@@ -51,6 +51,10 @@ public final class CommonConstraints {
   public static final AbstractNumberConstraint GREATER_THAN_ONE_INT = new GreaterConstraint(1);
 
   /**
+   * Larger than two
+   */
+  public static final AbstractNumberConstraint GREATER_THAN_TWO_INT = new GreaterConstraint(2);
+  /**
    * Not negative.
    */
   public static final AbstractNumberConstraint GREATER_EQUAL_ZERO_DOUBLE = new GreaterEqualConstraint(0.);

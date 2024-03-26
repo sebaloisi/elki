@@ -23,6 +23,8 @@ package elki.index.tree.metrical.vptree;
 
 import java.util.Random;
 
+import elki.data.NumberVector;
+import elki.data.type.TypeInformation;
 import elki.database.ids.ArrayModifiableDBIDs;
 import elki.database.ids.DBID;
 import elki.database.ids.DBIDIter;
@@ -35,13 +37,33 @@ import elki.database.ids.DoubleDBIDListMIter;
 import elki.database.ids.ModifiableDoubleDBIDList;
 import elki.database.ids.QuickSelectDBIDs;
 import elki.database.query.PrioritySearcher;
+import elki.database.query.QueryBuilder;
 import elki.database.query.distance.DistanceQuery;
+import elki.database.query.knn.KNNSearcher;
+import elki.database.query.range.RangeSearcher;
 import elki.database.relation.Relation;
 import elki.distance.Distance;
 import elki.index.DistancePriorityIndex;
+import elki.index.IndexFactory;
+import elki.index.tree.metrical.vptree.VPTree.VPTreeKNNDBIDSearcher;
+import elki.index.tree.metrical.vptree.VPTree.VPTreeKNNObjectSearcher;
+import elki.index.tree.metrical.vptree.VPTree.VPTreePriorityDBIDSearcher;
+import elki.index.tree.metrical.vptree.VPTree.VPTreePriorityObjectSearcher;
+import elki.index.tree.metrical.vptree.VPTree.VPTreeRangeDBIDSearcher;
+import elki.index.tree.metrical.vptree.VPTree.VPTreeRangeObjectSearcher;
+import elki.index.tree.metrical.vptree.VPTree.VPTreeRangeSearcher;
 import elki.logging.Logging;
+import elki.logging.statistics.LongStatistic;
+import elki.utilities.Alias;
 import elki.utilities.datastructures.QuickSelect;
 import elki.utilities.documentation.Reference;
+import elki.utilities.optionhandling.OptionID;
+import elki.utilities.optionhandling.Parameterizer;
+import elki.utilities.optionhandling.constraints.CommonConstraints;
+import elki.utilities.optionhandling.parameterization.Parameterization;
+import elki.utilities.optionhandling.parameters.IntParameter;
+import elki.utilities.optionhandling.parameters.ObjectParameter;
+import elki.utilities.optionhandling.parameters.RandomParameter;
 import elki.utilities.random.RandomFactory;
 
 /**
@@ -127,17 +149,17 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
     static int kVal;
 
     // TODO: Implement standart vals somewhere?
-  /**
-   * Constructor with default values, used by EmpiricalQueryOptimizer
-   * 
-   * @param relation data for tree construction
-   * @param distance distance function for tree construction
-   * @param leafsize Leaf size and sample size (simpler parameterization)
-   * @param kVal 
-   */
-  public VPkTree(Relation<O> relation, Distance<? super O> distance, int leafsize, int kVal) {
-    this(relation, distance, RandomFactory.DEFAULT, leafsize, leafsize, kVal);
-  }
+    /**
+     * Constructor with default values, used by EmpiricalQueryOptimizer
+     * 
+     * @param relation data for tree construction
+     * @param distance distance function for tree construction
+     * @param leafsize Leaf size and sample size (simpler parameterization)
+     * @param kVal
+     */
+    public VPkTree(Relation<O> relation, Distance<? super O> distance, int leafsize, int kVal) {
+        this(relation, distance, RandomFactory.DEFAULT, leafsize, leafsize, kVal);
+    }
 
     /**
      * Constructor.
@@ -434,13 +456,312 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
     }
 
     // TODO: Override interfaces
+    @Override
+    public KNNSearcher<O> kNNByObject(DistanceQuery<O> distanceQuery, int maxk, int flags) {
+        return (flags & QueryBuilder.FLAG_PRECOMPUTE) == 0 && //
+                distanceQuery.getRelation() == relation && this.distFunc.equals(distanceQuery.getDistance()) ? //
+                        new VPkTreeKNNObjectSearcher() : null;
+    }
+
+    @Override
+    public KNNSearcher<DBIDRef> kNNByDBID(DistanceQuery<O> distanceQuery, int maxk, int flags) {
+        return (flags & QueryBuilder.FLAG_PRECOMPUTE) == 0 && //
+                distanceQuery.getRelation() == relation && this.distFunc.equals(distanceQuery.getDistance()) ? //
+                        new VPkTreeKNNDBIDSearcher() : null;
+    }
+
+    @Override
+    public RangeSearcher<O> rangeByObject(DistanceQuery<O> distanceQuery, double maxrange, int flags) {
+        return (flags & QueryBuilder.FLAG_PRECOMPUTE) == 0 && //
+                distanceQuery.getRelation() == relation && this.distFunc.equals(distanceQuery.getDistance()) ? //
+                        new VPkTreeRangeObjectSearcher() : null;
+    }
+
+    @Override
+    public RangeSearcher<DBIDRef> rangeByDBID(DistanceQuery<O> distanceQuery, double maxrange, int flags) {
+        return (flags & QueryBuilder.FLAG_PRECOMPUTE) == 0 && //
+                distanceQuery.getRelation() == relation && this.distFunc.equals(distanceQuery.getDistance()) ? //
+                        new VPkTreeRangeDBIDSearcher() : null;
+    }
 
     @Override
     public PrioritySearcher<O> priorityByObject(DistanceQuery<O> distanceQuery, double maxrange, int flags) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'priorityByObject'");
+        return (flags & QueryBuilder.FLAG_PRECOMPUTE) == 0 && //
+                distanceQuery.getRelation() == relation && this.distFunc.equals(distanceQuery.getDistance()) ? //
+                        new VPTreePriorityObjectSearcher() : null;
     }
 
+    @Override
+    public PrioritySearcher<DBIDRef> priorityByDBID(DistanceQuery<O> distanceQuery, double maxrange, int flags) {
+        return (flags & QueryBuilder.FLAG_PRECOMPUTE) == 0 && //
+                distanceQuery.getRelation() == relation && this.distFunc.equals(distanceQuery.getDistance()) ? //
+                        new VPTreePriorityDBIDSearcher() : null;
+    }
+
+    /**
+     * Range search for the VPk-Tree
+     * 
+     * @author Sebastian Aloisi
+     *         based on VPTreeRangeSearcher written by Robert Gehde and Erich
+     *         Schubert
+     */
+    public static abstract class VPkTreeRangeSearcher {
+        /**
+         * Recursive search function.
+         *
+         * @param result Result output
+         * @param node Current node
+         * @param range Search radius
+         */
+        protected void vpRangeSearch(ModifiableDoubleDBIDList result, Node node, double range) {
+            final DoubleDBIDListMIter vp = node.vp.iter();
+            final double x = queryDistance(vp);
+
+            if(x <= range) {
+                result.add(x, vp);
+            }
+
+            for(vp.advance(); vp.valid(); vp.advance()) {
+                final double d = queryDistance(vp);
+                if(d <= range) {
+                    result.add(d, vp);
+                }
+            }
+
+            Node[] children = node.children;
+
+            for(int i = 0; i < kVal - 1; i++) {
+                Node currentChild = children[i];
+
+                if(currentChild != null && currentChild.lowBound <= x + range && x - range <= currentChild.highBound) {
+                    vpRangeSearch(result, currentChild, range);
+                }
+            }
+
+            // TODO: why ?
+            Node currentChild = children[kVal - 1];
+            if(currentChild != null && currentChild.lowBound <= x + range && x - range <= currentChild.highBound) {
+                vpRangeSearch(result, currentChild, range);
+            }
+        }
+
+        /**
+         * Compute the distance to a candidate object.
+         * 
+         * @param p Object
+         * @return Distance
+         */
+        protected abstract double queryDistance(DBIDRef p);
+    }
+
+    /**
+     * Range search for the VPk-Tree
+     * 
+     * @author Sebastian Aloisi
+     *         based on VPTreeRangeSearcher written by Robert Gehde and Erich
+     *         Schubert
+     */
+    public class VPkTreeRangeObjectSearcher extends VPkTreeRangeSearcher implements RangeSearcher<O> {
+        /**
+         * Current query object
+         */
+        private O query;
+
+        @Override
+        public ModifiableDoubleDBIDList getRange(O query, double range, ModifiableDoubleDBIDList result) {
+            this.query = query;
+            vpRangeSearch(result, root, range);
+            return result;
+        }
+
+        @Override
+        protected double queryDistance(DBIDRef p) {
+            return VPkTree.this.distance(query, p);
+        }
+    }
+
+    /**
+     * Range search for the VP-tree.
+     * 
+     * @author Robert Gehde
+     * @author Erich Schubert
+     */
+    public class VPkTreeRangeDBIDSearcher extends VPkTreeRangeSearcher implements RangeSearcher<DBIDRef> {
+        /**
+         * Current query object
+         */
+        private DBIDRef query;
+
+        @Override
+        public ModifiableDoubleDBIDList getRange(DBIDRef query, double range, ModifiableDoubleDBIDList result) {
+            this.query = query;
+            vpRangeSearch(result, root, range);
+            return result;
+        }
+
+        @Override
+        protected double queryDistance(DBIDRef p) {
+            return VPkTree.this.distance(query, p);
+        }
+    }
     // TODO: Implement Queries
 
+
+
+    @Override
+    public void logStatistics() {
+    LOG.statistics(new LongStatistic(this.getClass().getName() + ".distance-computations", distComputations));
+    }
+
+      // TODO: Parameters for algorithm selection
+  /**
+   * Index factory for the VPk-Tree
+   *
+   * @author Sebastian Aloisi
+   * based on the Index Factory for the VP-Tree written by Robert Gehde
+   *
+   * @param <O> Object type
+   */
+  @Alias({ "vpk" })
+  public static class Factory<O extends NumberVector> implements IndexFactory<O> {
+    /**
+     * Distance Function
+     */
+    Distance<? super O> distance;
+
+    /**
+     * Random factory
+     */
+    RandomFactory random;
+
+    /**
+     * Sample size
+     */
+    int sampleSize;
+
+    /**
+     * Truncation parameter
+     */
+    int truncate;
+
+    /** 
+     * k-fold split parameter
+    */
+    int kFold;
+
+    /**
+     * Constructor.
+     * 
+     * @param distFunc distance function
+     * @param random random generator
+     * @param sampleSize sample size
+     * @param truncate maximum leaf size (truncation)
+     * @param kFold split size
+     */
+    public Factory(Distance<? super O> distFunc, RandomFactory random, int sampleSize, int truncate, int kFold) {
+      super();
+      this.distance = distFunc;
+      this.random = random;
+      this.sampleSize = Math.max(sampleSize, 1);
+      this.truncate = Math.max(truncate, 1);
+      this.kFold = kFold;
+    }
+
+    @Override
+    public VPkTree<O> instantiate(Relation<O> relation) {
+      return new VPkTree<>(relation, distance, random, sampleSize, truncate,kFold);
+    }
+
+    @Override
+    public TypeInformation getInputTypeRestriction() {
+      return distance.getInputTypeRestriction();
+    }
+
+    /**
+     * Parameterization class.
+     *
+     * @author Sebastian Aloisi
+     * 
+     * Based on Parameterization class for VP-Tree written by Robert Gehde
+     */
+    public static class Par<O extends NumberVector> implements Parameterizer {
+      /**
+       * Parameter to specify the distance function to determine the distance
+       * between database objects, must extend
+       * {@link elki.distance.Distance}.
+       */
+      public final static OptionID DISTANCE_FUNCTION_ID = new OptionID("vpktree.distanceFunction", "Distance function to determine the distance between objects.");
+
+      /**
+       * Parameter to specify the sample size for choosing vantage point
+       */
+      public final static OptionID SAMPLE_SIZE_ID = new OptionID("vpktree.sampleSize", "Size of sample to select vantage point from.");
+
+      /**
+       * Parameter to specify the minimum leaf size
+       */
+      public final static OptionID TRUNCATE_ID = new OptionID("vpktree.truncate", "Minimum leaf size for stopping.");
+
+      /**
+       * Parameter to specify the rnd generator seed
+       */
+      public final static OptionID SEED_ID = new OptionID("vpktree.seed", "The rnd number generator seed.");
+      
+     /**
+      * Parameter to specify the k-fold split size
+      */
+      public final static OptionID KFOLD_ID = new OptionID("vpktree.kfold", "The size to k-fold split to");
+
+      /**
+       * Distance function
+       */
+      protected Distance<? super O> distance;
+
+      /**
+       * Random generator
+       */
+      protected RandomFactory random;
+
+      /**
+       * Sample size
+       */
+      protected int sampleSize;
+
+      /**
+       * Truncation parameter
+       */
+      int truncate;
+
+      /**
+       * k-fold split size parameter
+       */
+      int kFold;
+
+      @Override
+      public void configure(Parameterization config) {
+        new ObjectParameter<Distance<? super O>>(DISTANCE_FUNCTION_ID, Distance.class) //
+            .grab(config, x -> {
+              this.distance = x;
+              if(!distance.isMetric()) {
+                LOG.warning("VPkTree requires a metric to be exact.");
+              }
+            });
+        new IntParameter(SAMPLE_SIZE_ID, 10) //
+            .addConstraint(CommonConstraints.GREATER_EQUAL_ONE_INT) //
+            .grab(config, x -> this.sampleSize = x);
+        new IntParameter(TRUNCATE_ID, 8) //
+            .addConstraint(CommonConstraints.GREATER_EQUAL_ONE_INT) //
+            .grab(config, x -> this.truncate = x);
+        new RandomParameter(SEED_ID).grab(config, x -> random = x);
+        new IntParameter(KFOLD_ID,2)
+            .addConstraint(CommonConstraints.GREATER_THAN_TWO_INT)
+            .grab(config, x -> this.kFold = x);
+      }
+
+      @Override
+      public Factory<O> make() {
+        return new Factory<>(distance, random, sampleSize, truncate,kFold);
+      }
+    }
+  }
 }
