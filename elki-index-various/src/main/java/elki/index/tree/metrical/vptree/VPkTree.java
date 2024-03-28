@@ -33,7 +33,9 @@ import elki.database.ids.DBIDRef;
 import elki.database.ids.DBIDUtil;
 import elki.database.ids.DBIDVar;
 import elki.database.ids.DBIDs;
+import elki.database.ids.DoubleDBIDListIter;
 import elki.database.ids.DoubleDBIDListMIter;
+import elki.database.ids.KNNHeap;
 import elki.database.ids.ModifiableDoubleDBIDList;
 import elki.database.ids.QuickSelectDBIDs;
 import elki.database.query.PrioritySearcher;
@@ -496,6 +498,56 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
         return (flags & QueryBuilder.FLAG_PRECOMPUTE) == 0 && //
                 distanceQuery.getRelation() == relation && this.distFunc.equals(distanceQuery.getDistance()) ? //
                         new VPTreePriorityDBIDSearcher() : null;
+    }
+
+    /**
+     * kNN search for the VPk-Tree
+     * 
+     * @author Sebastian Aloisi
+     * 
+     *         Based on VPTreeKNNSearcher for VP-Tree
+     *         written by Robert Gehde and Erich Schubert
+     */
+
+    public static abstract class VPkTreeKNNSearcher {
+        // TODO: Branch Prio?
+        /**
+         * Recursive search function
+         * 
+         * @param knns Current kNN results
+         * @param node Current node
+         * @return New tau
+         */
+        protected double vpKNNSearch(KNNHeap knns, Node node) {
+            DoubleDBIDListIter vp = node.vp.iter();
+            final double x = queryDistance(vp);
+            knns.insert(x, vp);
+            for(vp.advance(); vp.valid(); vp.advance()) {
+                knns.insert(queryDistance(vp), vp);
+            }
+            
+            // Choose the Childnode to prioritize
+            Node[] childNodes = node.children;
+            double tau = knns.getKNNDistance();
+
+            for (int i = 0; i < childNodes.length; i ++){
+                Node currentChild = childNodes[i];
+
+                if (currentChild.lowBound <= x + tau && x - tau <= currentChild.highBound){
+                    tau = vpKNNSearch(knns, currentChild);
+                }
+            }
+
+            return tau;
+        }
+
+        /**
+         * Compute the distance to a candidate object.
+         * 
+         * @param p Object
+         * @return Distance
+         */
+        protected abstract double queryDistance(DBIDRef p);
     }
 
     /**
