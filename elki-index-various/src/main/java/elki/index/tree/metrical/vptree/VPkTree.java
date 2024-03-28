@@ -36,6 +36,7 @@ import elki.database.ids.DBIDs;
 import elki.database.ids.DoubleDBIDListIter;
 import elki.database.ids.DoubleDBIDListMIter;
 import elki.database.ids.KNNHeap;
+import elki.database.ids.KNNList;
 import elki.database.ids.ModifiableDoubleDBIDList;
 import elki.database.ids.QuickSelectDBIDs;
 import elki.database.query.PrioritySearcher;
@@ -49,6 +50,7 @@ import elki.index.DistancePriorityIndex;
 import elki.index.IndexFactory;
 import elki.index.tree.metrical.vptree.VPTree.VPTreeKNNDBIDSearcher;
 import elki.index.tree.metrical.vptree.VPTree.VPTreeKNNObjectSearcher;
+import elki.index.tree.metrical.vptree.VPTree.VPTreeKNNSearcher;
 import elki.index.tree.metrical.vptree.VPTree.VPTreePriorityDBIDSearcher;
 import elki.index.tree.metrical.vptree.VPTree.VPTreePriorityObjectSearcher;
 import elki.index.tree.metrical.vptree.VPTree.VPTreeRangeDBIDSearcher;
@@ -510,7 +512,7 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
      */
 
     public static abstract class VPkTreeKNNSearcher {
-        // TODO: Branch Prio?
+        // TODO: Branch Prio? sort by pairwise 
         /**
          * Recursive search function
          * 
@@ -518,7 +520,7 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
          * @param node Current node
          * @return New tau
          */
-        protected double vpKNNSearch(KNNHeap knns, Node node) {
+        protected double vpkKNNSearch(KNNHeap knns, Node node) {
             DoubleDBIDListIter vp = node.vp.iter();
             final double x = queryDistance(vp);
             knns.insert(x, vp);
@@ -533,13 +535,14 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
             for (int i = 0; i < childNodes.length; i ++){
                 Node currentChild = childNodes[i];
 
-                if (currentChild.lowBound <= x + tau && x - tau <= currentChild.highBound){
-                    tau = vpKNNSearch(knns, currentChild);
+                if(currentChild != null && currentChild.lowBound <= x + tau && x - tau <= currentChild.highBound) {
+                    tau = vpkKNNSearch(knns, currentChild);
                 }
             }
 
             return tau;
         }
+
 
         /**
          * Compute the distance to a candidate object.
@@ -548,6 +551,61 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
          * @return Distance
          */
         protected abstract double queryDistance(DBIDRef p);
+    }
+
+
+    /**
+     * kNN search for the VPk-Tree.
+     *
+     * @author Sebastian Aloisi
+     *         Based on VPTreeKNNObjectSearcher written by Robert Gehde and
+     *         Erich Schubert
+     */
+    public class VPkTreeKNNObjectSearcher extends VPkTreeKNNSearcher implements KNNSearcher<O> {
+        /**
+         * Current query object
+         */
+        private O query;
+
+        @Override
+        public KNNList getKNN(O query, int k) {
+            final KNNHeap knns = DBIDUtil.newHeap(k);
+            this.query = query;
+            vpkKNNSearch(knns, root);
+            return knns.toKNNList();
+        }
+
+        @Override
+        protected double queryDistance(DBIDRef p) {
+            return VPkTree.this.distance(query, p);
+        }
+    }
+
+    /**
+     * kNN search for the VPk-Tree.
+     *
+     * @author Sebastian Aloisi
+     *         Based on VPTreeKNNObjectSearcher written by Robert Gehde and
+     *         Erich Schubert
+     */
+    public class VPkTreeKNNDBIDSearcher extends VPkTreeKNNSearcher implements KNNSearcher<DBIDRef> {
+        /**
+         * Current query object
+         */
+        private DBIDRef query;
+
+        @Override
+        public KNNList getKNN(DBIDRef query, int k) {
+            final KNNHeap knns = DBIDUtil.newHeap(k);
+            this.query = query;
+            vpkKNNSearch(knns, root);
+            return knns.toKNNList();
+        }
+
+        @Override
+        protected double queryDistance(DBIDRef p) {
+            return VPkTree.this.distance(query, p);
+        }
     }
 
     /**
