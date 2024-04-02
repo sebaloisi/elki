@@ -22,6 +22,7 @@
 package elki.index.tree.metrical.vptree;
 
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import elki.data.NumberVector;
 import elki.data.type.TypeInformation;
@@ -35,6 +36,7 @@ import elki.database.ids.DBIDVar;
 import elki.database.ids.DBIDs;
 import elki.database.ids.DoubleDBIDListIter;
 import elki.database.ids.DoubleDBIDListMIter;
+import elki.database.ids.DoubleDBIDPair;
 import elki.database.ids.KNNHeap;
 import elki.database.ids.KNNList;
 import elki.database.ids.ModifiableDoubleDBIDList;
@@ -139,13 +141,11 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
      */
     Node root;
 
-    // TODO: not less than two!
     /**
      * The k Value to split to
      */
     static int kVal;
 
-    // TODO: Implement standart vals somewhere?
     /**
      * Constructor with default values, used by EmpiricalQueryOptimizer
      * 
@@ -234,10 +234,9 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
                 }
                 return new Node(vps);
             }
-            DBIDVar vantagePoint = chooseVantagePoint(left, right);
+            DBIDVar vantagePoint = chooseRandomVantagePoint(left, right);
             int tied = 0;
-            // Compute all the distances to the best vantage point (not just
-            // sample)
+            // Compute all the distances to the vantage point
             for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()) {
                 if(DBIDUtil.equal(scratchit, vantagePoint)) {
                     scratchit.setDouble(0);
@@ -268,20 +267,18 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
             int quantilesAmount = kVal - 1;
             int[] quantiles = new int[quantilesAmount];
 
-            //TODO: Bounds for individual child nodes not lc rightChild
             double lowBounds[] = new double[kVal];
             double highBounds[] = new double[kVal];
 
-            for (int i = 0; i < kVal; i++){
+            for(int i = 0; i < kVal; i++) {
                 lowBounds[i] = Double.POSITIVE_INFINITY;
                 highBounds[i] = Double.NEGATIVE_INFINITY;
             }
 
             for(int i = 0; i < quantilesAmount; i++) {
                 double currentBound = (double) (i + 1) / (double) kVal;
-                quantiles[i] = QuickSelectDBIDs.quantile(scratch,left,right, currentBound);
+                quantiles[i] = QuickSelectDBIDs.quantile(scratch, left, right, currentBound);
 
-                // TODO: falsch?
                 QuickSelectDBIDs.quickSelect(scratch, left + tied, right, quantiles[i]);
                 final double quantileDistVal = scratch.doubleValue(quantiles[i]);
 
@@ -300,8 +297,8 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
 
                 for(scratchit.seek(quantiles[i]); scratchit.getOffset() < right; scratchit.advance()) {
                     final double d = scratchit.doubleValue();
-                    lowBounds[kVal-1] = d < lowBounds[kVal - 1] ? d : lowBounds[kVal - 1];
-                    highBounds[kVal-1] = d > highBounds[kVal - 1] ? d : highBounds[kVal - 1];
+                    lowBounds[kVal - 1] = d < lowBounds[kVal - 1] ? d : lowBounds[kVal - 1];
+                    highBounds[kVal - 1] = d > highBounds[kVal - 1] ? d : highBounds[kVal - 1];
                 }
 
                 assert right > quantiles[i];
@@ -314,25 +311,27 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
             }
 
             Node current = new Node(vps);
-
-            //TODO: sieht falsch aus, kval?
+            
             // Recursive build the first kVal-1 child Partititions
+            // TODO: Grosser quatsch, iterator muss weiter nach rechts um größe der Partition bewegt werden
             for(int i = 0; i < quantilesAmount; i++) {
                 if(left + tied < quantiles[i]) {
                     current.children[i] = buildTree(left + tied, quantiles[i]);
                     current.children[i].lowBound = lowBounds[i];
                     current.children[i].highBound = highBounds[i];
+                    left += quantiles[i];
                 }
             }
 
             // Build Child for the last partitition
-            current.children[kVal-1] = buildTree(quantiles[quantilesAmount - 1], right);
-            current.children[kVal-1].lowBound = lowBounds[kVal - 1];
-            current.children[kVal-1].highBound = highBounds[kVal - 1];
+            current.children[kVal - 1] = buildTree(quantiles[quantilesAmount - 1], right);
+            current.children[kVal - 1].lowBound = lowBounds[kVal - 1];
+            current.children[kVal - 1].highBound = highBounds[kVal - 1];
             return current;
         }
 
         // TODO: interface for VP Selection alternatives
+        // TODO: Standart algorithmus liefert random VP für samplesize = 1
         /**
          * Find a vantage points in the DBIDs between left and right
          * 
@@ -340,58 +339,50 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
          * @param right Right bound in scratch
          * @return vantage point
          */
-        private DBIDVar chooseVantagePoint(int left, int right) {
-            // Random sampling:
-            if(sampleSize == 1) {
-                return scratch.assignVar(left + rnd.nextInt(right - left), DBIDUtil.newVar());
-            }
-            final int s = Math.min(sampleSize, right - left);
-            double bestSpread = Double.NEGATIVE_INFINITY;
-            DBIDVar best = DBIDUtil.newVar();
-            // Modifiable copy for sampling:
+        private DBIDVar chooseRandomVantagePoint(int left, int right) {
+            scratchit.seek(left);
+            DBIDVar result = DBIDUtil.newVar();
             ArrayModifiableDBIDs workset = DBIDUtil.newArray(right - left);
+            
             for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()) {
                 workset.add(scratchit);
             }
-            for(DBIDMIter it = DBIDUtil.randomSample(workset, s, rnd).iter(); it.valid(); it.advance()) {
-                // Sample s+1 objects in case `it` is contained.
-                DBIDUtil.randomShuffle(workset, rnd, Math.min(s + 1, workset.size()));
-                double spread = calcMoment(it, workset, s);
-                if(spread > bestSpread) {
-                    bestSpread = spread;
-                    best.set(it);
-                }
-            }
-            return best;
+
+            DBIDMIter it = DBIDUtil.randomSample(workset, 1, rnd).iter();
+            
+            result.set(it);
+            return result;
         }
 
-        // TODO: interface for VP Selection alternatives
-        // TODO: dont median, use quantil
+        // TODO: mindestens 2 datenpunkte wegen Varianz
+        // TODO: ist die Standartabweichung zu den einzelnen Punkten korrekt?
+        // TODO: Refernz zur Methode einfügen
         /**
-         * Calculate the 2nd moment to the median of the distances to p
          * 
-         * @param p DBID to calculate the moment for
-         * @param check points to check with
-         * @param size Maximum size to use
-         * @return second moment
+         * @param left
+         * @param right
+         * @return
          */
-        private double calcMoment(DBIDRef p, DBIDs check, int size) {
-            double[] dists = new double[Math.min(size, check.size())];
-            int i = 0;
-            for(DBIDIter iter = check.iter(); iter.valid() && i < size; iter.advance()) {
-                if(!DBIDUtil.equal(iter, p)) {
-                    dists[i++] = distance(p, iter);
+        private DBIDVar findMaximumVarianceVantagePoint(int left, int right){
+
+            double length = right - left;
+            double minDeviation = Double.POSITIVE_INFINITY;
+
+            DBIDVar best = DBIDUtil.newVar();
+
+            for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()){
+                double distance = scratchit.doubleValue()
+                double mean = distance/ length;
+                double deviation = Math.sqrt(distance - mean);
+
+                if (deviation < minDeviation){
+                    best.set(scratchit);
                 }
             }
-            double median = QuickSelect.median(dists);
-            double ssq = 0;
-            for(int j = 0; j < i; j++) {
-                final double o = dists[j] - median;
-                ssq += o * o;
-            }
-            return ssq / i;
-        }
+            
+            return best;
 
+        }
     }
 
     /**
@@ -456,7 +447,6 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
         return distQuery.distance(a, b);
     }
 
-    // TODO: Override interfaces
     @Override
     public KNNSearcher<O> kNNByObject(DistanceQuery<O> distanceQuery, int maxk, int flags) {
         return (flags & QueryBuilder.FLAG_PRECOMPUTE) == 0 && //
@@ -643,7 +633,6 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
                 }
             }
 
-            // TODO: why ?
             Node currentChild = children[kVal - 1];
             if(currentChild != null && currentChild.lowBound <= x + range && x - range <= currentChild.highBound) {
                 vpRangeSearch(result, currentChild, range);
@@ -802,10 +791,10 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
 
             // Add Child Nodes to the Heap
 
-            for (int i = 0; i < childNodes.length; i++){
+            for(int i = 0; i < childNodes.length; i++) {
                 Node currentChild = childNodes[i];
 
-                if(currentChild != null){
+                if(currentChild != null) {
                     final double mindist = Math.max(Math.max(vpdist - currentChild.highBound, currentChild.lowBound - vpdist), curdist);
                     if(mindist <= threshold) {
                         heap.add(mindist, currentChild);
@@ -884,51 +873,51 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
      *         Erich Schubert
      *
      */
-  public class VPkTreePriorityObjectSearcher extends VPkTreePrioritySearcher<O> {
+    public class VPkTreePriorityObjectSearcher extends VPkTreePrioritySearcher<O> {
+        /**
+         * Current query object
+         */
+        private O query;
+
+        @Override
+        public PrioritySearcher<O> search(O query) {
+            this.query = query;
+            doSearch();
+            return this;
+        }
+
+        @Override
+        protected double queryDistance(DBIDRef p) {
+            return VPkTree.this.distance(query, p);
+        }
+    }
+
     /**
-     * Current query object
+     * Range search for for the VPk-Tree.
+     * 
+     * @author Sebastian Aloisi
+     *         Based on VPTreePriorityDBIDSearcher written by Robert Gehde and
+     *         Erich Schubert
+     *
      */
-    private O query;
+    public class VPkTreePriorityDBIDSearcher extends VPkTreePrioritySearcher<DBIDRef> {
+        /**
+         * Current query object
+         */
+        private DBIDRef query;
 
-    @Override
-    public PrioritySearcher<O> search(O query) {
-      this.query = query;
-      doSearch();
-      return this;
+        @Override
+        public PrioritySearcher<DBIDRef> search(DBIDRef query) {
+            this.query = query;
+            doSearch();
+            return this;
+        }
+
+        @Override
+        protected double queryDistance(DBIDRef p) {
+            return VPkTree.this.distance(query, p);
+        }
     }
-
-    @Override
-    protected double queryDistance(DBIDRef p) {
-      return VPkTree.this.distance(query, p);
-    }
-  }
-
-  /**
-   * Range search for for the VPk-Tree.
-   * 
-   * @author Sebastian Aloisi
-   *         Based on VPTreePriorityDBIDSearcher written by Robert Gehde and
-   *         Erich Schubert
-   *
-   */
-  public class VPkTreePriorityDBIDSearcher extends VPkTreePrioritySearcher<DBIDRef> {
-    /**
-     * Current query object
-     */
-    private DBIDRef query;
-
-    @Override
-    public PrioritySearcher<DBIDRef> search(DBIDRef query) {
-      this.query = query;
-      doSearch();
-      return this;
-    }
-
-    @Override
-    protected double queryDistance(DBIDRef p) {
-      return VPkTree.this.distance(query, p);
-    }
-  }
 
     @Override
     public void logStatistics() {
