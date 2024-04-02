@@ -52,6 +52,8 @@ import elki.index.DistancePriorityIndex;
 import elki.index.IndexFactory;
 import elki.logging.Logging;
 import elki.logging.statistics.LongStatistic;
+import elki.math.Mean;
+import elki.math.MeanVariance;
 import elki.utilities.Alias;
 import elki.utilities.datastructures.QuickSelect;
 import elki.utilities.datastructures.heap.DoubleObjectMinHeap;
@@ -60,6 +62,7 @@ import elki.utilities.optionhandling.OptionID;
 import elki.utilities.optionhandling.Parameterizer;
 import elki.utilities.optionhandling.constraints.CommonConstraints;
 import elki.utilities.optionhandling.parameterization.Parameterization;
+import elki.utilities.optionhandling.parameters.EnumParameter;
 import elki.utilities.optionhandling.parameters.IntParameter;
 import elki.utilities.optionhandling.parameters.ObjectParameter;
 import elki.utilities.optionhandling.parameters.RandomParameter;
@@ -146,16 +149,23 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
      */
     static int kVal;
 
+    
+    /**
+     * Vantage Point Selection Algorithm
+     */
+    VPSelectionAlgorithm vpSelector;
+
     /**
      * Constructor with default values, used by EmpiricalQueryOptimizer
      * 
      * @param relation data for tree construction
      * @param distance distance function for tree construction
      * @param leafsize Leaf size and sample size (simpler parameterization)
-     * @param kVal
+     * @param kVal k-split Value
+     * @param vpSelector Vantage Point selection Algorithm
      */
-    public VPkTree(Relation<O> relation, Distance<? super O> distance, int leafsize, int kVal) {
-        this(relation, distance, RandomFactory.DEFAULT, leafsize, leafsize, kVal);
+    public VPkTree(Relation<O> relation, Distance<? super O> distance, int leafsize, int kVal, VPSelectionAlgorithm vpSelector) {
+        this(relation, distance, RandomFactory.DEFAULT, leafsize, leafsize, kVal, vpSelector);
     }
 
     /**
@@ -167,8 +177,9 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
      * @param sampleSize Sample size for finding the vantage point
      * @param truncate Leaf size threshold
      * @param kVal k-split Value
+     * @param vpSelector Vantage Point selection Algorithm
      */
-    public VPkTree(Relation<O> relation, Distance<? super O> distance, RandomFactory random, int sampleSize, int truncate, int kVal) {
+    public VPkTree(Relation<O> relation, Distance<? super O> distance, RandomFactory random, int sampleSize, int truncate, int kVal, VPSelectionAlgorithm vpSelector) {
         this.relation = relation;
         this.distFunc = distance;
         this.random = random;
@@ -176,11 +187,17 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
         this.sampleSize = Math.max(sampleSize, 1);
         this.truncate = Math.max(truncate, 1);
         this.kVal = kVal;
+        this.vpSelector = vpSelector;
     }
 
     @Override
     public void initialize() {
         root = new Builder().buildTree(0, relation.size());
+    }
+
+    public enum VPSelectionAlgorithm {
+        RANDOM,
+        MAXIMUM_VARIANCE
     }
 
     /**
@@ -234,7 +251,14 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
                 }
                 return new Node(vps);
             }
-            DBIDVar vantagePoint = chooseRandomVantagePoint(left, right);
+            
+            DBIDVar vantagePoint;
+            if (vpSelector == VPSelectionAlgorithm.MAXIMUM_VARIANCE){
+                vantagePoint = selectMaximumVarianceVantagePoint(left, right);
+            } else {
+                vantagePoint = selectRandomVantagePoint(left, right);
+            }
+
             int tied = 0;
             // Compute all the distances to the vantage point
             for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()) {
@@ -330,6 +354,8 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
             return current;
         }
 
+        
+
         // TODO: interface for VP Selection alternatives
         // TODO: Standart algorithmus liefert random VP für samplesize = 1
         /**
@@ -339,7 +365,7 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
          * @param right Right bound in scratch
          * @return vantage point
          */
-        private DBIDVar chooseRandomVantagePoint(int left, int right) {
+        private DBIDVar selectRandomVantagePoint(int left, int right) {
             scratchit.seek(left);
             DBIDVar result = DBIDUtil.newVar();
             ArrayModifiableDBIDs workset = DBIDUtil.newArray(right - left);
@@ -354,34 +380,47 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
             return result;
         }
 
-        // TODO: mindestens 2 datenpunkte wegen Varianz
-        // TODO: ist die Standartabweichung zu den einzelnen Punkten korrekt?
-        // TODO: Refernz zur Methode einfügen
+        // TODO: mindestens 2 datenpunkte wegen Varianz?  
+        // TODO: Sampling variante ansehen (Bonus?)
+        // TODO: Referenz zur Methode einfügen
+        // TODO: Standart VP-Tree Variante für Benchmarking berücksichtigen
+        // HINWEIS: für GH Tree Variante auch mean berechnen!
         /**
          * 
          * @param left
          * @param right
          * @return
          */
-        private DBIDVar findMaximumVarianceVantagePoint(int left, int right){
-
-            double length = right - left;
-            double maxDeviation = Double.NEGATIVE_INFINITY;
+        private DBIDVar selectMaximumVarianceVantagePoint(int left, int right){
 
             DBIDVar best = DBIDUtil.newVar();
+            DBIDVar currenDbid = DBIDUtil.newVar();
+            double bestStandartDeviation = Double.NEGATIVE_INFINITY;
 
             for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()){
-                double distance = scratchit.doubleValue()
-                double mean = distance/ length;
-                double deviation = Math.sqrt(distance - mean);
+                int currentOffset = scratchit.getOffset();
+                
+                currenDbid.set(scratchit);
 
-                if (deviation > maxDeviation){
+                MeanVariance currentVariance = new MeanVariance();
+
+                for (scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()){
+                    double currentDistance = distance(currenDbid, scratchit);
+
+                    currentVariance.put(currentDistance);
+                }
+
+                scratchit.seek(currentOffset);
+
+                double currentStandartDeviance = currentVariance.getSampleStddev();
+
+                if (currentStandartDeviance > bestStandartDeviation){
                     best.set(scratchit);
+                    bestStandartDeviation = currentStandartDeviance;
                 }
             }
             
             return best;
-
         }
     }
 
@@ -960,6 +999,11 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
          * k-fold split parameter
          */
         int kFold;
+        
+        /**
+         * Vantage Point selection Algorithm
+         */
+        VPSelectionAlgorithm vpSelector;
 
         /**
          * Constructor.
@@ -969,19 +1013,21 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
          * @param sampleSize sample size
          * @param truncate maximum leaf size (truncation)
          * @param kFold split size
+         * @param vpSelector Vantage Point selection Algorithm
          */
-        public Factory(Distance<? super O> distFunc, RandomFactory random, int sampleSize, int truncate, int kFold) {
+        public Factory(Distance<? super O> distFunc, RandomFactory random, int sampleSize, int truncate, int kFold, VPSelectionAlgorithm vpSelector) {
             super();
             this.distance = distFunc;
             this.random = random;
             this.sampleSize = Math.max(sampleSize, 1);
             this.truncate = Math.max(truncate, 1);
             this.kFold = kFold;
+            this.vpSelector = vpSelector;
         }
 
         @Override
         public VPkTree<O> instantiate(Relation<O> relation) {
-            return new VPkTree<>(relation, distance, random, sampleSize, truncate, kFold);
+            return new VPkTree<>(relation, distance, random, sampleSize, truncate, kFold, vpSelector);
         }
 
         @Override
@@ -1026,6 +1072,8 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
              */
             public final static OptionID KFOLD_ID = new OptionID("vpktree.kfold", "The size to k-fold split to");
 
+            
+            public final static OptionID VPSELECTOR_ID = new OptionID("vpktree.vpSelector", "The Vantage Point selection Algorithm");
             /**
              * Distance function
              */
@@ -1051,6 +1099,11 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
              */
             int kFold;
 
+            /**
+             * Vantage Point selection Algorithm
+             */
+            VPSelectionAlgorithm vpSelector;
+
             @Override
             public void configure(Parameterization config) {
                 new ObjectParameter<Distance<? super O>>(DISTANCE_FUNCTION_ID, Distance.class) //
@@ -1068,11 +1121,12 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
                         .grab(config, x -> this.truncate = x);
                 new RandomParameter(SEED_ID).grab(config, x -> random = x);
                 new IntParameter(KFOLD_ID, 2).addConstraint(CommonConstraints.GREATER_THAN_ONE_INT).grab(config, x -> this.kFold = x);
+                new EnumParameter<>(VPSELECTOR_ID, VPSelectionAlgorithm.class).grab(config, x -> this.vpSelector = x);
             }
 
             @Override
             public Factory<O> make() {
-                return new Factory<>(distance, random, sampleSize, truncate, kFold);
+                return new Factory<>(distance, random, sampleSize, truncate, kFold, vpSelector);
             }
         }
     }
