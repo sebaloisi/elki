@@ -366,7 +366,7 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
         private DBIDVar findMaximumVarianceVantagePoint(int left, int right){
 
             double length = right - left;
-            double minDeviation = Double.POSITIVE_INFINITY;
+            double maxDeviation = Double.NEGATIVE_INFINITY;
 
             DBIDVar best = DBIDUtil.newVar();
 
@@ -375,7 +375,7 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
                 double mean = distance/ length;
                 double deviation = Math.sqrt(distance - mean);
 
-                if (deviation < minDeviation){
+                if (deviation > maxDeviation){
                     best.set(scratchit);
                 }
             }
