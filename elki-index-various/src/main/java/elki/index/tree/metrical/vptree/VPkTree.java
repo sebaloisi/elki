@@ -22,7 +22,6 @@
 package elki.index.tree.metrical.vptree;
 
 import java.util.Random;
-import java.util.random.RandomGenerator;
 
 import elki.data.NumberVector;
 import elki.data.type.TypeInformation;
@@ -33,12 +32,11 @@ import elki.database.ids.DBIDMIter;
 import elki.database.ids.DBIDRef;
 import elki.database.ids.DBIDUtil;
 import elki.database.ids.DBIDVar;
-import elki.database.ids.DBIDs;
 import elki.database.ids.DoubleDBIDListIter;
 import elki.database.ids.DoubleDBIDListMIter;
-import elki.database.ids.DoubleDBIDPair;
 import elki.database.ids.KNNHeap;
 import elki.database.ids.KNNList;
+import elki.database.ids.ModifiableDBIDs;
 import elki.database.ids.ModifiableDoubleDBIDList;
 import elki.database.ids.QuickSelectDBIDs;
 import elki.database.query.PrioritySearcher;
@@ -52,10 +50,8 @@ import elki.index.DistancePriorityIndex;
 import elki.index.IndexFactory;
 import elki.logging.Logging;
 import elki.logging.statistics.LongStatistic;
-import elki.math.Mean;
 import elki.math.MeanVariance;
 import elki.utilities.Alias;
-import elki.utilities.datastructures.QuickSelect;
 import elki.utilities.datastructures.heap.DoubleObjectMinHeap;
 import elki.utilities.documentation.Reference;
 import elki.utilities.optionhandling.OptionID;
@@ -197,7 +193,8 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
 
     public enum VPSelectionAlgorithm {
         RANDOM,
-        MAXIMUM_VARIANCE
+        MAXIMUM_VARIANCE,
+        MAXIMUM_VARIANCE_SAMPLING
     }
 
     /**
@@ -253,10 +250,24 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
             }
             
             DBIDVar vantagePoint;
+
+            // TODO: Interfae switch in Constructor?
+            switch (vpSelector){
+                case MAXIMUM_VARIANCE: 
+                    vantagePoint = selectMaximumVarianceVantagePoint(left, right);
+                break;
+                case  MAXIMUM_VARIANCE_SAMPLING:
+                    vantagePoint = selectSampledMaximumVarianceVantagePoint(left, right);
+                break;
+                default:
+                    vantagePoint = selectRandomVantagePoint(left, right);
+                break;
+            }
+
             if (vpSelector == VPSelectionAlgorithm.MAXIMUM_VARIANCE){
-                vantagePoint = selectMaximumVarianceVantagePoint(left, right);
+                
             } else {
-                vantagePoint = selectRandomVantagePoint(left, right);
+                
             }
 
             int tied = 0;
@@ -385,11 +396,14 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
         // TODO: Referenz zur Methode einfügen
         // TODO: Standart VP-Tree Variante für Benchmarking berücksichtigen
         // HINWEIS: für GH Tree Variante auch mean berechnen!
+        
         /**
+         * Finds the Vantage Point with Maximum Variance to all other Data
+         * Points
          * 
          * @param left
          * @param right
-         * @return
+         * @return vantage point
          */
         private DBIDVar selectMaximumVarianceVantagePoint(int left, int right){
 
@@ -421,6 +435,54 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
             }
             
             return best;
+        }
+
+
+        /**
+         * Finds the Vatnage Point with maximum Variance in respect to random
+         * sampled subsets of relation.
+         * 
+         * @param left
+         * @param right
+         * @return vantage point
+         */
+        private DBIDVar selectSampledMaximumVarianceVantagePoint(int left, int right) {
+            DBIDVar best = DBIDUtil.newVar();
+            // Random sampling:
+            if(sampleSize == 1) {
+                return scratch.assignVar(left + rnd.nextInt(right - left), DBIDUtil.newVar());
+            }
+
+            final int s = Math.min(sampleSize, right - left);
+            ArrayModifiableDBIDs workset = DBIDUtil.newArray(right - left);
+            for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()) {
+                workset.add(scratchit);
+            }
+
+            double bestStandartDeviation = Double.NEGATIVE_INFINITY;
+
+            ModifiableDBIDs worksetDBIDs = DBIDUtil.randomSample(workset, s, rnd);
+
+            for(DBIDMIter it = worksetDBIDs.iter(); it.valid(); it.advance()) {
+
+                MeanVariance currentVariance = new MeanVariance();
+
+                for(DBIDMIter jt = worksetDBIDs.iter(); jt.valid(); jt.advance()) {
+                    double currentDistance = distance(it, jt);
+
+                    currentVariance.put(currentDistance);
+                }
+
+                double currentStandartDeviance = currentVariance.getSampleStddev();
+
+                if(currentStandartDeviance > bestStandartDeviation) {
+                    best.set(it);
+                    bestStandartDeviation = currentStandartDeviance;
+                }
+            }
+
+            return best;
+
         }
     }
 
