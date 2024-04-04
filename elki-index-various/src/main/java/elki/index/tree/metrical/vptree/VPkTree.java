@@ -32,6 +32,7 @@ import elki.database.ids.DBIDMIter;
 import elki.database.ids.DBIDRef;
 import elki.database.ids.DBIDUtil;
 import elki.database.ids.DBIDVar;
+import elki.database.ids.DBIDs;
 import elki.database.ids.DoubleDBIDListIter;
 import elki.database.ids.DoubleDBIDListMIter;
 import elki.database.ids.KNNHeap;
@@ -52,6 +53,7 @@ import elki.logging.Logging;
 import elki.logging.statistics.LongStatistic;
 import elki.math.MeanVariance;
 import elki.utilities.Alias;
+import elki.utilities.datastructures.QuickSelect;
 import elki.utilities.datastructures.heap.DoubleObjectMinHeap;
 import elki.utilities.documentation.Reference;
 import elki.utilities.optionhandling.OptionID;
@@ -196,7 +198,8 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
     public enum VPSelectionAlgorithm {
         RANDOM,
         MAXIMUM_VARIANCE,
-        MAXIMUM_VARIANCE_SAMPLING
+        MAXIMUM_VARIANCE_SAMPLING,
+        REF_CHOOSE_VP
     }
 
     /**
@@ -261,6 +264,9 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
                 case  MAXIMUM_VARIANCE_SAMPLING:
                     vantagePoint = selectSampledMaximumVarianceVantagePoint(left, right);
                 break;
+                case REF_CHOOSE_VP:
+                    vantagePoint = chooseVantagePoint(left, right);
+                    break;
                 default:
                     vantagePoint = selectRandomVantagePoint(left, right);
                 break;
@@ -491,6 +497,63 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
 
             return best;
 
+        }
+
+        /**
+         * Find a vantage points in the DBIDs between left and right
+         * 
+         * @param left Left bound in scratch
+         * @param right Right bound in scratch
+         * @return vantage point
+         */
+        private DBIDVar chooseVantagePoint(int left, int right) {
+            // Random sampling:
+            if(sampleSize == 1) {
+                return scratch.assignVar(left + rnd.nextInt(right - left), DBIDUtil.newVar());
+            }
+            final int s = Math.min(sampleSize, right - left);
+            double bestSpread = Double.NEGATIVE_INFINITY;
+            DBIDVar best = DBIDUtil.newVar();
+            // Modifiable copy for sampling:
+            ArrayModifiableDBIDs workset = DBIDUtil.newArray(right - left);
+            for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()) {
+                workset.add(scratchit);
+            }
+            for(DBIDMIter it = DBIDUtil.randomSample(workset, s, rnd).iter(); it.valid(); it.advance()) {
+                // Sample s+1 objects in case `it` is contained.
+                DBIDUtil.randomShuffle(workset, rnd, Math.min(s + 1, workset.size()));
+                double spread = calcMoment(it, workset, s);
+                if(spread > bestSpread) {
+                    bestSpread = spread;
+                    best.set(it);
+                }
+            }
+            return best;
+        }
+
+        /**
+         * Calculate the 2nd moment to the median of the distances to p
+         * 
+         * @param p DBID to calculate the moment for
+         * @param check points to check with
+         * @param size Maximum size to use
+         * @return second moment
+         */
+        private double calcMoment(DBIDRef p, DBIDs check, int size) {
+            double[] dists = new double[Math.min(size, check.size())];
+            int i = 0;
+            for(DBIDIter iter = check.iter(); iter.valid() && i < size; iter.advance()) {
+                if(!DBIDUtil.equal(iter, p)) {
+                    dists[i++] = distance(p, iter);
+                }
+            }
+            double median = QuickSelect.median(dists);
+            double ssq = 0;
+            for(int j = 0; j < i; j++) {
+                final double o = dists[j] - median;
+                ssq += o * o;
+            }
+            return ssq / i;
         }
     }
 
