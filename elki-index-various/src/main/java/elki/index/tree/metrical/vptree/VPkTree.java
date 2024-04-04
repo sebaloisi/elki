@@ -195,7 +195,7 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
 
     }
 
-    public enum VPSelectionAlgorithm {
+    private enum VPSelectionAlgorithm {
         RANDOM,
         MAXIMUM_VARIANCE,
         MAXIMUM_VARIANCE_SAMPLING,
@@ -206,6 +206,7 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
      * Build the VPk-Tree
      * 
      * @author Sebastian Aloisi
+     * based on Builder Class for VP-Tree written by Erich Schubert
      */
     private class Builder {
         /**
