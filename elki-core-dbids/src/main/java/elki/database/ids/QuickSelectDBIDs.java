@@ -374,7 +374,7 @@ public final class QuickSelectDBIDs {
    * @param end Interval end (exclusive)
    * @param rank rank position we are interested in (starting at 0)
    */
-  public static void quickSelect(ModifiableDoubleDBIDList data, int start, int end, int rank) {
+  public static void  quickSelect(ModifiableDoubleDBIDList data, int start, int end, int rank) {
     DoubleDBIDListIter refi = data.iter(), refj = data.iter(),
         pivot = data.iter();
     while(true) {

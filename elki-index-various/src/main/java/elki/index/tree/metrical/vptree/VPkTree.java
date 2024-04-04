@@ -189,6 +189,8 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
     @Override
     public void initialize() {
         root = new Builder().buildTree(0, relation.size());
+        //TODO: remove
+
     }
 
     public enum VPSelectionAlgorithm {
@@ -264,12 +266,6 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
                 break;
             }
 
-            if (vpSelector == VPSelectionAlgorithm.MAXIMUM_VARIANCE){
-                
-            } else {
-                
-            }
-
             int tied = 0;
             // Compute all the distances to the vantage point
             for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()) {
@@ -288,8 +284,10 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
                     scratch.swap(scratchit.getOffset(), left + tied++);
                 }
             }
+
             assert tied > 0;
             assert DBIDUtil.equal(vantagePoint, scratchit.seek(left)) : "tied: " + tied;
+
             // Note: many duplicates of vantage point:
             if(left + tied + truncate > right) {
                 ModifiableDoubleDBIDList vps = DBIDUtil.newDistanceDBIDList(right - left);
@@ -313,13 +311,21 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
             for(int i = 0; i < quantilesAmount; i++) {
                 double currentBound = (double) (i + 1) / (double) kVal;
                 quantiles[i] = QuickSelectDBIDs.quantile(scratch, left, right, currentBound);
+                
+            }
 
-                QuickSelectDBIDs.quickSelect(scratch, left + tied, right, quantiles[i]);
+            QuickSelectDBIDs.quickSelect(scratch, left + tied, right, quantiles[quantiles.length-1]);
+
+            int leftQuant = left;
+            for(int i = 0; i < quantilesAmount; i++) {
+
                 final double quantileDistVal = scratch.doubleValue(quantiles[i]);
 
                 // offset for values == quantileDistVal, such that correct
                 // sorting is given
-                for(scratchit.seek(left + tied); scratchit.getOffset() < quantiles[i]; scratchit.advance()) {
+                // TODO: loop in quantile?
+                // TODO: + quantiles correct?
+                for(scratchit.seek(leftQuant + tied); scratchit.getOffset() < quantiles[i]; scratchit.advance()) {
                     final double d = scratchit.doubleValue();
                     // Move all tied with the quantile to the next partition
                     if(d == quantileDistVal) {
@@ -329,14 +335,16 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
                     lowBounds[i] = d < lowBounds[i] ? d : lowBounds[i];
                     highBounds[i] = d > highBounds[i] ? d : highBounds[i];
                 }
-
-                for(scratchit.seek(quantiles[i]); scratchit.getOffset() < right; scratchit.advance()) {
-                    final double d = scratchit.doubleValue();
-                    lowBounds[kVal - 1] = d < lowBounds[kVal - 1] ? d : lowBounds[kVal - 1];
-                    highBounds[kVal - 1] = d > highBounds[kVal - 1] ? d : highBounds[kVal - 1];
-                }
+                
+                leftQuant += quantiles[i];
 
                 assert right > quantiles[i];
+            }
+
+            for(scratchit.seek(quantiles[quantiles.length-1]); scratchit.getOffset() < right; scratchit.advance()) {
+                final double d = scratchit.doubleValue();
+                lowBounds[kVal - 1] = d < lowBounds[kVal - 1] ? d : lowBounds[kVal - 1];
+                highBounds[kVal - 1] = d > highBounds[kVal - 1] ? d : highBounds[kVal - 1];
             }
 
             // Recursive build, include ties with parent:
@@ -351,6 +359,7 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
             // TODO: Grosser quatsch, iterator muss weiter nach rechts um größe der Partition bewegt werden
             for(int i = 0; i < quantilesAmount; i++) {
                 if(left + tied < quantiles[i]) {
+                    // TODO: Check if part is empty?
                     current.children[i] = buildTree(left + tied, quantiles[i]);
                     current.children[i].lowBound = lowBounds[i];
                     current.children[i].highBound = highBounds[i];
@@ -391,8 +400,7 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
             return result;
         }
 
-        // TODO: mindestens 2 datenpunkte wegen Varianz?  
-        // TODO: Sampling variante ansehen (Bonus?)
+        // TODO: mindestens 2 datenpunkte wegen Varianz?
         // TODO: Referenz zur Methode einfügen
         // TODO: Standart VP-Tree Variante für Benchmarking berücksichtigen
         // HINWEIS: für GH Tree Variante auch mean berechnen!
@@ -439,7 +447,7 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
 
 
         /**
-         * Finds the Vatnage Point with maximum Variance in respect to random
+         * Finds the Vantage Point with maximum Variance in respect to random
          * sampled subsets of relation.
          * 
          * @param left
