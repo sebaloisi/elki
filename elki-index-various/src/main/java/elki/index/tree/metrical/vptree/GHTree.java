@@ -17,6 +17,7 @@ import elki.database.ids.QuickSelectDBIDs;
 import elki.database.query.PrioritySearcher;
 import elki.database.query.distance.DistanceQuery;
 import elki.database.query.knn.KNNSearcher;
+import elki.database.query.range.RangeSearcher;
 import elki.database.relation.Relation;
 import elki.distance.Distance;
 import elki.index.DistancePriorityIndex;
@@ -511,6 +512,109 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             this.query = query;
             ghKNNSearch(knns, root);
             return knns.toKNNList();
+        }
+
+        @Override
+        protected double queryDistance(DBIDRef p) {
+            return GHTree.this.distance(query, p);
+        }
+    }
+
+    /**
+     * Range Searcher for the GH-Tree
+     */
+    public static abstract class GHTreeRangeSearcher {
+
+        protected void ghRangeSearch(ModifiableDoubleDBIDList result, Node node, double range){
+            final DoubleDBIDListIter firstVP = node.leftVp.iter();
+            final DoubleDBIDListMIter secondVP = node.rightVp.iter();
+
+            final double firstVPDistance = queryDistance(firstVP);
+            final double secondVPDistance = queryDistance(secondVP);
+
+            if(firstVPDistance < range){
+                result.add(firstVPDistance,firstVP);
+            }
+
+            for(firstVP.advance(); firstVP.valid(); firstVP.advance()){
+                final double d = queryDistance(firstVP);
+                if(d <= range) {
+                    result.add(d,firstVP);
+                }
+            }
+
+            // TODO: if both, smarter ?
+
+            if(secondVPDistance < range){
+                result.add(secondVPDistance,secondVP);
+            }
+
+            for(secondVP.advance(); secondVP.valid(); secondVP.advance()) {
+                final double d = queryDistance(secondVP);
+                if(d <= range) {
+                    result.add(d, secondVP);
+                }
+            }
+            
+            Node lc = node.leftChild, rc = node.rightChild;
+
+            final double firstDistanceDiff = (firstVPDistance - secondVPDistance) / 2;
+            final double secondDistanceDiff = (secondVPDistance - firstDistanceDiff) / 2;
+
+            if( lc != null && firstDistanceDiff < range){
+                ghRangeSearch(result,lc,range);
+            }
+
+            if ( rc != null && secondDistanceDiff < range){
+                ghRangeSearch(result, rc, range);
+            }
+        }
+
+        /**
+         * Compute the distance to a candidate object.
+         * 
+         * @param p Object
+         * @return Distance
+         */
+        protected abstract double queryDistance(DBIDRef p);
+    }
+
+    /**
+     * Range search for the GH-Tree.
+     * 
+     * @author Sebastian Aloisi
+     */
+    public class GHTreeRangeObjectSearcher extends GHTreeRangeSearcher implements RangeSearcher<O> {
+
+        private O query;
+
+        @Override
+        public ModifiableDoubleDBIDList getRange(O query, double range, ModifiableDoubleDBIDList result) {
+            this.query = query;
+            ghRangeSearch(result, root, range);
+            return result;
+        }
+
+        @Override
+        protected double queryDistance(DBIDRef p) {
+            return GHTree.this.distance(query, p);
+        }   
+    }
+
+    /**
+     * Range search for the GH-Tree
+     * 
+     * @author Sebastian Aloisi
+     */
+    public class GHTreeRangeDBUDSearcher extends GHTreeRangeSearcher implements RangeSearcher<DBIDRef>{
+
+        private DBIDRef query;
+
+        @Override
+        public ModifiableDoubleDBIDList getRange(DBIDRef query, double range, ModifiableDoubleDBIDList result) {
+            this.query = query;
+            ghRangeSearch(result, root, range);
+            return result;
         }
 
         @Override
