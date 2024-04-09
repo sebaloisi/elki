@@ -7,11 +7,16 @@ import elki.database.ids.DBIDIter;
 import elki.database.ids.DBIDRef;
 import elki.database.ids.DBIDUtil;
 import elki.database.ids.DBIDVar;
+import elki.database.ids.DoubleDBIDIter;
+import elki.database.ids.DoubleDBIDListIter;
 import elki.database.ids.DoubleDBIDListMIter;
+import elki.database.ids.KNNHeap;
+import elki.database.ids.KNNList;
 import elki.database.ids.ModifiableDoubleDBIDList;
 import elki.database.ids.QuickSelectDBIDs;
 import elki.database.query.PrioritySearcher;
 import elki.database.query.distance.DistanceQuery;
+import elki.database.query.knn.KNNSearcher;
 import elki.database.relation.Relation;
 import elki.distance.Distance;
 import elki.index.DistancePriorityIndex;
@@ -102,7 +107,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
      * @param vpSelector Vantage Point selection Algorithm
      */
     public GHTree(Relation<O> relation, Distance<? super O> distance, int leafsize, int kVal, VPSelectionAlgorithm vpSelector) {
-        this(relation, distance, RandomFactory.DEFAULT, leafsize, leafsize, kVal, vpSelector);
+        this(relation, distance, RandomFactory.DEFAULT, leafsize, leafsize, vpSelector);
     }
 
     /**
@@ -176,7 +181,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
          * @param right Right bound in scratch
          * @return new node
          */
-
+        // TODO: Variant with max Bounds
         private Node buildTree(int left, int right){
             assert left < right;
             if(left + truncate >= right) {
@@ -267,11 +272,6 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             // sort left < 0; right >= 0
             QuickSelectDBIDs.quickSelect(scratch, left + tiedFirst, right, firstPartititionLimit);
 
-            double leftLowBound = Double.POSITIVE_INFINITY;
-            double rightLowBound = Double.POSITIVE_INFINITY;
-            double leftHighBound = Double.NEGATIVE_INFINITY;
-            double rightHighBound = Double.NEGATIVE_INFINITY;
-
             for (scratchit.seek(left +tiedFirst); scratchit.getOffset() < firstPartititionLimit; scratchit.advance()){
                 final double d = scratchit.doubleValue();
                 // Move all tied to hyperplane to next Partitition
@@ -279,16 +279,12 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                     scratch.swap(scratchit.getOffset(), --firstPartititionLimit);
                     continue;
                 }
-                
-                leftLowBound = d < leftLowBound ? d : leftLowBound;
-                leftHighBound = d > leftHighBound ? d : leftHighBound;
 
             }
             
             for(scratchit.seek(firstPartititionLimit); scratchit.getOffset() < right - tiedSecond; scratchit.advance()) {
                 final double d = scratchit.doubleValue();
-                rightLowBound = d < rightLowBound ? d : rightLowBound;
-                rightHighBound = d > rightHighBound ? d : rightHighBound;
+
             }
             
             assert right > firstPartititionLimit;
@@ -310,12 +306,8 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             // TODO: disappearing left branches?
             if(left + tiedFirst < firstPartititionLimit){
                 current.leftChild = buildTree(left + tiedFirst, firstPartititionLimit);
-                current.leftChild.lowBound = leftLowBound;
-                current.leftChild.highBound = leftHighBound;
             }
             current.rightChild = buildTree(firstPartititionLimit, right - tiedSecond);
-            current.rightChild.lowBound = leftHighBound;
-            current.rightChild.highBound = rightHighBound;
             
             return current;
         }
@@ -391,8 +383,6 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         public Node(ModifiableDoubleDBIDList leftVp, ModifiableDoubleDBIDList rightVp) {
             this.leftVp = leftVp;
             this.rightVp = rightVp;
-            this.lowBound = Double.NaN;
-            this.highBound = Double.NaN;
             assert !rightVp.isEmpty();
             assert !leftVp.isEmpty();
         }
@@ -426,6 +416,107 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
     public PrioritySearcher<O> priorityByObject(DistanceQuery<O> distanceQuery, double maxrange, int flags) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'priorityByObject'");
+    }
+
+    /**
+     * kNN search for the GH-Tree
+     * 
+     * @author Sebastian Aloisi
+     */
+    public static abstract class GHTreeKNNSearcher {
+        /**
+         * Recursive search function
+         * 
+         * @param knns Current kNN results
+         * @param node Current node
+         * @return New tau
+         */
+        protected double ghKNNSearch(KNNHeap knns, Node node){
+            DoubleDBIDListIter firstVP = node.leftVp.iter();
+            DoubleDBIDListIter secondVP = node.rightVp.iter();
+            
+            final double firstVPDistance = queryDistance(firstVP);
+            final double secondVPDistance = queryDistance(secondVP);
+
+            knns.insert(firstVPDistance, firstVP);
+            knns.insert(secondVPDistance, secondVP);
+
+            for(firstVP.advance(); firstVP.valid(); firstVP.advance()){
+                knns.insert(queryDistance(firstVP), firstVP);
+            }
+
+            for(secondVP.advance(); secondVP.valid(); secondVP.advance()){
+                knns.insert(queryDistance(secondVP), secondVP);
+            }
+
+            Node lc = node.leftChild, rc = node.rightChild;
+            double tau = knns.getKNNDistance();
+
+            final double firstDistanceDiff = (firstVPDistance - secondVPDistance) / 2;
+            final double secondDistanceDiff = (secondVPDistance - firstDistanceDiff) /2;
+
+            // TODO: Priortization?
+
+            if (lc != null && firstDistanceDiff < tau){
+                tau = ghKNNSearch(knns, lc);
+            }
+
+            if (rc != null && secondDistanceDiff < tau) {
+                tau = ghKNNSearch(knns, rc);
+            }
+
+            return tau;
+
+        }
+
+        /**
+         * Compute the distance to a candidate object.
+         * 
+         * @param p Object
+         * @return Distance
+         */
+        protected abstract double queryDistance(DBIDRef p);
+    }
+
+    public class GHTreeKNNObjectSearcher extends GHTreeKNNSearcher implements KNNSearcher<O> {
+        private O query;
+
+        @Override
+        public KNNList getKNN(O query, int k) {
+            final KNNHeap knns = DBIDUtil.newHeap(k);
+            this.query = query;
+            ghKNNSearch(knns, root);
+            return knns.toKNNList();
+        }
+
+        @Override
+        protected double queryDistance(DBIDRef p) {
+            return GHTree.this.distance(query, p);
+        }
+    }
+
+    /**
+     * 
+     * kNN search for the GH-Tree
+     * 
+     * @author Sebastian Aloisi
+     */
+    public class GHTreeKNNDBIDSearcher extends GHTreeKNNSearcher implements KNNSearcher<DBIDRef> {
+
+        private DBIDRef query;
+
+        @Override
+        public KNNList getKNN(DBIDRef query, int k) {
+            final KNNHeap knns = DBIDUtil.newHeap(k);
+            this.query = query;
+            ghKNNSearch(knns, root);
+            return knns.toKNNList();
+        }
+
+        @Override
+        protected double queryDistance(DBIDRef p) {
+            return GHTree.this.distance(query, p);
+        }
     }
     
 }
