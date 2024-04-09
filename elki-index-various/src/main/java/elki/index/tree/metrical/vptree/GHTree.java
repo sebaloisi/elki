@@ -28,6 +28,8 @@ import elki.index.tree.metrical.vptree.VPTree.VPTreePriorityObjectSearcher;
 import elki.index.tree.metrical.vptree.VPTree.VPTreeRangeDBIDSearcher;
 import elki.index.tree.metrical.vptree.VPTree.VPTreeRangeObjectSearcher;
 import elki.logging.Logging;
+import elki.logging.statistics.LongStatistic;
+import elki.utilities.datastructures.heap.DoubleObjectMinHeap;
 import elki.utilities.documentation.Reference;
 import elki.utilities.random.RandomFactory;
 
@@ -212,6 +214,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             int firstPartititionSize = 0;
             int secondPartititionSize = 0;
 
+
             // Compute difference between distances to Vantage Points
             for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()) {
                 double firstDistance = distance(scratchit, firstVP);
@@ -275,22 +278,31 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
 
             int firstPartititionLimit = firstPartititionSize + tiedFirst;
 
+            double firstLowBound = Double.MAX_VALUE;
+            double firstHighBound = -1;
+            double secondLowBound = Double.MAX_VALUE;
+            double secondHighBound = -1;
+
             // sort left < 0; right >= 0
-            QuickSelectDBIDs.quickSelect(scratch, left + tiedFirst, right, firstPartititionLimit);
+            QuickSelectDBIDs.quickSelect(scratch, left + tiedFirst, right - tiedSecond, firstPartititionLimit);
 
             for(scratchit.seek(left + tiedFirst); scratchit.getOffset() < firstPartititionLimit; scratchit.advance()) {
                 final double d = scratchit.doubleValue();
-                // Move all tied to hyperplane to next Partitition
+                // Move all tied to hyperplane to the second Partitition
                 if(d == 0) {
                     scratch.swap(scratchit.getOffset(), --firstPartititionLimit);
                     continue;
                 }
 
+                firstLowBound = d < firstLowBound ? d : firstLowBound;
+                firstHighBound = d > firstHighBound ? d : firstHighBound;
             }
 
             for(scratchit.seek(firstPartititionLimit); scratchit.getOffset() < right - tiedSecond; scratchit.advance()) {
                 final double d = scratchit.doubleValue();
 
+                secondLowBound = d < secondLowBound ? d : secondLowBound;
+                secondHighBound = d > secondHighBound ? d: secondHighBound;
             }
 
             assert right > firstPartititionLimit;
@@ -312,8 +324,13 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             // TODO: disappearing left branches?
             if(left + tiedFirst < firstPartititionLimit) {
                 current.leftChild = buildTree(left + tiedFirst, firstPartititionLimit);
+                current.leftChild.firstLowBound = firstLowBound;
+                current.leftChild.firstHighBound = firstHighBound;
             }
+
             current.rightChild = buildTree(firstPartititionLimit, right - tiedSecond);
+            current.rightChild.secondLowBound = secondLowBound;
+            current.rightChild.secondHighBound = secondHighBound;
 
             return current;
         }
@@ -382,7 +399,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         /**
          * upper and lower distance bounds
          */
-        double lowBound, highBound;
+        double firstLowBound, firstHighBound, secondLowBound, secondHighBound;
 
         /**
          * Constructor.
@@ -666,4 +683,127 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             return GHTree.this.distance(query, p);
         }
     }
+
+    /**
+     * Priority search for the GH-Tree
+     * 
+     * @author Sebastian Aloisi
+     * 
+     * @param <Q> query type
+     */
+    public abstract class GHTreePrioritySearcher<Q> implements PrioritySearcher<Q> {
+        /**
+         * Min heap for searching.
+         */
+        private DoubleObjectMinHeap<Node> heap = new DoubleObjectMinHeap<>();
+
+        /**
+         * Stopping threshold.
+         */
+        private double threshold;
+
+        /**
+         * Current search position.
+         */
+        private Node cur;
+
+        /**
+         * Current iterator.
+         */
+        private DoubleDBIDListIter candidates = DoubleDBIDListIter.EMPTY;
+
+        /**
+         * Distance to the current object.
+         */
+        private double curdist, vpDist;
+
+        /**
+         * Start the search.
+         */
+        public void doSearch() {
+            this.threshold = Double.POSITIVE_INFINITY;
+            this.candidates = DoubleDBIDListIter.EMPTY;
+            this.heap.clear();
+            this.heap.add(0, root);
+            advance();
+        }
+
+        @Override
+        public PrioritySearcher<Q> advance() {
+            if(heap.isEmpty()){
+                cur = null;
+                return this;
+            }
+
+            cur = heap.peekValue();
+            double mindist = heap.peekKey();
+            heap.poll(); // Remove
+
+            if (cur != null){
+                boolean ignoreFirst = false;
+                boolean ignoreSecond = false;
+
+                double firstDistance = queryDistance(cur.leftVp.iter());
+                double secondDistance = queryDistance(cur.rightVp.iter());
+
+
+                // Check interval intersection fromeach vp point of view
+                if (cur.leftChild != null && !intersect(firstDistance - threshold, firstDistance + threshold, cur.firstLowBound,cur.firstHighBound)){
+                    ignoreFirst = true;
+                }
+
+                if (cur.rightChild != null && !intersect(firstDistance - threshold, firstDistance + threshold, cur.secondLowBound, cur.secondHighBound)) {
+                    ignoreSecond = true;
+                }
+
+                if (cur.leftChild != null && !intersect(firstDistance - threshold, firstDistance + threshold, cur.secondLowBound, cur.secondHighBound)) {
+                    ignoreFirst = true;
+                }
+
+                if (cur.rightChild != null && intersect(secondDistance -threshold, secondDistance + threshold, cur.secondLowBound, cur.secondHighBound)){
+                    ignoreSecond = true;
+                }
+
+                if(!ignoreFirst){
+                    double cdist = Math.max(firstDistance - cur.firstHighBound, mindist);
+                    heap.add(cdist, cur.leftChild);
+                }
+
+                if(!ignoreSecond){
+                    double cdist = Math.max(secondDistance - cur.secondHighBound, mindist);
+                    heap.add(cdist, cur.leftChild);
+                }
+
+
+            }
+
+            return this;
+        }
+
+        /**
+         * Query the distance to a query object.
+         *
+         * @param iter Target object
+         * @return Distance
+         */
+        protected abstract double queryDistance(DBIDRef iter);
+    }
+
+    /**
+     * check intersection of 2 intervals
+     * 
+     * @param l1 first lower bound
+     * @param u1 first upper bound
+     * @param l2 second lower bound
+     * @param u2 second upper bound
+     * @return if intervals intersect
+     */
+    private static boolean intersect(double l1, double u1, double l2, double u2) {
+        return l1 <= u2 && l2 <= u1;
+    }
+
+      @Override
+  public void logStatistics() {
+    LOG.statistics(new LongStatistic(this.getClass().getName() + ".distance-computations", distComputations));
+  }
 }
