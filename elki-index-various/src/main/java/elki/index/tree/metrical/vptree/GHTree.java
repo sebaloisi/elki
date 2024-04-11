@@ -607,6 +607,69 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
 
             return new DBIDVarTuple(firstVP, secondVP);
         }
+
+        /**
+         * First VP is selected by Maximum Variance
+         * Second VP is selected by FFT
+         * 
+         * @param left
+         * @param right
+         * @return Vantage Points
+         */
+        private DBIDVarTuple selectMVFFTVantagePoints(int left, int right){
+            // Create Workset to sample from
+            final int s = Math.min(sampleSize, right - left);
+            ArrayModifiableDBIDs scratchCopy = DBIDUtil.newArray(right - left);
+            for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()) {
+                scratchCopy.add(scratchit);
+            }
+
+            ModifiableDBIDs workset = DBIDUtil.randomSample(scratchCopy, s, rnd);
+
+            DBIDVar firstVP = DBIDUtil.newVar();
+            DBIDVar secondVP = DBIDUtil.newVar();
+            DBIDVar currentDbid = DBIDUtil.newVar();
+
+            double bestStandartDeviation = Double.NEGATIVE_INFINITY;
+            double bestMean = 0;
+            double maxdist = -1;
+
+            // Select first VP
+            for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()){
+                int currentOffset = scratchit.getOffset();
+                
+                currentDbid.set(scratchit);
+
+                MeanVariance currentVariance = new MeanVariance();
+
+                for (scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()){
+                    double currentDistance = distance(currentDbid, scratchit);
+
+                    currentVariance.put(currentDistance);
+                }
+
+                scratchit.seek(currentOffset);
+
+                double currentStandartDeviance = currentVariance.getSampleStddev();
+
+                if (currentStandartDeviance > bestStandartDeviation){
+                    firstVP.set(scratchit);
+                    bestStandartDeviation = currentStandartDeviance;
+                }
+            }
+
+            // Select second VP
+            for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()){
+                double curdist = distance(firstVP, scratchit);
+
+                if(curdist > maxdist){
+                    maxdist = curdist;
+                    secondVP.set(scratchit);
+                }
+            }
+
+            return new DBIDVarTuple(firstVP, secondVP);
+        }
     }
 
     /**

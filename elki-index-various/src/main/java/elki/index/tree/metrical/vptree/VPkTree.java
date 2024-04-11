@@ -421,18 +421,18 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
         private DBIDVar selectMaximumVarianceVantagePoint(int left, int right){
 
             DBIDVar best = DBIDUtil.newVar();
-            DBIDVar currenDbid = DBIDUtil.newVar();
+            DBIDVar currentDbid = DBIDUtil.newVar();
             double bestStandartDeviation = Double.NEGATIVE_INFINITY;
 
             for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()){
                 int currentOffset = scratchit.getOffset();
                 
-                currenDbid.set(scratchit);
+                currentDbid.set(scratchit);
 
                 MeanVariance currentVariance = new MeanVariance();
 
                 for (scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()){
-                    double currentDistance = distance(currenDbid, scratchit);
+                    double currentDistance = distance(currentDbid, scratchit);
 
                     currentVariance.put(currentDistance);
                 }
