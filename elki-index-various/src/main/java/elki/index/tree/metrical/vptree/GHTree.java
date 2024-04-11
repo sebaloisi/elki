@@ -4,8 +4,10 @@ import java.util.Random;
 
 import elki.data.NumberVector;
 import elki.data.type.TypeInformation;
+import elki.database.ids.ArrayModifiableDBIDs;
 import elki.database.ids.DBID;
 import elki.database.ids.DBIDIter;
+import elki.database.ids.DBIDMIter;
 import elki.database.ids.DBIDRef;
 import elki.database.ids.DBIDUtil;
 import elki.database.ids.DBIDVar;
@@ -153,8 +155,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
 
     @Override
     public void initialize() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'initialize'");
+        root = new Builder().buildTree(0, relation.size());
     }
 
     private enum VPSelectionAlgorithm {
@@ -347,6 +348,18 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             return current;
         }
 
+
+        private class DBIDVarTuple {
+            DBIDVar first;
+
+            DBIDVar second;
+
+            public DBIDVarTuple(DBIDVar first, DBIDVar second) {
+                this.first = first;
+                this.second = second;
+            }
+        }
+
         /**
          * Finds two Vantage Points using Farthest first Traversal
          * 
@@ -373,15 +386,36 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             return new DBIDVarTuple(first, second);
         }
 
-        private class DBIDVarTuple {
-            DBIDVar first;
+        /**
+         * Returns two random Vantage Points. Ignores duplicates.
+         * 
+         * @param left Left bound in scratch
+         * @param right Right Bound in scratch
+         * @return two Vantage points
+         */
+        private DBIDVarTuple selectRandomVantagePoints(int left, int right) {
+            // Select First VP at random
+            DBIDVar first = scratch.assignVar(left + rnd.nextInt(right - left), DBIDUtil.newVar());
+            DBIDVar second = DBIDUtil.newVar();
 
-            DBIDVar second;
-
-            public DBIDVarTuple(DBIDVar first, DBIDVar second) {
-                this.first = first;
-                this.second = second;
+            // Modifiable copy for selecting:
+            ArrayModifiableDBIDs workset = DBIDUtil.newArray(right - left);
+            for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()) {
+                workset.add(scratchit);
             }
+
+            // remove all Datapoints eqaul to first VP from workset
+            for(DBIDMIter it = workset.iter(); it.valid(); it.advance()){
+                if (DBIDUtil.equal(it, first)){
+                    it.remove();
+                }
+            }
+
+            second.set(DBIDUtil.randomSample(workset, random));
+
+            DBIDVarTuple result = new DBIDVarTuple(first, second);
+
+            return result;
         }
     }
 
@@ -765,19 +799,6 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
          * @return Distance
          */
         protected abstract double queryDistance(DBIDRef iter);
-    }
-
-    /**
-     * check intersection of 2 intervals
-     * 
-     * @param l1 first lower bound
-     * @param u1 first upper bound
-     * @param l2 second lower bound
-     * @param u2 second upper bound
-     * @return if intervals intersect
-     */
-    private static boolean intersect(double l1, double u1, double l2, double u2) {
-        return l1 <= u2 && l2 <= u1;
     }
 
     @Override

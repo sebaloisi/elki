@@ -191,8 +191,6 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
     @Override
     public void initialize() {
         root = new Builder().buildTree(0, relation.size());
-        //TODO: remove
-
     }
 
     private enum VPSelectionAlgorithm {
@@ -1210,7 +1208,7 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
              * Parameter to specify the VP selection Algorithm
              */
             public final static OptionID VPSELECTOR_ID = new OptionID("vpktree.vpSelector", "The Vantage Point selection Algorithm");
-            
+
             /**
              * Distance function
              */
