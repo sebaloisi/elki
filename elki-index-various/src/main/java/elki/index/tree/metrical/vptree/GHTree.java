@@ -15,6 +15,7 @@ import elki.database.ids.DoubleDBIDListIter;
 import elki.database.ids.DoubleDBIDListMIter;
 import elki.database.ids.KNNHeap;
 import elki.database.ids.KNNList;
+import elki.database.ids.ModifiableDBIDs;
 import elki.database.ids.ModifiableDoubleDBIDList;
 import elki.database.ids.QuickSelectDBIDs;
 import elki.database.query.PrioritySearcher;
@@ -214,7 +215,6 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
          * @param right Right bound in scratch
          * @return new node
          */
-        // TODO: Variant with max Bounds
         private Node buildTree(int left, int right) {
             assert left < right;
             if(left + truncate >= right) {
@@ -431,8 +431,6 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             return result;
         }
 
-
-        // TODO: alpha, Maxdist
         /**
          * Returns the two Vantage Points with maximum Variance
          * 
@@ -514,7 +512,99 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                     secondBestStandartDeviation = currentStandartDeviance;
                 }
             }
-            
+
+            return new DBIDVarTuple(firstVP, secondVP);
+        }
+
+        /**
+         * Select Maximum Variance Vantage Points using a random sampled subset of relation
+         * 
+         * @param left
+         * @param right
+         * @return Vantage Points
+         */
+        private DBIDVarTuple selectSampledMaximumVarianceVantagePoints(int left, int right){
+            if(GHTree.this.sampleSize == 2){
+                return this.selectRandomVantagePoints(left, right);
+            }
+
+            // Create Workset to sample from
+            final int s = Math.min(sampleSize, right - left);
+            ArrayModifiableDBIDs scratchCopy = DBIDUtil.newArray(right - left);
+            for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()) {
+                scratchCopy.add(scratchit);
+            }
+
+            ModifiableDBIDs workset = DBIDUtil.randomSample(scratchCopy, s, rnd);
+
+            DBIDVar firstVP = DBIDUtil.newVar();
+            DBIDVar secondVP = DBIDUtil.newVar();
+            DBIDVar currentDbid = DBIDUtil.newVar();
+
+            double bestStandartDeviation = Double.NEGATIVE_INFINITY;
+            double bestMean = 0;
+            double secondBestStandartDeviation = Double.NEGATIVE_INFINITY;
+            double maxDist = -1;
+
+            // Select first VP
+            for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
+                currentDbid.set(it);
+
+                MeanVariance currentVariance = new MeanVariance();
+
+                for(DBIDMIter jt = workset.iter(); jt.valid(); jt.advance()) {
+                    double currentDistance = distance(currentDbid, jt);
+
+                    currentVariance.put(currentDistance);
+
+                    if(currentDistance > maxDist) {
+                        maxDist = currentDistance;
+                    }
+                }
+
+                double currentStandartDeviance = currentVariance.getSampleStddev();
+
+                if(currentStandartDeviance > bestStandartDeviation) {
+                    firstVP.set(it);
+                    bestStandartDeviation = currentStandartDeviance;
+                    bestMean = currentVariance.getMean();
+                }
+            }
+
+            // Remove all candidates from workingset exceeding threshold
+            // Also remove all duplicates
+            double omega = GHTree.this.mvAlpha * maxDist;
+
+            for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
+                if(Math.abs(distance(firstVP, it) - bestMean) > omega) {
+                    it.remove();
+                }
+
+                if(DBIDUtil.equal(it, firstVP)) {
+                    it.remove();
+                }
+            }
+
+            // Select second VP
+            for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
+                currentDbid.set(it);
+
+                MeanVariance currentVariance = new MeanVariance();
+
+                for(DBIDMIter jt = workset.iter(); jt.valid(); jt.advance()) {
+                    double currentDistance = distance(currentDbid, jt);
+
+                    currentVariance.put(currentDistance);
+                }
+
+                double currentStandartDeviance = currentVariance.getSampleStddev();
+
+                if(currentStandartDeviance > secondBestStandartDeviation) {
+                    secondVP.set(it);
+                    secondBestStandartDeviation = currentStandartDeviance;
+                }
+            }
+
             return new DBIDVarTuple(firstVP, secondVP);
         }
     }
@@ -1056,7 +1146,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                             }
                         });
                 new IntParameter(SAMPLE_SIZE_ID, 10) //
-                        .addConstraint(CommonConstraints.GREATER_EQUAL_ONE_INT) //
+                        .addConstraint(CommonConstraints.GREATER_THAN_ONE_INT) //
                         .grab(config, x -> this.sampleSize = x);
                 new IntParameter(TRUNCATE_ID, 8) //
                         .addConstraint(CommonConstraints.GREATER_EQUAL_ONE_INT) //
