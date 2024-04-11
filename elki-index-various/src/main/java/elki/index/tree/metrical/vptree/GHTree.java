@@ -35,6 +35,7 @@ import elki.index.tree.metrical.vptree.VPTree.VPTreeRangeDBIDSearcher;
 import elki.index.tree.metrical.vptree.VPTree.VPTreeRangeObjectSearcher;
 import elki.logging.Logging;
 import elki.logging.statistics.LongStatistic;
+import elki.math.MeanVariance;
 import elki.utilities.Alias;
 import elki.utilities.datastructures.heap.DoubleObjectMinHeap;
 import elki.utilities.documentation.Reference;
@@ -42,6 +43,7 @@ import elki.utilities.optionhandling.OptionID;
 import elki.utilities.optionhandling.Parameterizer;
 import elki.utilities.optionhandling.constraints.CommonConstraints;
 import elki.utilities.optionhandling.parameterization.Parameterization;
+import elki.utilities.optionhandling.parameters.DoubleParameter;
 import elki.utilities.optionhandling.parameters.EnumParameter;
 import elki.utilities.optionhandling.parameters.IntParameter;
 import elki.utilities.optionhandling.parameters.ObjectParameter;
@@ -107,6 +109,17 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
     int truncate;
 
     /**
+     * Maximumvariance threshold
+     */
+
+     double mvAlpha;
+
+     /**
+      * Vantage Point Selection Algorithm
+      */
+     VPSelectionAlgorithm vpSelector;
+
+    /**
      * Counter for distance computations.
      */
     long distComputations = 0L;
@@ -116,10 +129,6 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
      */
     Node root;
 
-    /**
-     * Vantage Point Selection Algorithm
-     */
-    VPSelectionAlgorithm vpSelector;
 
     /**
      * Constructor with default values, used by EmpiricalQueryOptimizer
@@ -127,10 +136,11 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
      * @param relation data for tree construction
      * @param distance distance function for tree construction
      * @param leafsize Leaf size and sample size (simpler parameterization)
+     * @param mvAlpha Maximum Variance threshold
      * @param vpSelector Vantage Point selection Algorithm
      */
-    public GHTree(Relation<O> relation, Distance<? super O> distance, int leafsize, int kVal, VPSelectionAlgorithm vpSelector) {
-        this(relation, distance, RandomFactory.DEFAULT, leafsize, leafsize, vpSelector);
+    public GHTree(Relation<O> relation, Distance<? super O> distance, int leafsize, double mvAlpha, VPSelectionAlgorithm vpSelector) {
+        this(relation, distance, RandomFactory.DEFAULT, leafsize, leafsize, mvAlpha, vpSelector);
     }
 
     /**
@@ -141,15 +151,17 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
      * @param random Random generator for sampling
      * @param sampleSize Sample size for finding the vantage point
      * @param truncate Leaf size threshold
+     * @param mvAlpha Maximum Variance threshold
      * @param vpSelector Vantage Point selection Algorithm
      */
-    public GHTree(Relation<O> relation, Distance<? super O> distance, RandomFactory random, int sampleSize, int truncate, VPSelectionAlgorithm vpSelector) {
+    public GHTree(Relation<O> relation, Distance<? super O> distance, RandomFactory random, int sampleSize, int truncate, double mvAlpha, VPSelectionAlgorithm vpSelector) {
         this.relation = relation;
         this.distFunc = distance;
         this.random = random;
         this.distQuery = distance.instantiate(relation);
         this.sampleSize = Math.max(sampleSize, 1);
         this.truncate = Math.max(truncate, 1);
+        this.mvAlpha = mvAlpha;
         this.vpSelector = vpSelector;
     }
 
@@ -217,6 +229,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             }
 
             // TODO: add multiple selection Methods
+            // TODO: check for all equal and/or less than 2
             DBIDVarTuple tuple = selectFFTVantagePoints(left, right);
 
             DBIDVar firstVP = tuple.first;
@@ -416,6 +429,93 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             DBIDVarTuple result = new DBIDVarTuple(first, second);
 
             return result;
+        }
+
+
+        // TODO: alpha, Maxdist
+        /**
+         * Returns the two Vantage Points with maximum Variance
+         * 
+         * @param left Left bound in scratch
+         * @param right Right Bound in scratch
+         * @return two Vantage points
+         */
+        private DBIDVarTuple selectMaximumVarianceVantagePoints(int left, int right){
+            DBIDVar firstVP = DBIDUtil.newVar();
+            DBIDVar secondVP = DBIDUtil.newVar();
+            DBIDVar currentDbid = DBIDUtil.newVar();
+
+            double bestStandartDeviation = Double.NEGATIVE_INFINITY;
+            double bestMean = 0;
+            double secondBestStandartDeviation = Double.NEGATIVE_INFINITY;
+            double maxDist = -1;
+
+            // Modifiable copy for selecting:
+            ArrayModifiableDBIDs workset = DBIDUtil.newArray(right - left);
+            for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()) {
+                workset.add(scratchit);
+            }
+
+            // Select first VP
+            for(DBIDMIter it = workset.iter(); it.valid(); it.advance()){
+                currentDbid.set(it);
+
+                MeanVariance currentVariance = new MeanVariance();
+
+                for(DBIDMIter jt = workset.iter(); jt.valid(); jt.advance()){
+                    double currentDistance = distance(currentDbid, jt);
+
+                    currentVariance.put(currentDistance);
+
+                    if(currentDistance > maxDist){
+                        maxDist = currentDistance;
+                    }
+                }
+
+                double currentStandartDeviance = currentVariance.getSampleStddev();
+
+                if(currentStandartDeviance > bestStandartDeviation) {
+                    firstVP.set(it);
+                    bestStandartDeviation = currentStandartDeviance;
+                    bestMean = currentVariance.getMean();
+                }
+            }
+
+            // Remove all candidates from workingset exceeding threshold
+            // Also remove all duplicates
+            double omega = GHTree.this.mvAlpha * maxDist;
+
+            for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
+                if (Math.abs(distance(firstVP,it) - bestMean) > omega){
+                    it.remove();
+                }
+
+                if(DBIDUtil.equal(it, firstVP)){
+                    it.remove();
+                }
+            }
+
+            // Select second VP
+            for(DBIDMIter it = workset.iter(); it.valid(); it.advance()){
+                currentDbid.set(it);
+
+                MeanVariance currentVariance = new MeanVariance();
+
+                for(DBIDMIter jt = workset.iter(); jt.valid(); jt.advance()) {
+                    double currentDistance = distance(currentDbid, jt);
+
+                    currentVariance.put(currentDistance);
+                }
+
+                double currentStandartDeviance = currentVariance.getSampleStddev();
+
+                if(currentStandartDeviance > secondBestStandartDeviation) {
+                    secondVP.set(it);
+                    secondBestStandartDeviation = currentStandartDeviance;
+                }
+            }
+            
+            return new DBIDVarTuple(firstVP, secondVP);
         }
     }
 
@@ -837,6 +937,12 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         int truncate;
 
         /**
+         * Maximum Variance threshold
+         */
+
+         double mvAlpha;
+
+        /**
          * Vantage Point selection Algorithm
          */
         VPSelectionAlgorithm vpSelector;
@@ -848,20 +954,22 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
          * @param random random generator
          * @param sampleSize sample size
          * @param truncate maximum leaf size (truncation)
+         * @param mvAlpha Maximum Variance threshold
          * @param vpSelector Vantage Point selection Algorithm
          */
-        public Factory(Distance<? super O> distance, RandomFactory random, int sampleSize, int truncate, VPSelectionAlgorithm vpSelector) {
+        public Factory(Distance<? super O> distance, RandomFactory random, int sampleSize, int truncate, double mvAlpha, VPSelectionAlgorithm vpSelector) {
             super();
             this.distance = distance;
             this.random = random;
             this.sampleSize = sampleSize;
             this.truncate = truncate;
+            this.mvAlpha = mvAlpha;
             this.vpSelector = vpSelector;
         }
 
         @Override
         public Index instantiate(Relation<O> relation) {
-            return new GHTree<>(relation, distance, random, truncate, sampleSize, vpSelector);
+            return new GHTree<>(relation, distance, random, truncate, sampleSize, mvAlpha, vpSelector);
         }
 
         @Override
@@ -893,7 +1001,11 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
              * Parameter to specify the minimum leaf size
              */
             public final static OptionID TRUNCATE_ID = new OptionID("ghtree.truncate", "Minimum leaf size for stopping");
-
+            
+            /**
+             * Parameter to specify Maximum Variance Threshold
+             */
+            public final static OptionID MV_ALPHA_ID = new OptionID("ghtree.mvAlpha","Threshold for Maximum Variance VP selection Algorithm");
             /**
              * Parameter to specify the rnd generator seed
              */
@@ -925,6 +1037,11 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             int truncate;
 
             /**
+             * Maximum Variance Threshold Parameter
+             */
+            double mvAlpha;
+
+            /**
              * Vantage Point selection Algorithm
              */
             VPSelectionAlgorithm vpSelector;
@@ -945,12 +1062,16 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                         .addConstraint(CommonConstraints.GREATER_EQUAL_ONE_INT) //
                         .grab(config, x -> this.truncate = x);
                 new RandomParameter(SEED_ID).grab(config, x -> random = x);
+                new DoubleParameter(MV_ALPHA_ID,0.5) //
+                        .addConstraint(CommonConstraints.LESS_EQUAL_ONE_DOUBLE)
+                        .addConstraint(CommonConstraints.GREATER_EQUAL_ZERO_DOUBLE)
+                        .grab(config, x -> this.mvAlpha = x);
                 new EnumParameter<>(VPSELECTOR_ID, VPSelectionAlgorithm.class).grab(config, x -> this.vpSelector = x);
             }
 
             @Override
             public Object make() {
-                return new Factory<>(distance, random, sampleSize, truncate, vpSelector);
+                return new Factory<>(distance, random, sampleSize, truncate,mvAlpha, vpSelector);
             }
         }
     }
