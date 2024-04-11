@@ -2,6 +2,8 @@ package elki.index.tree.metrical.vptree;
 
 import java.util.Random;
 
+import elki.data.NumberVector;
+import elki.data.type.TypeInformation;
 import elki.database.ids.DBID;
 import elki.database.ids.DBIDIter;
 import elki.database.ids.DBIDRef;
@@ -21,6 +23,8 @@ import elki.database.query.range.RangeSearcher;
 import elki.database.relation.Relation;
 import elki.distance.Distance;
 import elki.index.DistancePriorityIndex;
+import elki.index.Index;
+import elki.index.IndexFactory;
 import elki.index.tree.metrical.vptree.VPTree.VPTreeKNNDBIDSearcher;
 import elki.index.tree.metrical.vptree.VPTree.VPTreeKNNObjectSearcher;
 import elki.index.tree.metrical.vptree.VPTree.VPTreePriorityDBIDSearcher;
@@ -29,8 +33,17 @@ import elki.index.tree.metrical.vptree.VPTree.VPTreeRangeDBIDSearcher;
 import elki.index.tree.metrical.vptree.VPTree.VPTreeRangeObjectSearcher;
 import elki.logging.Logging;
 import elki.logging.statistics.LongStatistic;
+import elki.utilities.Alias;
 import elki.utilities.datastructures.heap.DoubleObjectMinHeap;
 import elki.utilities.documentation.Reference;
+import elki.utilities.optionhandling.OptionID;
+import elki.utilities.optionhandling.Parameterizer;
+import elki.utilities.optionhandling.constraints.CommonConstraints;
+import elki.utilities.optionhandling.parameterization.Parameterization;
+import elki.utilities.optionhandling.parameters.EnumParameter;
+import elki.utilities.optionhandling.parameters.IntParameter;
+import elki.utilities.optionhandling.parameters.ObjectParameter;
+import elki.utilities.optionhandling.parameters.RandomParameter;
 import elki.utilities.random.RandomFactory;
 
 /**
@@ -214,7 +227,6 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             int firstPartititionSize = 0;
             int secondPartititionSize = 0;
 
-
             // Compute difference between distances to Vantage Points
             for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()) {
                 double firstDistance = distance(scratchit, firstVP);
@@ -302,7 +314,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                 final double d = scratchit.doubleValue();
 
                 secondLowBound = d < secondLowBound ? d : secondLowBound;
-                secondHighBound = d > secondHighBound ? d: secondHighBound;
+                secondHighBound = d > secondHighBound ? d : secondHighBound;
             }
 
             assert right > firstPartititionLimit;
@@ -710,19 +722,22 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         /**
          * Current iterator.
          */
-        private DoubleDBIDListIter candidates = DoubleDBIDListIter.EMPTY;
+        private DoubleDBIDListIter firstCandidates = DoubleDBIDListIter.EMPTY;
+
+        private DoubleDBIDListIter secondCandidates = DoubleDBIDListIter.EMPTY;
 
         /**
          * Distance to the current object.
          */
-        private double curdist, vpDist;
+        private double curdist, firstDist, secondDist;
 
         /**
          * Start the search.
          */
         public void doSearch() {
             this.threshold = Double.POSITIVE_INFINITY;
-            this.candidates = DoubleDBIDListIter.EMPTY;
+            this.firstCandidates = DoubleDBIDListIter.EMPTY;
+            this.secondCandidates = DoubleDBIDListIter.EMPTY;
             this.heap.clear();
             this.heap.add(0, root);
             advance();
@@ -730,54 +745,17 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
 
         @Override
         public PrioritySearcher<Q> advance() {
-            if(heap.isEmpty()){
-                cur = null;
-                return this;
-            }
-
-            cur = heap.peekValue();
-            double mindist = heap.peekKey();
-            heap.poll(); // Remove
-
-            if (cur != null){
-                boolean ignoreFirst = false;
-                boolean ignoreSecond = false;
-
-                double firstDistance = queryDistance(cur.leftVp.iter());
-                double secondDistance = queryDistance(cur.rightVp.iter());
-
-
-                // Check interval intersection fromeach vp point of view
-                if (cur.leftChild != null && !intersect(firstDistance - threshold, firstDistance + threshold, cur.firstLowBound,cur.firstHighBound)){
-                    ignoreFirst = true;
-                }
-
-                if (cur.rightChild != null && !intersect(firstDistance - threshold, firstDistance + threshold, cur.secondLowBound, cur.secondHighBound)) {
-                    ignoreSecond = true;
-                }
-
-                if (cur.leftChild != null && !intersect(firstDistance - threshold, firstDistance + threshold, cur.secondLowBound, cur.secondHighBound)) {
-                    ignoreFirst = true;
-                }
-
-                if (cur.rightChild != null && intersect(secondDistance -threshold, secondDistance + threshold, cur.secondLowBound, cur.secondHighBound)){
-                    ignoreSecond = true;
-                }
-
-                if(!ignoreFirst){
-                    double cdist = Math.max(firstDistance - cur.firstHighBound, mindist);
-                    heap.add(cdist, cur.leftChild);
-                }
-
-                if(!ignoreSecond){
-                    double cdist = Math.max(secondDistance - cur.secondHighBound, mindist);
-                    heap.add(cdist, cur.leftChild);
-                }
-
-
-            }
 
             return this;
+        }
+
+        /**
+         * Expand the next node of the priority heap.
+         * 
+         * @return success
+         */
+        protected boolean advanceQueue() {
+
         }
 
         /**
@@ -802,8 +780,157 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         return l1 <= u2 && l2 <= u1;
     }
 
-      @Override
-  public void logStatistics() {
-    LOG.statistics(new LongStatistic(this.getClass().getName() + ".distance-computations", distComputations));
-  }
+    @Override
+    public void logStatistics() {
+        LOG.statistics(new LongStatistic(this.getClass().getName() + ".distance-computations", distComputations));
+    }
+
+    /**
+     * Index factory for the GH-Tree
+     * 
+     * @author Sebastian Aloisi
+     * 
+     * @param <O> Object type
+     */
+    @Alias({ "gh" })
+    public static class Factory<O extends NumberVector> implements IndexFactory<O> {
+
+        /**
+         * Distance Function
+         */
+        Distance<? super O> distance;
+
+        /**
+         * Random Factory
+         */
+        RandomFactory random;
+
+        /**
+         * Sample size
+         */
+        int sampleSize;
+
+        /**
+         * Truncation parameter
+         */
+        int truncate;
+
+        /**
+         * Vantage Point selection Algorithm
+         */
+        VPSelectionAlgorithm vpSelector;
+
+        /**
+         * Constructor
+         * 
+         * @param distance distance function
+         * @param random random generator
+         * @param sampleSize sample size
+         * @param truncate maximum leaf size (truncation)
+         * @param vpSelector Vantage Point selection Algorithm
+         */
+        public Factory(Distance<? super O> distance, RandomFactory random, int sampleSize, int truncate, VPSelectionAlgorithm vpSelector) {
+            super();
+            this.distance = distance;
+            this.random = random;
+            this.sampleSize = sampleSize;
+            this.truncate = truncate;
+            this.vpSelector = vpSelector;
+        }
+
+        @Override
+        public Index instantiate(Relation<O> relation) {
+            return new GHTree<>(relation, distance, random, truncate, sampleSize, vpSelector);
+        }
+
+        @Override
+        public TypeInformation getInputTypeRestriction() {
+            return distance.getInputTypeRestriction();
+        }
+
+        /**
+         * Parameterization class
+         * 
+         * @author Sebastian Aloisi
+         */
+        public static class Par<O extends NumberVector> implements Parameterizer {
+
+            /**
+             * Parameter to specify the distance function to determine the
+             * distance
+             * between database objects, must extend
+             * {@link elki.distance.Distance}.
+             */
+            public final static OptionID DISTANCE_FUNCTION_ID = new OptionID("ghtree.distanceFunction", "Distance function to determine the distance between objects");
+
+            /**
+             * Parameter to specify the sample size for choosing vantage points
+             */
+            public final static OptionID SAMPLE_SIZE_ID = new OptionID("ghtree.sampleSize", "Size of sample to select vantage points from");
+
+            /**
+             * Parameter to specify the minimum leaf size
+             */
+            public final static OptionID TRUNCATE_ID = new OptionID("ghtree.truncate", "Minimum leaf size for stopping");
+
+            /**
+             * Parameter to specify the rnd generator seed
+             */
+            public final static OptionID SEED_ID = new OptionID("ghtree.seed", "The rnd number generator seed");
+
+            /**
+             * Parameter to specify the Vantage Point selection Algorithm
+             */
+            public final static OptionID VPSELECTOR_ID = new OptionID("ghtree.vpSelector", "The Vantage Point selection Algorithm");
+
+            /**
+             * Distance function
+             */
+            protected Distance<? super O> distance;
+
+            /**
+             * Random generator
+             */
+            protected RandomFactory random;
+
+            /**
+             * Sample size
+             */
+            protected int sampleSize;
+
+            /**
+             * Truncation parameter
+             */
+            int truncate;
+
+            /**
+             * Vantage Point selection Algorithm
+             */
+            VPSelectionAlgorithm vpSelector;
+
+            @Override
+            public void configure(Parameterization config) {
+                new ObjectParameter<Distance<? super O>>(DISTANCE_FUNCTION_ID, Distance.class) //
+                        .grab(config, x -> {
+                            this.distance = x;
+                            if(!distance.isMetric()) {
+                                LOG.warning("GHtree requires a metric to be exact.");
+                            }
+                        });
+                new IntParameter(SAMPLE_SIZE_ID, 10) //
+                        .addConstraint(CommonConstraints.GREATER_EQUAL_ONE_INT) //
+                        .grab(config, x -> this.sampleSize = x);
+                new IntParameter(TRUNCATE_ID, 8) //
+                        .addConstraint(CommonConstraints.GREATER_EQUAL_ONE_INT) //
+                        .grab(config, x -> this.truncate = x);
+                new RandomParameter(SEED_ID).grab(config, x -> random = x);
+                new EnumParameter<>(VPSELECTOR_ID, VPSelectionAlgorithm.class).grab(config, x -> this.vpSelector = x);
+            }
+
+            @Override
+            public Object make() {
+                return new Factory<>(distance, random, sampleSize, truncate, vpSelector);
+            }
+        }
+    }
 }

@@ -1206,8 +1206,11 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
              */
             public final static OptionID KFOLD_ID = new OptionID("vpktree.kfold", "The size to k-fold split to");
 
-            
+            /**
+             * Parameter to specify the VP selection Algorithm
+             */
             public final static OptionID VPSELECTOR_ID = new OptionID("vpktree.vpSelector", "The Vantage Point selection Algorithm");
+            
             /**
              * Distance function
              */
