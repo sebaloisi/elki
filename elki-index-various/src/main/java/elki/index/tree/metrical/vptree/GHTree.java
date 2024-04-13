@@ -176,6 +176,19 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
     }
 
     /**
+     * check intersection of 2 intervals
+     * 
+     * @param l1 first lower bound
+     * @param u1 first upper bound
+     * @param l2 second lower bound
+     * @param u2 second upper bound
+     * @return if intervals intersect
+     */
+    private static boolean intersect(double l1, double u1, double l2, double u2) {
+        return l1 <= u2 && l2 <= u1;
+    }
+
+    /**
      * Build the GH Tree
      * 
      * @author Sebastian Aloisi
@@ -233,6 +246,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             DBIDVarTuple tuple = selectFFTVantagePoints(left, right);
 
             DBIDVar firstVP = tuple.first;
+            // TODO: what if secondVP = null
             DBIDVar secondVP = tuple.second;
 
             assert !DBIDUtil.equal(firstVP, secondVP);
@@ -360,7 +374,6 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
 
             return current;
         }
-
 
         private class DBIDVarTuple {
             DBIDVar first;
@@ -624,14 +637,11 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                 scratchCopy.add(scratchit);
             }
 
-            ModifiableDBIDs workset = DBIDUtil.randomSample(scratchCopy, s, rnd);
-
             DBIDVar firstVP = DBIDUtil.newVar();
             DBIDVar secondVP = DBIDUtil.newVar();
             DBIDVar currentDbid = DBIDUtil.newVar();
 
             double bestStandartDeviation = Double.NEGATIVE_INFINITY;
-            double bestMean = 0;
             double maxdist = -1;
 
             // Select first VP
@@ -797,6 +807,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             DoubleDBIDListIter secondVP = node.rightVp.iter();
 
             final double firstVPDistance = queryDistance(firstVP);
+            // TODO: if not null
             final double secondVPDistance = queryDistance(secondVP);
 
             knns.insert(firstVPDistance, firstVP);
@@ -890,6 +901,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             final DoubleDBIDListMIter secondVP = node.rightVp.iter();
 
             final double firstVPDistance = queryDistance(firstVP);
+            // TODO: if not null
             final double secondVPDistance = queryDistance(secondVP);
 
             if(firstVPDistance < range) {
@@ -1009,22 +1021,19 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         /**
          * Current iterator.
          */
-        private DoubleDBIDListIter firstCandidates = DoubleDBIDListIter.EMPTY;
-
-        private DoubleDBIDListIter secondCandidates = DoubleDBIDListIter.EMPTY;
+        private DoubleDBIDListIter candidates = DoubleDBIDListIter.EMPTY;
 
         /**
          * Distance to the current object.
          */
-        private double curdist, firstDist, secondDist;
+        private double curdist, vpDist;
 
         /**
          * Start the search.
          */
         public void doSearch() {
             this.threshold = Double.POSITIVE_INFINITY;
-            this.firstCandidates = DoubleDBIDListIter.EMPTY;
-            this.secondCandidates = DoubleDBIDListIter.EMPTY;
+            this.candidates = DoubleDBIDListIter.EMPTY;
             this.heap.clear();
             this.heap.add(0, root);
             advance();
@@ -1032,7 +1041,18 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
 
         @Override
         public PrioritySearcher<Q> advance() {
+            if(candidates.valid()){
+                candidates.advance();
+            }
 
+            do {
+                while(candidates.valid()){
+                    if(vpDist - candidates.doubleValue() <= threshold){
+                        return this;
+                    }
+                    candidates.advance();
+                }
+            }while(advanceQueue());
             return this;
         }
 
@@ -1042,7 +1062,57 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
          * @return success
          */
         protected boolean advanceQueue() {
+            if(heap.isEmpty()) {
+                candidates = DoubleDBIDListIter.EMPTY;
+                return false;
+            }
+            curdist = heap.peekKey();
+            if(curdist > threshold) {
+                heap.clear();
+                candidates = DoubleDBIDListIter.EMPTY;
+                return false;
+            }
+            cur = heap.peekValue();
+            heap.poll();
 
+            DoubleDBIDListIter firstCandidates = cur.leftVp.iter();
+            double firstDist = queryDistance(firstCandidates);
+            Node lc = cur.leftChild;
+
+            if(lc != null && intersect(firstDist - threshold, firstDist + threshold, lc.firstLowBound, lc.firstHighBound)) {
+                final double mindist = Math.max(Math.max(firstDist - lc.firstHighBound, lc.firstLowBound - firstDist), curdist);
+                if(mindist <= threshold) {
+                    heap.add(mindist, lc);
+                }
+            }
+
+            if (cur.rightVp == null || cur.rightVp.isEmpty()){
+                candidates = firstCandidates;
+                vpDist = firstDist;
+                return true;
+            }
+
+            DoubleDBIDListIter secondCandidates = cur.rightVp.iter();
+            double secondDist = queryDistance(secondCandidates);
+
+            Node rc = cur.rightChild;
+
+            if(rc != null && intersect(secondDist - threshold, secondDist + threshold, rc.firstLowBound, rc.firstHighBound)) {
+                final double mindist = Math.max(Math.max(secondDist - rc.firstHighBound, rc.firstLowBound - secondDist), curdist);
+                if(mindist <= threshold) {
+                    heap.add(mindist, rc);
+                }
+            }
+
+            if (firstDist < secondDist){
+                candidates = firstCandidates;
+                vpDist = firstDist;
+                return true;
+            }
+
+            candidates = secondCandidates;
+            vpDist = secondDist;
+            return true;
         }
 
         /**
@@ -1052,6 +1122,107 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
          * @return Distance
          */
         protected abstract double queryDistance(DBIDRef iter);
+
+        @Override
+        public int internalGetIndex() {
+            return candidates.internalGetIndex();
+        }
+
+        @Override
+        public boolean valid() {
+            return candidates.valid();
+        }
+
+        @Override
+        public PrioritySearcher<Q> decreaseCutoff(double threshold) {
+            assert threshold <= this.threshold : "Thresholds must only decreasee.";
+            this.threshold = threshold;
+            if(threshold < curdist) { // No more results possible:
+                heap.clear();
+                candidates = DoubleDBIDListIter.EMPTY;
+            }
+            return this;
+        }
+
+        @Override
+        public double computeExactDistance() {
+            return candidates.doubleValue() == 0. ? vpDist : queryDistance(candidates);
+        }
+
+        @Override
+        public double getApproximateDistance() {
+            return vpDist;
+        }
+
+        @Override
+        public double getApproximateAccuracy() {
+            return candidates.doubleValue();
+        }
+
+        @Override
+        public double getLowerBound() {
+            return Math.max(vpDist - candidates.doubleValue(), curdist);
+        }
+
+        @Override
+        public double getUpperBound() {
+            return vpDist + candidates.doubleValue();
+        }
+
+        @Override
+        public double allLowerBound() {
+            return curdist;
+        }
+    }
+
+    /**
+     * Priority Range Search for the GH-tree
+     * 
+     * @author Sebastian Aloisi
+     * 
+     */
+    public class GHTreePriorityObjectSearcher extends GHTreePrioritySearcher<O> {
+        /**
+         * Current query object
+         */
+        private O query;
+
+        @Override
+        public PrioritySearcher<O> search(O query) {
+            this.query = query;
+            doSearch();
+            return this;
+        }
+
+        @Override
+        protected double queryDistance(DBIDRef p) {
+            return GHTree.this.distance(query, p);
+        }
+    }
+
+    /**
+     * Priority Range Search for the GH-tree
+     * 
+     * @author Sebastian Aloisi
+     * 
+     */
+    public class GHTreePriorityDBIDSearcher extends GHTreePrioritySearcher<DBIDRef>{
+        /**
+         * Current query object
+         */
+        private DBIDRef query;
+
+        @Override
+        public PrioritySearcher<DBIDRef> search(DBIDRef query) {
+            this.query = query;
+            doSearch();
+            return this;
+        }
+
+        @Override
+        protected double queryDistance(DBIDRef p) {
+            return GHTree.this.distance(query, p);
+        }
     }
 
     @Override
