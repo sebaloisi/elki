@@ -241,19 +241,52 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                 return new Node(leftVps, rightVps);
             }
 
-            // TODO: add multiple selection Methods
+            DBIDVarTuple tuple;
+            DBIDVar firstVP;
+            DBIDVar secondVP;
+
             // TODO: check for all equal and/or less than 2
-            DBIDVarTuple tuple = selectFFTVantagePoints(left, right);
+            // TODO: Ref selection?
+            switch (GHTree.this.vpSelector) {
+                case RANDOM:
+                    tuple = selectRandomVantagePoints(left, right);
+                    firstVP = tuple.first;
+                    secondVP = tuple.second;
+                    break;
+                case FFT:
+                    tuple = selectFFTVantagePoints(left, right);
+                    firstVP = tuple.first;
+                    secondVP = tuple.second;
+                    break;
+                case MAXIMUM_VARIANCE:
+                    tuple = selectMaximumVarianceVantagePoints(left, right);
+                    firstVP = tuple.first;
+                    secondVP = tuple.second;
+                    break;
+                case MAXIMUM_VARIANCE_SAMPLING:
+                    tuple = selectSampledMaximumVarianceVantagePoints(left, right);
+                    firstVP = tuple.first;
+                    secondVP = tuple.second;
+                    break;
+                case MAXIMUM_VARIANCE_FFT:
+                    tuple = selectMVFFTVantagePoints(left, right);
+                    firstVP = tuple.first;
+                    secondVP = tuple.second;
+                    break;
+                default:
+                    tuple = selectFFTVantagePoints(left, right);
+                    firstVP = tuple.first;
+                    secondVP = tuple.second;
+                    break;
+            }
 
-            DBIDVar firstVP = tuple.first;
+            
             // TODO: what if secondVP = null
-            DBIDVar secondVP = tuple.second;
 
-            assert !DBIDUtil.equal(firstVP, secondVP);
+            //assert !DBIDUtil.equal(firstVP, secondVP);
             int tiedFirst = 0;
             int tiedSecond = 0;
             int firstPartititionSize = 0;
-            int secondPartititionSize = 0;
 
             // Compute difference between distances to Vantage Points
             for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()) {
@@ -285,9 +318,6 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                 if(distDiff < 0) {
                     firstPartititionSize += 1;
                 }
-                else {
-                    secondPartititionSize += 1;
-                }
 
                 scratchit.setDouble(distDiff);
 
@@ -303,8 +333,10 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             assert tiedFirst > 0;
             assert tiedSecond > 0;
             assert DBIDUtil.equal(firstVP, scratchit.seek(left)) : "tiedFirst" + tiedFirst;
-            assert DBIDUtil.equal(firstVP, scratchit.seek(right - 1)) : "tiedSecond" + tiedSecond;
-            assert (right - left) == firstPartititionSize + secondPartititionSize;
+            if( secondVP != null){
+                assert DBIDUtil.equal(secondVP, scratchit.seek(right - 1)) : "tiedSecond" + tiedSecond;
+            }
+            //assert (right - left) == firstPartititionSize + secondPartititionSize;
 
             // Note: many duplicates of vantage point:
             if(left + tiedFirst + truncate > right) {
@@ -718,8 +750,6 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         public Node(ModifiableDoubleDBIDList leftVp, ModifiableDoubleDBIDList rightVp) {
             this.leftVp = leftVp;
             this.rightVp = rightVp;
-            assert !rightVp.isEmpty();
-            assert !leftVp.isEmpty();
         }
     }
 

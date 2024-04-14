@@ -680,8 +680,8 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
          */
         protected double vpkKNNSearch(KNNHeap knns, Node node) {
             DoubleDBIDListIter vp = node.vp.iter();
-            final double x = queryDistance(vp);
-            knns.insert(x, vp);
+            final double vpDist = queryDistance(vp);
+            knns.insert(vpDist, vp);
             for(vp.advance(); vp.valid(); vp.advance()) {
                 knns.insert(queryDistance(vp), vp);
             }
@@ -690,10 +690,34 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
             Node[] childNodes = node.children;
             double tau = knns.getKNNDistance();
 
-            for(int i = 0; i < childNodes.length; i++) {
+            boolean[] searchedChilds = new boolean[childNodes.length];
+
+            // Priortize Nodes search
+            for (int i = 0; i < childNodes.length -1 ; i++){
+                Node currentChild = childNodes[i];
+                Node nextChild = null;
+                
+                // Find next non null child
+                for (int j = i+1; j < childNodes.length; j++){
+                    if (childNodes[j] != null){
+                        nextChild = childNodes[j];
+                        break;
+                    }
+                }
+
+                if (currentChild != null && nextChild != null && vpDist <(currentChild.highBound + nextChild.lowBound * 0.5)){
+                    if(currentChild.lowBound <= vpDist + tau && vpDist - tau <= currentChild.highBound ){
+                        tau = vpkKNNSearch(knns, currentChild);
+                        searchedChilds[i] = true;
+                    }
+                }
+            }
+
+            // Search Nodes not already searched
+            for(int i = childNodes.length-1; i >= 0; i--) {
                 Node currentChild = childNodes[i];
 
-                if(currentChild != null && currentChild.lowBound <= x + tau && x - tau <= currentChild.highBound) {
+                if(!searchedChilds[i] && currentChild != null && currentChild.lowBound <= vpDist + tau && vpDist - tau <= currentChild.highBound) {
                     tau = vpkKNNSearch(knns, currentChild);
                 }
             }
@@ -962,6 +986,7 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
 
             // Add Child Nodes to the Heap
 
+            // TODO: prio
             for(int i = 0; i < childNodes.length; i++) {
                 Node currentChild = childNodes[i];
 

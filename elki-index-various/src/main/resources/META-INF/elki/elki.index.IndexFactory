@@ -2,6 +2,7 @@ elki.index.tree.metrical.covertree.CoverTree$Factory
 elki.index.tree.metrical.covertree.SimplifiedCoverTree$Factory
 elki.index.tree.metrical.vptree.VPTree$Factory vp
 elki.index.tree.metrical.vptree.VPkTree$Factory vpk
+elki.index.tree.metrical.vptree.GHTree$Factory
 elki.index.tree.metrical.vptree.GNAT$Factory MVPTree mvp
 elki.index.tree.spatial.kd.MemoryKDTree$Factory kd
 elki.index.tree.spatial.kd.SmallMemoryKDTree$Factory smallkd
