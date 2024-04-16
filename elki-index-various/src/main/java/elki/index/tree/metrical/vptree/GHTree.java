@@ -6,18 +6,17 @@ import elki.data.NumberVector;
 import elki.data.type.TypeInformation;
 import elki.database.ids.ArrayModifiableDBIDs;
 import elki.database.ids.DBID;
+import elki.database.ids.DBIDArrayIter;
 import elki.database.ids.DBIDIter;
 import elki.database.ids.DBIDMIter;
 import elki.database.ids.DBIDRef;
 import elki.database.ids.DBIDUtil;
 import elki.database.ids.DBIDVar;
-import elki.database.ids.DoubleDBIDListIter;
-import elki.database.ids.DoubleDBIDListMIter;
+import elki.database.ids.DBIDs;
 import elki.database.ids.KNNHeap;
 import elki.database.ids.KNNList;
 import elki.database.ids.ModifiableDBIDs;
 import elki.database.ids.ModifiableDoubleDBIDList;
-import elki.database.ids.QuickSelectDBIDs;
 import elki.database.query.PrioritySearcher;
 import elki.database.query.QueryBuilder;
 import elki.database.query.distance.DistanceQuery;
@@ -28,17 +27,11 @@ import elki.distance.Distance;
 import elki.index.DistancePriorityIndex;
 import elki.index.Index;
 import elki.index.IndexFactory;
-import elki.index.tree.metrical.vptree.VPTree.VPTreeKNNDBIDSearcher;
-import elki.index.tree.metrical.vptree.VPTree.VPTreeKNNObjectSearcher;
-import elki.index.tree.metrical.vptree.VPTree.VPTreePriorityDBIDSearcher;
-import elki.index.tree.metrical.vptree.VPTree.VPTreePriorityObjectSearcher;
-import elki.index.tree.metrical.vptree.VPTree.VPTreeRangeDBIDSearcher;
-import elki.index.tree.metrical.vptree.VPTree.VPTreeRangeObjectSearcher;
 import elki.logging.Logging;
 import elki.logging.statistics.LongStatistic;
 import elki.math.MeanVariance;
 import elki.utilities.Alias;
-import elki.utilities.datastructures.heap.DoubleObjectMinHeap;
+import elki.utilities.datastructures.heap.ComparableMinHeap;
 import elki.utilities.documentation.Reference;
 import elki.utilities.optionhandling.OptionID;
 import elki.utilities.optionhandling.Parameterizer;
@@ -100,6 +93,11 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
     RandomFactory random;
 
     /**
+     * Random Thread for selecting vantage points
+     */
+    Random randomThread;
+
+    /**
      * Sample size for selecting vantage points
      */
     int sampleSize;
@@ -113,12 +111,12 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
      * Maximumvariance threshold
      */
 
-     double mvAlpha;
+    double mvAlpha;
 
-     /**
-      * Vantage Point Selection Algorithm
-      */
-     VPSelectionAlgorithm vpSelector;
+    /**
+     * Vantage Point Selection Algorithm
+     */
+    VPSelectionAlgorithm vpSelector;
 
     /**
      * Counter for distance computations.
@@ -129,7 +127,6 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
      * Root node from the tree
      */
     Node root;
-
 
     /**
      * Constructor with default values, used by EmpiricalQueryOptimizer
@@ -146,7 +143,8 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
 
     /**
      * Constructor.
-     *
+     * TODO: delete truncate
+     * 
      * @param relation data for tree construction
      * @param distance distance function for tree construction
      * @param random Random generator for sampling
@@ -159,6 +157,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         this.relation = relation;
         this.distFunc = distance;
         this.random = random;
+        this.randomThread = random.getSingleThreadedRandom();
         this.distQuery = distance.instantiate(relation);
         this.sampleSize = Math.max(sampleSize, 1);
         this.truncate = Math.max(truncate, 1);
@@ -168,11 +167,12 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
 
     @Override
     public void initialize() {
-        root = new Builder().buildTree(0, relation.size());
+        root = new Node();
+        buildTree(root, relation.getDBIDs());
     }
 
     private enum VPSelectionAlgorithm {
-        RANDOM, FFT, MAXIMUM_VARIANCE, MAXIMUM_VARIANCE_SAMPLING, MAXIMUM_VARIANCE_FFT, REF_CHOOSE_VP
+        RANDOM, FFT, MAXIMUM_VARIANCE, MAXIMUM_VARIANCE_SAMPLING, MAXIMUM_VARIANCE_FFT, MAXIMUM_VARIANCE_FFT_SAMPLING, REF_CHOOSE_VP
     }
 
     /**
@@ -189,447 +189,263 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
     }
 
     /**
-     * Build the GH Tree
+     * Build the tree recursively
      * 
-     * @author Sebastian Aloisi
+     * @param current current node to build
+     * @param content data to index
+     * @return new node
      */
-    private class Builder {
-        /**
-         * Scratch space for organizing the elements
-         */
-        ModifiableDoubleDBIDList scratch;
+    private void buildTree(Node current, DBIDs content) {
 
-        /**
-         * Scratch iterator
-         */
-        DoubleDBIDListMIter scratchit;
+        DBIDVarTuple tuple;
+        DBIDVar firstVP = DBIDUtil.newVar();
+        DBIDVar secondVP = DBIDUtil.newVar();
 
-        /**
-         * Random generator
-         */
-        Random rnd;
-
-        /**
-         * Constructor.
-         */
-        public Builder() {
-            scratch = DBIDUtil.newDistanceDBIDList(relation.size());
-            for(DBIDIter it = relation.iterDBIDs(); it.valid(); it.advance()) {
-                scratch.add(Double.NaN, it);
-            }
-            scratchit = scratch.iter();
-            rnd = GHTree.this.random.getSingleThreadedRandom();
+        // TODO: check for all equal and/or less than 2
+        // TODO: Ref selection?
+        switch(GHTree.this.vpSelector){
+        case RANDOM:
+            tuple = selectRandomVantagePoints(content);
+            firstVP.set(tuple.first);
+            secondVP.set(tuple.second);
+            break;
+        case FFT:
+            tuple = selectFFTVantagePoints(content);
+            firstVP.set(tuple.first);
+            secondVP.set(tuple.second);
+            break;
+        case MAXIMUM_VARIANCE:
+            tuple = selectMaximumVarianceVantagePoints(content);
+            firstVP.set(tuple.first);
+            secondVP.set(tuple.second);
+            break;
+        case MAXIMUM_VARIANCE_SAMPLING:
+            tuple = selectSampledMaximumVarianceVantagePoints(content);
+            firstVP.set(tuple.first);
+            secondVP.set(tuple.second);
+            break;
+        case MAXIMUM_VARIANCE_FFT:
+            tuple = selectMVFFTVantagePoints(content);
+            firstVP.set(tuple.first);
+            secondVP.set(tuple.second);
+            break;
+        case MAXIMUM_VARIANCE_FFT_SAMPLING:
+            tuple = selectSampledMVFFTVantagePoints(content);
+            firstVP.set(tuple.first);
+            secondVP.set(tuple.second);
+            break;
+        default:
+            tuple = selectFFTVantagePoints(content);
+            firstVP.set(tuple.first);
+            secondVP.set(tuple.second);
+            break;
         }
 
-        /**
-         * Build the tree recursively
-         * 
-         * @param left Left bound in scratch
-         * @param right Right bound in scratch
-         * @return new node
-         */
-        private Node buildTree(int left, int right) {
-            assert left < right;
-            if(left + truncate >= right) {
-                DBID vp = DBIDUtil.deref(scratchit.seek(left));
-                ModifiableDoubleDBIDList leftVps = DBIDUtil.newDistanceDBIDList(right - left);
-                ModifiableDoubleDBIDList rightVps = DBIDUtil.newDistanceDBIDList();
-                leftVps.add(0., vp);
-                for(scratchit.advance(); scratchit.getOffset() < right; scratchit.advance()) {
-                    leftVps.add(distance(vp, scratchit), scratchit);
+        current.firstVP = firstVP;
+
+        // If second VP is empty, Leaf is reached, just set low/highbound
+        // Else build childnodes
+        if(secondVP.isEmpty()) {
+            current.firstLowBound = 0;
+            current.firstHighBound = 0;
+        } else {
+            current.secondVP = secondVP;
+
+            double firstDistance;
+            double secondDistance;
+
+            ModifiableDBIDs[] children = new ModifiableDBIDs[2];
+
+            for(DBIDIter iter = content.iter(); iter.valid(); iter.advance()) {
+                // If the current position is a VP, this will be set to current
+                // offset
+                int vpOffset = -1;
+
+                if(DBIDUtil.equal(firstVP, iter)) {
+                    vpOffset = 0;
                 }
-                return new Node(leftVps, rightVps);
-            }
 
-            DBIDVarTuple tuple;
-            DBIDVar firstVP;
-            DBIDVar secondVP;
+                if(DBIDUtil.equal(secondVP, iter)) {
+                    vpOffset = 1;
+                }
 
-            // TODO: check for all equal and/or less than 2
-            // TODO: Ref selection?
-            switch (GHTree.this.vpSelector) {
-                case RANDOM:
-                    tuple = selectRandomVantagePoints(left, right);
-                    firstVP = tuple.first;
-                    secondVP = tuple.second;
-                    break;
-                case FFT:
-                    tuple = selectFFTVantagePoints(left, right);
-                    firstVP = tuple.first;
-                    secondVP = tuple.second;
-                    break;
-                case MAXIMUM_VARIANCE:
-                    tuple = selectMaximumVarianceVantagePoints(left, right);
-                    firstVP = tuple.first;
-                    secondVP = tuple.second;
-                    break;
-                case MAXIMUM_VARIANCE_SAMPLING:
-                    tuple = selectSampledMaximumVarianceVantagePoints(left, right);
-                    firstVP = tuple.first;
-                    secondVP = tuple.second;
-                    break;
-                case MAXIMUM_VARIANCE_FFT:
-                    tuple = selectMVFFTVantagePoints(left, right);
-                    firstVP = tuple.first;
-                    secondVP = tuple.second;
-                    break;
-                default:
-                    tuple = selectFFTVantagePoints(left, right);
-                    firstVP = tuple.first;
-                    secondVP = tuple.second;
-                    break;
-            }
+                int childOffset = -1;
 
-            
-            // TODO: what if secondVP = null
+                firstDistance = distance(firstVP, iter);
+                secondDistance = distance(secondVP, iter);
+                if(firstDistance < secondDistance) {
+                    childOffset = 0;
+                }
+                else {
+                    childOffset = 1;
+                }
 
-            //assert !DBIDUtil.equal(firstVP, secondVP);
-            int tiedFirst = 0;
-            int tiedSecond = 0;
-            int firstPartititionSize = 0;
-
-            // Compute difference between distances to Vantage Points
-            for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()) {
-                double firstDistance = distance(scratchit, firstVP);
-                double secondDistance = distance(scratchit, secondVP);
-
-                double distDiff = (firstDistance - secondDistance) / 2;
-
-                if(DBIDUtil.equal(scratchit, firstVP)) {
-                    scratchit.setDouble(firstDistance / 2);
-                    if(tiedFirst > 0 && scratchit.getOffset() != left + tiedFirst) {
-                        scratch.swap(left, left + tiedFirst);
+                if(vpOffset == -1) {
+                    if(children[childOffset] == null) {
+                        children[childOffset] = DBIDUtil.newArray();
                     }
-                    scratch.swap(scratchit.getOffset(), left);
-                    tiedFirst++;
-                    continue;
+                    children[childOffset].add(iter);
                 }
-
-                if(DBIDUtil.equal(scratchit, secondVP)) {
-                    scratchit.setDouble(secondDistance / 2);
-                    if(tiedSecond > 0 && scratchit.getOffset() != right - tiedSecond) {
-                        scratch.swap(right - 1, right - 1 - tiedSecond);
-                    }
-                    scratch.swap(scratchit.getOffset(), right - 1);
-                    tiedSecond++;
-                    continue;
-                }
-
-                if(distDiff < 0) {
-                    firstPartititionSize += 1;
-                }
-
-                scratchit.setDouble(distDiff);
-
-                if(distDiff == firstDistance / 2) {
-                    scratch.swap(scratchit.getOffset(), left);
-                }
-
-                if(distDiff == secondDistance / 2) {
-                    scratch.swap(scratchit.getOffset(), right - 1);
-                }
+                current.firstLowBound = current.firstLowBound > firstDistance ? firstDistance : current.firstLowBound;
+                current.firstHighBound = current.firstHighBound < firstDistance ? firstDistance : current.firstHighBound;
+                current.secondLowBound = current.secondLowBound > secondDistance ? secondDistance : current.secondLowBound;
+                current.secondHighBound = current.secondHighBound < secondDistance ? secondDistance : current.secondHighBound;
             }
 
-            assert tiedFirst > 0;
-            assert tiedSecond > 0;
-            assert DBIDUtil.equal(firstVP, scratchit.seek(left)) : "tiedFirst" + tiedFirst;
-            if( secondVP != null){
-                assert DBIDUtil.equal(secondVP, scratchit.seek(right - 1)) : "tiedSecond" + tiedSecond;
-            }
-            //assert (right - left) == firstPartititionSize + secondPartititionSize;
-
-            // Note: many duplicates of vantage point:
-            if(left + tiedFirst + truncate > right) {
-                ModifiableDoubleDBIDList vps = DBIDUtil.newDistanceDBIDList(right - left);
-                ModifiableDoubleDBIDList emptyVps = DBIDUtil.newDistanceDBIDList();
-                for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()) {
-                    vps.add(scratchit.doubleValue(), scratchit);
-                }
-                return new Node(vps, emptyVps);
+            if(children[0] != null) {
+                buildTree(current.firstChild = new Node(), children[0]);
             }
 
-            int firstPartititionLimit = firstPartititionSize + tiedFirst;
-
-            double firstLowBound = Double.MAX_VALUE;
-            double firstHighBound = -1;
-            double secondLowBound = Double.MAX_VALUE;
-            double secondHighBound = -1;
-
-            // sort left < 0; right >= 0
-            QuickSelectDBIDs.quickSelect(scratch, left + tiedFirst, right - tiedSecond, firstPartititionLimit);
-
-            for(scratchit.seek(left + tiedFirst); scratchit.getOffset() < firstPartititionLimit; scratchit.advance()) {
-                final double d = scratchit.doubleValue();
-                // Move all tied to hyperplane to the second Partitition
-                if(d == 0) {
-                    scratch.swap(scratchit.getOffset(), --firstPartititionLimit);
-                    continue;
-                }
-
-                firstLowBound = d < firstLowBound ? d : firstLowBound;
-                firstHighBound = d > firstHighBound ? d : firstHighBound;
+            if(children[1] != null) {
+                buildTree(current.secondChild = new Node(), children[1]);
             }
-
-            for(scratchit.seek(firstPartititionLimit); scratchit.getOffset() < right - tiedSecond; scratchit.advance()) {
-                final double d = scratchit.doubleValue();
-
-                secondLowBound = d < secondLowBound ? d : secondLowBound;
-                secondHighBound = d > secondHighBound ? d : secondHighBound;
-            }
-
-            assert right > firstPartititionLimit;
-            // Recursive build, include ties with parent:
-
-            ModifiableDoubleDBIDList firstVPs = DBIDUtil.newDistanceDBIDList(tiedFirst);
-            ModifiableDoubleDBIDList secondVPs = DBIDUtil.newDistanceDBIDList(tiedSecond);
-
-            for(scratchit.seek(left); scratchit.getOffset() < left + tiedFirst; scratchit.advance()) {
-                firstVPs.add(scratchit.doubleValue(), scratchit);
-            }
-
-            for(scratchit.seek(right - tiedSecond); scratchit.getOffset() < right; scratchit.advance()) {
-                secondVPs.add(scratchit.doubleValue(), scratchit);
-            }
-
-            Node current = new Node(firstVPs, secondVPs);
-
-            // TODO: disappearing left branches?
-            if(left + tiedFirst < firstPartititionLimit) {
-                current.leftChild = buildTree(left + tiedFirst, firstPartititionLimit);
-                current.leftChild.firstLowBound = firstLowBound;
-                current.leftChild.firstHighBound = firstHighBound;
-            }
-
-            current.rightChild = buildTree(firstPartititionLimit, right - tiedSecond);
-            current.rightChild.secondLowBound = secondLowBound;
-            current.rightChild.secondHighBound = secondHighBound;
-
-            return current;
         }
+    }
 
-        private class DBIDVarTuple {
-            DBIDVar first;
+    private class DBIDVarTuple {
+        DBIDVar first;
 
-            DBIDVar second;
+        DBIDVar second;
 
-            public DBIDVarTuple(DBIDVar first, DBIDVar second) {
-                this.first = first;
-                this.second = second;
+        public DBIDVarTuple(DBIDVar first, DBIDVar second) {
+            this.first = first;
+            this.second = second;
+        }
+    }
+
+    /**
+     * Finds two Vantage Points using Farthest first Traversal
+     * 
+     * @param content Content to choose VP's from
+     * @return two Vantage points
+     */
+    private DBIDVarTuple selectFFTVantagePoints(DBIDs content) {
+        ArrayModifiableDBIDs contentArray = DBIDUtil.newArray(content);
+        // First VP = random
+        DBIDArrayIter contentIter = contentArray.iter();
+        int pos = randomThread.nextInt(content.size());
+        DBIDVar first = DBIDUtil.newVar();
+        contentIter.seek(pos);
+        first.set(contentIter);
+
+        // Second VP = farthest away from first
+        DBIDVar second = DBIDUtil.newVar();
+        double maxDist = 0;
+
+        for(contentIter.seek(0); contentIter.valid(); contentIter.advance()) {
+            double distance = distance(first, contentIter);
+            if(distance > maxDist) {
+                second.set(contentIter);
+                maxDist = distance;
             }
         }
 
-        /**
-         * Finds two Vantage Points using Farthest first Traversal
-         * 
-         * @param left Left bound in scratch
-         * @param right Right Bound in scratch
-         * @return two Vantage points
-         */
-        private DBIDVarTuple selectFFTVantagePoints(int left, int right) {
-            // First VP = random
-            DBIDVar first = scratch.assignVar(left + rnd.nextInt(right - left), DBIDUtil.newVar());
+        return new DBIDVarTuple(first, second);
+    }
 
-            // Second VP = farthest away from first
-            DBIDVar second = DBIDUtil.newVar();
-            double maxDist = Double.NEGATIVE_INFINITY;
+    /**
+     * Returns two random Vantage Points. Ignores duplicates.
+     * 
+     * @param content Content to choose VP's from
+     * @return two Vantage points
+     */
+    private DBIDVarTuple selectRandomVantagePoints(DBIDs content) {
+        ArrayModifiableDBIDs workset = DBIDUtil.newArray(content);
+        // First VP = random
+        DBIDArrayIter worksetIter = workset.iter();
+        int pos = randomThread.nextInt(content.size());
+        DBIDVar first = DBIDUtil.newVar();
+        worksetIter.seek(pos);
+        first.set(worksetIter);
 
-            for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()) {
-                double distance = distance(first, scratchit);
-                if(distance > maxDist) {
-                    second.set(scratchit);
-                    maxDist = distance;
-                }
+        // remove all Datapoints eqaul to first VP from workset
+        for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
+            if(DBIDUtil.equal(it, first)) {
+                it.remove();
             }
-
-            return new DBIDVarTuple(first, second);
         }
 
-        /**
-         * Returns two random Vantage Points. Ignores duplicates.
-         * 
-         * @param left Left bound in scratch
-         * @param right Right Bound in scratch
-         * @return two Vantage points
-         */
-        private DBIDVarTuple selectRandomVantagePoints(int left, int right) {
-            // Select First VP at random
-            DBIDVar first = scratch.assignVar(left + rnd.nextInt(right - left), DBIDUtil.newVar());
-            DBIDVar second = DBIDUtil.newVar();
-
-            // Modifiable copy for selecting:
-            ArrayModifiableDBIDs workset = DBIDUtil.newArray(right - left);
-            for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()) {
-                workset.add(scratchit);
-            }
-
-            // remove all Datapoints eqaul to first VP from workset
-            for(DBIDMIter it = workset.iter(); it.valid(); it.advance()){
-                if (DBIDUtil.equal(it, first)){
-                    it.remove();
-                }
-            }
-
-            second.set(DBIDUtil.randomSample(workset, random));
-
-            DBIDVarTuple result = new DBIDVarTuple(first, second);
-
-            return result;
+        // Choose Second VP at Random from remaining DBID's
+        DBIDVar second = DBIDUtil.newVar();
+        if( workset.size() > 0){
+            second.set(DBIDUtil.randomSample(workset, randomThread));
         }
 
-        /**
-         * Returns the two Vantage Points with maximum Variance
-         * 
-         * @param left Left bound in scratch
-         * @param right Right Bound in scratch
-         * @return two Vantage points
-         */
-        private DBIDVarTuple selectMaximumVarianceVantagePoints(int left, int right){
-            DBIDVar firstVP = DBIDUtil.newVar();
-            DBIDVar secondVP = DBIDUtil.newVar();
-            DBIDVar currentDbid = DBIDUtil.newVar();
+        DBIDVarTuple result = new DBIDVarTuple(first, second);
 
-            double bestStandartDeviation = Double.NEGATIVE_INFINITY;
-            double bestMean = 0;
-            double secondBestStandartDeviation = Double.NEGATIVE_INFINITY;
-            double maxDist = -1;
+        return result;
+    }
 
-            // Modifiable copy for selecting:
-            ArrayModifiableDBIDs workset = DBIDUtil.newArray(right - left);
-            for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()) {
-                workset.add(scratchit);
-            }
+    /**
+     * Returns the two Vantage Points with maximum Variance
+     * 
+     * @param left Left bound in scratch
+     * @param right Right Bound in scratch
+     * @return two Vantage points
+     */
+    private DBIDVarTuple selectMaximumVarianceVantagePoints(DBIDs content) {
+        DBIDVar firstVP = DBIDUtil.newVar();
+        DBIDVar secondVP = DBIDUtil.newVar();
+        DBIDVar currentDbid = DBIDUtil.newVar();
 
-            // Select first VP
-            for(DBIDMIter it = workset.iter(); it.valid(); it.advance()){
-                currentDbid.set(it);
-
-                MeanVariance currentVariance = new MeanVariance();
-
-                for(DBIDMIter jt = workset.iter(); jt.valid(); jt.advance()){
-                    double currentDistance = distance(currentDbid, jt);
-
-                    currentVariance.put(currentDistance);
-
-                    if(currentDistance > maxDist){
-                        maxDist = currentDistance;
-                    }
-                }
-
-                double currentStandartDeviance = currentVariance.getSampleStddev();
-
-                if(currentStandartDeviance > bestStandartDeviation) {
-                    firstVP.set(it);
-                    bestStandartDeviation = currentStandartDeviance;
-                    bestMean = currentVariance.getMean();
-                }
-            }
-
-            // Remove all candidates from workingset exceeding threshold
-            // Also remove all duplicates
-            double omega = GHTree.this.mvAlpha * maxDist;
-
-            for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
-                if (Math.abs(distance(firstVP,it) - bestMean) > omega){
-                    it.remove();
-                }
-
-                if(DBIDUtil.equal(it, firstVP)){
-                    it.remove();
-                }
-            }
-
-            // Select second VP
-            for(DBIDMIter it = workset.iter(); it.valid(); it.advance()){
-                currentDbid.set(it);
-
-                MeanVariance currentVariance = new MeanVariance();
-
-                for(DBIDMIter jt = workset.iter(); jt.valid(); jt.advance()) {
-                    double currentDistance = distance(currentDbid, jt);
-
-                    currentVariance.put(currentDistance);
-                }
-
-                double currentStandartDeviance = currentVariance.getSampleStddev();
-
-                if(currentStandartDeviance > secondBestStandartDeviation) {
-                    secondVP.set(it);
-                    secondBestStandartDeviation = currentStandartDeviance;
-                }
-            }
-
+        // TODO: Truncate!
+        if (content.size() == 1){
+            DBIDIter it = content.iter();
+            firstVP.set(it);
             return new DBIDVarTuple(firstVP, secondVP);
         }
 
-        /**
-         * Select Maximum Variance Vantage Points using a random sampled subset of relation
-         * 
-         * @param left
-         * @param right
-         * @return Vantage Points
-         */
-        private DBIDVarTuple selectSampledMaximumVarianceVantagePoints(int left, int right){
-            if(GHTree.this.sampleSize == 2){
-                return this.selectRandomVantagePoints(left, right);
-            }
+        double bestStandartDeviation = Double.NEGATIVE_INFINITY;
+        double bestMean = 0;
+        double secondBestStandartDeviation = Double.NEGATIVE_INFINITY;
+        double maxDist = -1;
 
-            // Create Workset to sample from
-            final int s = Math.min(sampleSize, right - left);
-            ArrayModifiableDBIDs scratchCopy = DBIDUtil.newArray(right - left);
-            for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()) {
-                scratchCopy.add(scratchit);
-            }
+        // Modifiable copy for selecting:
+        ArrayModifiableDBIDs workset = DBIDUtil.newArray(content);
 
-            ModifiableDBIDs workset = DBIDUtil.randomSample(scratchCopy, s, rnd);
+        // Select first VP
+        for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
+            currentDbid.set(it);
 
-            DBIDVar firstVP = DBIDUtil.newVar();
-            DBIDVar secondVP = DBIDUtil.newVar();
-            DBIDVar currentDbid = DBIDUtil.newVar();
+            MeanVariance currentVariance = new MeanVariance();
 
-            double bestStandartDeviation = Double.NEGATIVE_INFINITY;
-            double bestMean = 0;
-            double secondBestStandartDeviation = Double.NEGATIVE_INFINITY;
-            double maxDist = -1;
+            for(DBIDMIter jt = workset.iter(); jt.valid(); jt.advance()) {
+                double currentDistance = distance(currentDbid, jt);
 
-            // Select first VP
-            for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
-                currentDbid.set(it);
+                currentVariance.put(currentDistance);
 
-                MeanVariance currentVariance = new MeanVariance();
-
-                for(DBIDMIter jt = workset.iter(); jt.valid(); jt.advance()) {
-                    double currentDistance = distance(currentDbid, jt);
-
-                    currentVariance.put(currentDistance);
-
-                    if(currentDistance > maxDist) {
-                        maxDist = currentDistance;
-                    }
-                }
-
-                double currentStandartDeviance = currentVariance.getSampleStddev();
-
-                if(currentStandartDeviance > bestStandartDeviation) {
-                    firstVP.set(it);
-                    bestStandartDeviation = currentStandartDeviance;
-                    bestMean = currentVariance.getMean();
+                if(currentDistance > maxDist) {
+                    maxDist = currentDistance;
                 }
             }
 
-            // Remove all candidates from workingset exceeding threshold
-            // Also remove all duplicates
-            double omega = GHTree.this.mvAlpha * maxDist;
+            double currentStandartDeviance = currentVariance.getSampleStddev();
 
-            for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
-                if(Math.abs(distance(firstVP, it) - bestMean) > omega) {
-                    it.remove();
-                }
-
-                if(DBIDUtil.equal(it, firstVP)) {
-                    it.remove();
-                }
+            if(currentStandartDeviance > bestStandartDeviation) {
+                firstVP.set(it);
+                bestStandartDeviation = currentStandartDeviance;
+                bestMean = currentVariance.getMean();
             }
+        }
 
+        // Remove all candidates from workingset exceeding threshold
+        // Also remove all duplicates
+        double omega = GHTree.this.mvAlpha * maxDist;
+
+        for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
+            if(Math.abs(distance(firstVP, it) - bestMean) > omega || DBIDUtil.equal(it, firstVP)) {
+                it.remove();
+            }
+        }
+
+        // if only one left, chose this as Second VP
+        // else select according to algorithm
+        // if none left, let Second VP be null
+        if(workset.size() == 1) {
+            DBIDMIter it = workset.iter();
+            secondVP.set(it);
+        }
+        else {
             // Select second VP
             for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
                 currentDbid.set(it);
@@ -649,69 +465,235 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                     secondBestStandartDeviation = currentStandartDeviance;
                 }
             }
+        }
+        return new DBIDVarTuple(firstVP, secondVP);
+    }
 
+    /**
+     * Select Maximum Variance Vantage Points using a random sampled subset
+     * of relation
+     * 
+     * @param content Content to choose VP's from
+     * @return Vantage Points
+     */
+    private DBIDVarTuple selectSampledMaximumVarianceVantagePoints(DBIDs content) {
+        if(GHTree.this.sampleSize == 2) {
+            return this.selectRandomVantagePoints(content);
+        }
+
+        DBIDVar firstVP = DBIDUtil.newVar();
+        DBIDVar secondVP = DBIDUtil.newVar();
+        DBIDVar currentDbid = DBIDUtil.newVar();
+
+        // TODO: Truncate!
+        if(content.size() == 1) {
+            DBIDIter it = content.iter();
+            firstVP.set(it);
             return new DBIDVarTuple(firstVP, secondVP);
         }
 
-        /**
-         * First VP is selected by Maximum Variance
-         * Second VP is selected by FFT
-         * 
-         * @param left
-         * @param right
-         * @return Vantage Points
-         */
-        private DBIDVarTuple selectMVFFTVantagePoints(int left, int right){
-            // Create Workset to sample from
-            final int s = Math.min(sampleSize, right - left);
-            ArrayModifiableDBIDs scratchCopy = DBIDUtil.newArray(right - left);
-            for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()) {
-                scratchCopy.add(scratchit);
+        // Create Workset to sample from
+        final int adjustedSampleSize = Math.min(sampleSize, content.size());
+        ArrayModifiableDBIDs scratchCopy = DBIDUtil.newArray(content);
+
+        ModifiableDBIDs workset = DBIDUtil.randomSample(scratchCopy, adjustedSampleSize, random);
+
+        double bestStandartDeviation = Double.NEGATIVE_INFINITY;
+        double bestMean = 0;
+        double secondBestStandartDeviation = Double.NEGATIVE_INFINITY;
+        double maxDist = -1;
+
+        // Select first VP
+        for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
+            currentDbid.set(it);
+
+            MeanVariance currentVariance = new MeanVariance();
+
+            for(DBIDMIter jt = workset.iter(); jt.valid(); jt.advance()) {
+                double currentDistance = distance(currentDbid, jt);
+
+                currentVariance.put(currentDistance);
+
+                if(currentDistance > maxDist) {
+                    maxDist = currentDistance;
+                }
             }
 
-            DBIDVar firstVP = DBIDUtil.newVar();
-            DBIDVar secondVP = DBIDUtil.newVar();
-            DBIDVar currentDbid = DBIDUtil.newVar();
+            double currentStandartDeviance = currentVariance.getSampleStddev();
 
-            double bestStandartDeviation = Double.NEGATIVE_INFINITY;
-            double maxdist = -1;
+            if(currentStandartDeviance > bestStandartDeviation) {
+                firstVP.set(it);
+                bestStandartDeviation = currentStandartDeviance;
+                bestMean = currentVariance.getMean();
+            }
+        }
 
-            // Select first VP
-            for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()){
-                int currentOffset = scratchit.getOffset();
-                
-                currentDbid.set(scratchit);
+        // Remove all candidates from workingset exceeding threshold
+        // Also remove all duplicates
+        double omega = GHTree.this.mvAlpha * maxDist;
+
+        for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
+            if(Math.abs(distance(firstVP, it) - bestMean) > omega || DBIDUtil.equal(it, firstVP)) {
+                it.remove();
+            }
+        }
+
+        // if only one left, chose this as Second VP
+        // else select according to algorithm
+        // if none left, let Second VP be null
+        if(workset.size() == 1) {
+            DBIDMIter it = workset.iter();
+            secondVP.set(it);
+        } else {
+            // Select second VP
+            for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
+                currentDbid.set(it);
 
                 MeanVariance currentVariance = new MeanVariance();
 
-                for (scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()){
-                    double currentDistance = distance(currentDbid, scratchit);
+                for(DBIDMIter jt = workset.iter(); jt.valid(); jt.advance()) {
+                    double currentDistance = distance(currentDbid, jt);
 
                     currentVariance.put(currentDistance);
                 }
 
-                scratchit.seek(currentOffset);
-
                 double currentStandartDeviance = currentVariance.getSampleStddev();
 
-                if (currentStandartDeviance > bestStandartDeviation){
-                    firstVP.set(scratchit);
-                    bestStandartDeviation = currentStandartDeviance;
+                if(currentStandartDeviance > secondBestStandartDeviation) {
+                    secondVP.set(it);
+                    secondBestStandartDeviation = currentStandartDeviance;
                 }
             }
+        }
+        return new DBIDVarTuple(firstVP, secondVP);
+    }
 
-            // Select second VP
-            for(scratchit.seek(left); scratchit.getOffset() < right; scratchit.advance()){
-                double curdist = distance(firstVP, scratchit);
+    /**
+     * First VP is selected by Maximum Variance
+     * Second VP is selected by FFT
+     * 
+     * @param content Content to choose VP's from
+     * @return Vantage Points
+     */
+    private DBIDVarTuple selectMVFFTVantagePoints(DBIDs content) {
+        // Create Workset to sample from
+        ArrayModifiableDBIDs workset = DBIDUtil.newArray(content);
 
-                if(curdist > maxdist){
-                    maxdist = curdist;
-                    secondVP.set(scratchit);
-                }
-            }
+        DBIDVar firstVP = DBIDUtil.newVar();
+        DBIDVar secondVP = DBIDUtil.newVar();
+        DBIDVar currentDbid = DBIDUtil.newVar();
 
+        if (content.size() == 1){
+            DBIDIter iter = content.iter();
+            firstVP.set(iter);
             return new DBIDVarTuple(firstVP, secondVP);
         }
+
+        double bestStandartDeviation = Double.NEGATIVE_INFINITY;
+        double maxdist = 0;
+
+        // Select first VP
+        for(DBIDArrayIter iter = workset.iter(); iter.valid(); iter.advance()) {
+            int currentOffset = iter.getOffset();
+
+            currentDbid.set(iter);
+
+            MeanVariance currentVariance = new MeanVariance();
+
+            for(iter.seek(0); iter.valid(); iter.advance()) {
+                double currentDistance = distance(currentDbid, iter);
+
+                currentVariance.put(currentDistance);
+            }
+
+            iter.seek(currentOffset);
+
+            double currentStandartDeviance = currentVariance.getSampleStddev();
+
+            if(currentStandartDeviance > bestStandartDeviation) {
+                firstVP.set(iter);
+                bestStandartDeviation = currentStandartDeviance;
+            }
+        }
+
+        // Select second VP
+        for(DBIDArrayIter iter = workset.iter(); iter.valid(); iter.advance()) {
+            double curdist = distance(firstVP, iter);
+
+            if(curdist > maxdist) {
+                maxdist = curdist;
+                secondVP.set(iter);
+            }
+        }
+
+        return new DBIDVarTuple(firstVP, secondVP);
+    }
+
+    /**
+     * First VP is selected by Maximum Variance
+     * Second VP is selected by FFT
+     * 
+     * @param content Content to choose VP's from
+     * @return Vantage Points
+     */
+    private DBIDVarTuple selectSampledMVFFTVantagePoints(DBIDs content) {
+        DBIDVar firstVP = DBIDUtil.newVar();
+        DBIDVar secondVP = DBIDUtil.newVar();
+        DBIDVar currentDbid = DBIDUtil.newVar();
+
+        // TODO: Truncate!
+        if(content.size() == 1) {
+            DBIDIter it = content.iter();
+            firstVP.set(it);
+            return new DBIDVarTuple(firstVP, secondVP);
+        }
+
+        // Create Workset to sample from
+        final int adjustedSampleSize = Math.min(sampleSize, content.size());
+        ArrayModifiableDBIDs scratchCopy = DBIDUtil.newArray(content);
+
+        ModifiableDBIDs workset = DBIDUtil.randomSample(scratchCopy, adjustedSampleSize, random);
+
+        double bestStandartDeviation = Double.NEGATIVE_INFINITY;
+        double maxDist = -1;
+
+        // Select first VP
+        for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
+            currentDbid.set(it);
+
+            MeanVariance currentVariance = new MeanVariance();
+
+            for(DBIDMIter jt = workset.iter(); jt.valid(); jt.advance()) {
+                double currentDistance = distance(currentDbid, jt);
+
+                currentVariance.put(currentDistance);
+
+                if(currentDistance > maxDist) {
+                    maxDist = currentDistance;
+                }
+            }
+
+            double currentStandartDeviance = currentVariance.getSampleStddev();
+
+            if(currentStandartDeviance > bestStandartDeviation) {
+                firstVP.set(it);
+                bestStandartDeviation = currentStandartDeviance;
+            }
+        }
+
+        double maxdist = 0;
+
+        // Select second VP
+        for(DBIDIter iter = workset.iter(); iter.valid(); iter.advance()) {
+            double curdist = distance(firstVP, iter);
+
+            if(curdist > maxdist) {
+                maxdist = curdist;
+                secondVP.set(iter);
+            }
+        }
+
+        return new DBIDVarTuple(firstVP, secondVP);
     }
 
     /**
@@ -723,19 +705,19 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
      */
     protected static class Node {
         /**
-         * "Left" Vantage point and Singletons
+         * "Left" Vantage point
          */
-        ModifiableDoubleDBIDList leftVp;
+        DBIDRef firstVP;
 
         /**
-         * "Right" Vantage point and Singletons
+         * "Right" Vantage point
          */
-        ModifiableDoubleDBIDList rightVp;
+        DBIDRef secondVP;
 
         /**
          * child Trees
          */
-        Node leftChild, rightChild;
+        Node firstChild, secondChild;
 
         /**
          * upper and lower distance bounds
@@ -745,11 +727,12 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         /**
          * Constructor.
          * 
-         * @param vp Vantage point and singletons
          */
-        public Node(ModifiableDoubleDBIDList leftVp, ModifiableDoubleDBIDList rightVp) {
-            this.leftVp = leftVp;
-            this.rightVp = rightVp;
+        public Node() {
+            this.firstLowBound = Double.MAX_VALUE;
+            this.firstHighBound = -1;
+            this.secondLowBound = Double.MAX_VALUE;
+            this.secondHighBound = -1;
         }
     }
 
@@ -833,42 +816,31 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
          * @return New tau
          */
         protected double ghKNNSearch(KNNHeap knns, Node node) {
-            DoubleDBIDListIter firstVP = node.leftVp.iter();
-            DoubleDBIDListIter secondVP = node.rightVp.iter();
+            DBIDRef firstVP = node.firstVP;
+            DBIDRef secondVP = node.secondVP;
 
-            final double firstVPDistance = queryDistance(firstVP);
-            // TODO: if not null
-            final double secondVPDistance = queryDistance(secondVP);
 
-            knns.insert(firstVPDistance, firstVP);
-            knns.insert(secondVPDistance, secondVP);
-
-            for(firstVP.advance(); firstVP.valid(); firstVP.advance()) {
-                knns.insert(queryDistance(firstVP), firstVP);
-            }
-
-            for(secondVP.advance(); secondVP.valid(); secondVP.advance()) {
-                knns.insert(queryDistance(secondVP), secondVP);
-            }
-
-            Node lc = node.leftChild, rc = node.rightChild;
             double tau = knns.getKNNDistance();
-
-            final double firstDistanceDiff = (firstVPDistance - secondVPDistance) / 2;
-            final double secondDistanceDiff = (secondVPDistance - firstDistanceDiff) / 2;
-
+            final double firstDistance = queryDistance(firstVP);
+            knns.insert(firstDistance, firstVP);
+            Node lc = node.firstChild;
             // TODO: Priortization?
 
-            if(lc != null && firstDistanceDiff < tau) {
+            if(lc != null && node.firstLowBound <= firstDistance + tau && firstDistance - tau < node.firstHighBound) {
                 tau = ghKNNSearch(knns, lc);
             }
 
-            if(rc != null && secondDistanceDiff < tau) {
-                tau = ghKNNSearch(knns, rc);
+            if(secondVP != null) {
+                Node rc = node.secondChild;
+                final double secondDistance = queryDistance(secondVP);
+                knns.insert(secondDistance, secondVP);
+
+                if(rc != null && node.secondLowBound <= secondDistance + tau && secondDistance - tau < node.secondHighBound) {
+                    tau = ghKNNSearch(knns, rc);
+                }
             }
 
             return tau;
-
         }
 
         /**
@@ -927,8 +899,8 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
     public static abstract class GHTreeRangeSearcher {
 
         protected void ghRangeSearch(ModifiableDoubleDBIDList result, Node node, double range) {
-            final DoubleDBIDListIter firstVP = node.leftVp.iter();
-            final DoubleDBIDListMIter secondVP = node.rightVp.iter();
+            final DBIDRef firstVP = node.firstVP;
+            final DBIDRef secondVP = node.secondVP;
 
             final double firstVPDistance = queryDistance(firstVP);
             // TODO: if not null
@@ -938,37 +910,25 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                 result.add(firstVPDistance, firstVP);
             }
 
-            for(firstVP.advance(); firstVP.valid(); firstVP.advance()) {
-                final double d = queryDistance(firstVP);
-                if(d <= range) {
-                    result.add(d, firstVP);
-                }
-            }
-
-            // TODO: if both, smarter ?
-
             if(secondVPDistance < range) {
                 result.add(secondVPDistance, secondVP);
             }
 
-            for(secondVP.advance(); secondVP.valid(); secondVP.advance()) {
-                final double d = queryDistance(secondVP);
-                if(d <= range) {
-                    result.add(d, secondVP);
+            if(secondVP != null) {
+
+                Node lc = node.firstChild, rc = node.secondChild;
+
+                final double firstDistanceDiff = (firstVPDistance - secondVPDistance) / 2;
+                final double secondDistanceDiff = (secondVPDistance - firstDistanceDiff) / 2;
+
+                // TODO: Bounds?
+                if(lc != null && firstDistanceDiff < range) {
+                    ghRangeSearch(result, lc, range);
                 }
-            }
 
-            Node lc = node.leftChild, rc = node.rightChild;
-
-            final double firstDistanceDiff = (firstVPDistance - secondVPDistance) / 2;
-            final double secondDistanceDiff = (secondVPDistance - firstDistanceDiff) / 2;
-
-            if(lc != null && firstDistanceDiff < range) {
-                ghRangeSearch(result, lc, range);
-            }
-
-            if(rc != null && secondDistanceDiff < range) {
-                ghRangeSearch(result, rc, range);
+                if(rc != null && secondDistanceDiff < range) {
+                    ghRangeSearch(result, rc, range);
+                }
             }
         }
 
@@ -1036,7 +996,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         /**
          * Min heap for searching.
          */
-        private DoubleObjectMinHeap<Node> heap = new DoubleObjectMinHeap<>();
+        private ComparableMinHeap<PrioritySearchBranch> heap = new ComparableMinHeap<>();
 
         /**
          * Stopping threshold.
@@ -1046,103 +1006,47 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         /**
          * Current search position.
          */
-        private Node cur;
-
-        /**
-         * Current iterator.
-         */
-        private DoubleDBIDListIter candidates = DoubleDBIDListIter.EMPTY;
-
-        /**
-         * Distance to the current object.
-         */
-        private double curdist, vpDist;
+        private PrioritySearchBranch cur;
 
         /**
          * Start the search.
          */
         public void doSearch() {
             this.threshold = Double.POSITIVE_INFINITY;
-            this.candidates = DoubleDBIDListIter.EMPTY;
             this.heap.clear();
-            this.heap.add(0, root);
+            this.heap.add(new PrioritySearchBranch(0, root, null));
             advance();
         }
 
         @Override
         public PrioritySearcher<Q> advance() {
-            if(candidates.valid()){
-                candidates.advance();
-            }
-
-            do {
-                while(candidates.valid()){
-                    if(vpDist - candidates.doubleValue() <= threshold){
-                        return this;
-                    }
-                    candidates.advance();
-                }
-            }while(advanceQueue());
-            return this;
-        }
-
-        /**
-         * Expand the next node of the priority heap.
-         * 
-         * @return success
-         */
-        protected boolean advanceQueue() {
             if(heap.isEmpty()) {
-                candidates = DoubleDBIDListIter.EMPTY;
-                return false;
+                cur = null;
+                return this;
             }
-            curdist = heap.peekKey();
-            if(curdist > threshold) {
-                heap.clear();
-                candidates = DoubleDBIDListIter.EMPTY;
-                return false;
-            }
-            cur = heap.peekValue();
-            heap.poll();
 
-            DoubleDBIDListIter firstCandidates = cur.leftVp.iter();
-            double firstDist = queryDistance(firstCandidates);
-            Node lc = cur.leftChild;
+            cur = heap.poll();
 
-            if(lc != null && intersect(firstDist - threshold, firstDist + threshold, lc.firstLowBound, lc.firstHighBound)) {
-                final double mindist = Math.max(Math.max(firstDist - lc.firstHighBound, lc.firstLowBound - firstDist), curdist);
-                if(mindist <= threshold) {
-                    heap.add(mindist, lc);
+            if(cur.node != null) {
+                double firstVPDist = queryDistance(cur.node.firstVP);
+                // TODO if not null!
+                double secondVPDist = queryDistance(cur.node.secondVP);
+                Node lc = cur.node.firstChild;
+                Node rc = cur.node.secondChild;
+
+                if(lc != null && intersect(firstVPDist - threshold, firstVPDist + threshold, cur.node.firstLowBound, cur.node.firstHighBound)) {
+                    final double mindist = Math.max(firstVPDist - cur.node.firstHighBound, cur.mindist);
+                    heap.add(new PrioritySearchBranch(mindist, lc, DBIDUtil.deref(cur.node.firstVP)));
+                }
+
+                if(rc != null && intersect(secondVPDist - threshold, secondVPDist + threshold, cur.node.secondLowBound, cur.node.secondHighBound)) {
+                    final double mindist = Math.max(secondVPDist - cur.node.secondHighBound, cur.mindist);
+                    heap.add(new PrioritySearchBranch(mindist, rc, DBIDUtil.deref(cur.node.secondVP)));
                 }
             }
 
-            if (cur.rightVp == null || cur.rightVp.isEmpty()){
-                candidates = firstCandidates;
-                vpDist = firstDist;
-                return true;
-            }
+            return this;
 
-            DoubleDBIDListIter secondCandidates = cur.rightVp.iter();
-            double secondDist = queryDistance(secondCandidates);
-
-            Node rc = cur.rightChild;
-
-            if(rc != null && intersect(secondDist - threshold, secondDist + threshold, rc.firstLowBound, rc.firstHighBound)) {
-                final double mindist = Math.max(Math.max(secondDist - rc.firstHighBound, rc.firstLowBound - secondDist), curdist);
-                if(mindist <= threshold) {
-                    heap.add(mindist, rc);
-                }
-            }
-
-            if (firstDist < secondDist){
-                candidates = firstCandidates;
-                vpDist = firstDist;
-                return true;
-            }
-
-            candidates = secondCandidates;
-            vpDist = secondDist;
-            return true;
         }
 
         /**
@@ -1155,53 +1059,74 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
 
         @Override
         public int internalGetIndex() {
-            return candidates.internalGetIndex();
+            return cur.vp.internalGetIndex();
         }
 
         @Override
         public boolean valid() {
-            return candidates.valid();
+            return cur != null;
         }
 
         @Override
         public PrioritySearcher<Q> decreaseCutoff(double threshold) {
             assert threshold <= this.threshold : "Thresholds must only decreasee.";
             this.threshold = threshold;
-            if(threshold < curdist) { // No more results possible:
-                heap.clear();
-                candidates = DoubleDBIDListIter.EMPTY;
-            }
             return this;
         }
 
         @Override
         public double computeExactDistance() {
-            return candidates.doubleValue() == 0. ? vpDist : queryDistance(candidates);
-        }
-
-        @Override
-        public double getApproximateDistance() {
-            return vpDist;
-        }
-
-        @Override
-        public double getApproximateAccuracy() {
-            return candidates.doubleValue();
+            return queryDistance(cur.vp);
         }
 
         @Override
         public double getLowerBound() {
-            return Math.max(vpDist - candidates.doubleValue(), curdist);
-        }
-
-        @Override
-        public double getUpperBound() {
-            return vpDist + candidates.doubleValue();
+            return cur.mindist;
         }
 
         @Override
         public double allLowerBound() {
-            return curdist;
+            return cur.mindist;
+        }
+    }
+
+    /**
+     * Search position for priority search.
+     *
+     * @author Robert Gehde
+     */
+    private static class PrioritySearchBranch implements Comparable<PrioritySearchBranch> {
+        /**
+         * Minimum distance
+         */
+        double mindist;
+
+        /**
+         * associated vantage point
+         */
+        DBID vp;
+
+        /**
+         * Node
+         */
+        Node node;
+
+        /**
+         * Constructor.
+         *
+         * @param mindist Minimum distance
+         * @param node Node
+         * @param vp Vantage point
+         */
+        public PrioritySearchBranch(double mindist, Node node, DBID vp) {
+            this.mindist = mindist;
+            this.node = node;
+            this.vp = vp;
+        }
+
+        @Override
+        public int compareTo(PrioritySearchBranch o) {
+            return Double.compare(this.mindist, o.mindist);
         }
     }
 
@@ -1236,7 +1161,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
      * @author Sebastian Aloisi
      * 
      */
-    public class GHTreePriorityDBIDSearcher extends GHTreePrioritySearcher<DBIDRef>{
+    public class GHTreePriorityDBIDSearcher extends GHTreePrioritySearcher<DBIDRef> {
         /**
          * Current query object
          */
@@ -1294,7 +1219,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
          * Maximum Variance threshold
          */
 
-         double mvAlpha;
+        double mvAlpha;
 
         /**
          * Vantage Point selection Algorithm
@@ -1355,11 +1280,12 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
              * Parameter to specify the minimum leaf size
              */
             public final static OptionID TRUNCATE_ID = new OptionID("ghtree.truncate", "Minimum leaf size for stopping");
-            
+
             /**
              * Parameter to specify Maximum Variance Threshold
              */
-            public final static OptionID MV_ALPHA_ID = new OptionID("ghtree.mvAlpha","Threshold for Maximum Variance VP selection Algorithm");
+            public final static OptionID MV_ALPHA_ID = new OptionID("ghtree.mvAlpha", "Threshold for Maximum Variance VP selection Algorithm");
+
             /**
              * Parameter to specify the rnd generator seed
              */
@@ -1416,16 +1342,14 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                         .addConstraint(CommonConstraints.GREATER_EQUAL_ONE_INT) //
                         .grab(config, x -> this.truncate = x);
                 new RandomParameter(SEED_ID).grab(config, x -> random = x);
-                new DoubleParameter(MV_ALPHA_ID,0.5) //
-                        .addConstraint(CommonConstraints.LESS_EQUAL_ONE_DOUBLE)
-                        .addConstraint(CommonConstraints.GREATER_EQUAL_ZERO_DOUBLE)
-                        .grab(config, x -> this.mvAlpha = x);
+                new DoubleParameter(MV_ALPHA_ID, 0.5) //
+                        .addConstraint(CommonConstraints.LESS_EQUAL_ONE_DOUBLE).addConstraint(CommonConstraints.GREATER_EQUAL_ZERO_DOUBLE).grab(config, x -> this.mvAlpha = x);
                 new EnumParameter<>(VPSELECTOR_ID, VPSelectionAlgorithm.class).grab(config, x -> this.vpSelector = x);
             }
 
             @Override
             public Object make() {
-                return new Factory<>(distance, random, sampleSize, truncate,mvAlpha, vpSelector);
+                return new Factory<>(distance, random, sampleSize, truncate, mvAlpha, vpSelector);
             }
         }
     }
