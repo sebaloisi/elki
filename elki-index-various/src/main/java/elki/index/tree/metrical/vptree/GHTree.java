@@ -70,7 +70,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
     /**
      * Class logger.
      */
-    private static final Logging LOG = Logging.getLogger(VPTree.class);
+    private static final Logging LOG = Logging.getLogger(GHTree.class);
 
     /**
      * The representation we are bound to.
@@ -175,6 +175,17 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         RANDOM, FFT, MAXIMUM_VARIANCE, MAXIMUM_VARIANCE_SAMPLING, MAXIMUM_VARIANCE_FFT, MAXIMUM_VARIANCE_FFT_SAMPLING, REF_CHOOSE_VP
     }
 
+    private class DBIDVarTuple {
+        DBIDVar first;
+
+        DBIDVar second;
+
+        public DBIDVarTuple(DBIDVar first, DBIDVar second) {
+            this.first = first;
+            this.second = second;
+        }
+    }
+
     /**
      * check intersection of 2 intervals
      * 
@@ -201,45 +212,32 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         DBIDVar firstVP = DBIDUtil.newVar();
         DBIDVar secondVP = DBIDUtil.newVar();
 
-        // TODO: check for all equal and/or less than 2
-        // TODO: Ref selection?
-        switch(GHTree.this.vpSelector){
+        switch(this.vpSelector){
         case RANDOM:
             tuple = selectRandomVantagePoints(content);
-            firstVP.set(tuple.first);
-            secondVP.set(tuple.second);
             break;
         case FFT:
             tuple = selectFFTVantagePoints(content);
-            firstVP.set(tuple.first);
-            secondVP.set(tuple.second);
             break;
         case MAXIMUM_VARIANCE:
             tuple = selectMaximumVarianceVantagePoints(content);
-            firstVP.set(tuple.first);
-            secondVP.set(tuple.second);
             break;
         case MAXIMUM_VARIANCE_SAMPLING:
             tuple = selectSampledMaximumVarianceVantagePoints(content);
-            firstVP.set(tuple.first);
-            secondVP.set(tuple.second);
             break;
         case MAXIMUM_VARIANCE_FFT:
             tuple = selectMVFFTVantagePoints(content);
-            firstVP.set(tuple.first);
-            secondVP.set(tuple.second);
             break;
         case MAXIMUM_VARIANCE_FFT_SAMPLING:
             tuple = selectSampledMVFFTVantagePoints(content);
-            firstVP.set(tuple.first);
-            secondVP.set(tuple.second);
             break;
         default:
             tuple = selectFFTVantagePoints(content);
-            firstVP.set(tuple.first);
-            secondVP.set(tuple.second);
             break;
         }
+
+        firstVP.set(tuple.first);
+        secondVP.set(tuple.second);
 
         current.firstVP = firstVP;
 
@@ -302,17 +300,6 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         }
     }
 
-    private class DBIDVarTuple {
-        DBIDVar first;
-
-        DBIDVar second;
-
-        public DBIDVarTuple(DBIDVar first, DBIDVar second) {
-            this.first = first;
-            this.second = second;
-        }
-    }
-
     /**
      * Finds two Vantage Points using Farthest first Traversal
      * 
@@ -372,6 +359,8 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         }
 
         DBIDVarTuple result = new DBIDVarTuple(first, second);
+
+        assert !second.isEmpty() && !(second == null);
 
         return result;
     }
@@ -466,6 +455,9 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                 }
             }
         }
+
+        assert !secondVP.isEmpty() && !(secondVP == null);
+
         return new DBIDVarTuple(firstVP, secondVP);
     }
 
@@ -565,6 +557,8 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                 }
             }
         }
+        
+        assert !secondVP.isEmpty() && !(secondVP == null);
         return new DBIDVarTuple(firstVP, secondVP);
     }
 
@@ -625,6 +619,8 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                 secondVP.set(iter);
             }
         }
+
+        assert !secondVP.isEmpty() && !(secondVP == null);
 
         return new DBIDVarTuple(firstVP, secondVP);
     }
@@ -903,18 +899,17 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             final DBIDRef secondVP = node.secondVP;
 
             final double firstVPDistance = queryDistance(firstVP);
-            // TODO: if not null
-            final double secondVPDistance = queryDistance(secondVP);
 
             if(firstVPDistance < range) {
                 result.add(firstVPDistance, firstVP);
             }
 
-            if(secondVPDistance < range) {
-                result.add(secondVPDistance, secondVP);
-            }
-
             if(secondVP != null) {
+                final double secondVPDistance = queryDistance(secondVP);
+                
+                if(secondVPDistance < range) {
+                    result.add(secondVPDistance, secondVP);
+                }
 
                 Node lc = node.firstChild, rc = node.secondChild;
 
@@ -922,11 +917,11 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                 final double secondDistanceDiff = (secondVPDistance - firstDistanceDiff) / 2;
 
                 // TODO: Bounds?
-                if(lc != null && firstDistanceDiff < range) {
+                if(lc != null && firstDistanceDiff < range && firstVPDistance <= node.firstHighBound) {
                     ghRangeSearch(result, lc, range);
                 }
 
-                if(rc != null && secondDistanceDiff < range) {
+                if(rc != null && secondDistanceDiff < range && secondVPDistance <= node.secondHighBound) {
                     ghRangeSearch(result, rc, range);
                 }
             }
@@ -1029,24 +1024,27 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
 
             if(cur.node != null) {
                 double firstVPDist = queryDistance(cur.node.firstVP);
-                // TODO if not null!
-                double secondVPDist = queryDistance(cur.node.secondVP);
                 Node lc = cur.node.firstChild;
-                Node rc = cur.node.secondChild;
 
                 if(lc != null && intersect(firstVPDist - threshold, firstVPDist + threshold, cur.node.firstLowBound, cur.node.firstHighBound)) {
                     final double mindist = Math.max(firstVPDist - cur.node.firstHighBound, cur.mindist);
                     heap.add(new PrioritySearchBranch(mindist, lc, DBIDUtil.deref(cur.node.firstVP)));
                 }
 
-                if(rc != null && intersect(secondVPDist - threshold, secondVPDist + threshold, cur.node.secondLowBound, cur.node.secondHighBound)) {
-                    final double mindist = Math.max(secondVPDist - cur.node.secondHighBound, cur.mindist);
-                    heap.add(new PrioritySearchBranch(mindist, rc, DBIDUtil.deref(cur.node.secondVP)));
+
+                if (cur.node.secondVP != null ){
+                    double secondVPDist = queryDistance(cur.node.secondVP);
+                    Node rc = cur.node.secondChild;
+                    
+                    if(rc != null && intersect(secondVPDist - threshold, secondVPDist + threshold, cur.node.secondLowBound, cur.node.secondHighBound)) {
+                        final double mindist = Math.max(secondVPDist - cur.node.secondHighBound, cur.mindist);
+                        heap.add(new PrioritySearchBranch(mindist, rc, DBIDUtil.deref(cur.node.secondVP)));
+                    }
                 }
+
             }
 
             return this;
-
         }
 
         /**
@@ -1343,7 +1341,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                         .grab(config, x -> this.truncate = x);
                 new RandomParameter(SEED_ID).grab(config, x -> random = x);
                 new DoubleParameter(MV_ALPHA_ID, 0.5) //
-                        .addConstraint(CommonConstraints.LESS_EQUAL_ONE_DOUBLE).addConstraint(CommonConstraints.GREATER_EQUAL_ZERO_DOUBLE).grab(config, x -> this.mvAlpha = x);
+                        .addConstraint(CommonConstraints.LESS_THAN_ONE_DOUBLE).addConstraint(CommonConstraints.GREATER_EQUAL_ZERO_DOUBLE).grab(config, x -> this.mvAlpha = x);
                 new EnumParameter<>(VPSELECTOR_ID, VPSelectionAlgorithm.class).grab(config, x -> this.vpSelector = x);
             }
 

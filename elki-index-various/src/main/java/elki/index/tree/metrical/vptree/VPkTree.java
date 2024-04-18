@@ -100,7 +100,7 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
     /**
      * Class logger.
      */
-    private static final Logging LOG = Logging.getLogger(VPTree.class);
+    private static final Logging LOG = Logging.getLogger(VPkTree.class);
 
     /**
      * The representation we are bound to.
