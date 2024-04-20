@@ -239,6 +239,8 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         firstVP.set(tuple.first);
         secondVP.set(tuple.second);
 
+        assert !DBIDUtil.equal(firstVP, secondVP);
+
         current.firstVP = firstVP;
 
         // If second VP is empty, Leaf is reached, just set low/highbound
@@ -353,15 +355,14 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         }
 
         // Choose Second VP at Random from remaining DBID's
+        // TODO: Multiples?
         DBIDVar second = DBIDUtil.newVar();
         if( workset.size() > 0){
             second.set(DBIDUtil.randomSample(workset, randomThread));
         }
 
         DBIDVarTuple result = new DBIDVarTuple(first, second);
-
-        assert !second.isEmpty() && !(second == null);
-
+        
         return result;
     }
 
@@ -820,18 +821,23 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             final double firstDistance = queryDistance(firstVP);
             knns.insert(firstDistance, firstVP);
             Node lc = node.firstChild;
-            // TODO: Priortization?
 
-            if(lc != null && node.firstLowBound <= firstDistance + tau && firstDistance - tau < node.firstHighBound) {
-                tau = ghKNNSearch(knns, lc);
-            }
 
             if(secondVP != null) {
                 Node rc = node.secondChild;
                 final double secondDistance = queryDistance(secondVP);
                 knns.insert(secondDistance, secondVP);
 
-                if(rc != null && node.secondLowBound <= secondDistance + tau && secondDistance - tau < node.secondHighBound) {
+                final double firstDistanceDiff = (firstDistance - secondDistance) / 2;
+                final double secondDistanceDiff = (secondDistance - firstDistance) / 2;
+
+                // TODO: Priortization?
+
+                if(lc != null && firstDistanceDiff < tau && firstDistance <= node.firstHighBound) {
+                    tau = ghKNNSearch(knns, lc);
+                }
+
+                if(rc != null && secondDistanceDiff < tau && secondDistance <= node.secondHighBound) {
                     tau = ghKNNSearch(knns, rc);
                 }
             }
@@ -900,14 +906,14 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
 
             final double firstVPDistance = queryDistance(firstVP);
 
-            if(firstVPDistance < range) {
+            if(firstVPDistance <= range) {
                 result.add(firstVPDistance, firstVP);
             }
 
             if(secondVP != null) {
                 final double secondVPDistance = queryDistance(secondVP);
                 
-                if(secondVPDistance < range) {
+                if(secondVPDistance <= range) {
                     result.add(secondVPDistance, secondVP);
                 }
 
@@ -1035,7 +1041,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                 if (cur.node.secondVP != null ){
                     double secondVPDist = queryDistance(cur.node.secondVP);
                     Node rc = cur.node.secondChild;
-                    
+
                     if(rc != null && intersect(secondVPDist - threshold, secondVPDist + threshold, cur.node.secondLowBound, cur.node.secondHighBound)) {
                         final double mindist = Math.max(secondVPDist - cur.node.secondHighBound, cur.mindist);
                         heap.add(new PrioritySearchBranch(mindist, rc, DBIDUtil.deref(cur.node.secondVP)));
