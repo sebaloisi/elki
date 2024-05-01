@@ -21,6 +21,11 @@
 
 package elki.index.tree.metrical.vptree;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Random;
 
 import elki.data.NumberVector;
@@ -133,6 +138,11 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
     int truncate;
 
     /**
+     * The k Value to split to
+     */
+    static int kVal;
+
+    /**
      * Counter for distance computations.
      */
     long distComputations = 0L;
@@ -141,12 +151,6 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
      * Root node from the tree
      */
     Node root;
-
-    /**
-     * The k Value to split to
-     */
-    static int kVal;
-
     
     /**
      * Vantage Point Selection Algorithm
@@ -191,6 +195,8 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
     @Override
     public void initialize() {
         root = new Builder().buildTree(0, relation.size());
+        TreeParser parser = new TreeParser();
+        parser.parseTree();
     }
 
     private enum VPSelectionAlgorithm {
@@ -259,16 +265,16 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
             switch (vpSelector){
                 case MAXIMUM_VARIANCE: 
                     vantagePoint = selectMaximumVarianceVantagePoint(left, right);
-                break;
+                    break;
                 case  MAXIMUM_VARIANCE_SAMPLING:
                     vantagePoint = selectSampledMaximumVarianceVantagePoint(left, right);
-                break;
+                    break;
                 case REF_CHOOSE_VP:
                     vantagePoint = chooseVantagePoint(left, right);
                     break;
                 default:
                     vantagePoint = selectRandomVantagePoint(left, right);
-                break;
+                    break;
             }
 
             int tied = 0;
@@ -310,16 +316,14 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
 
             for(int i = 0; i < kVal; i++) {
                 lowBounds[i] = Double.POSITIVE_INFINITY;
-                highBounds[i] = Double.NEGATIVE_INFINITY;
+                highBounds[i] = -1;
             }
 
             for(int i = 0; i < quantilesAmount; i++) {
                 double currentBound = (double) (i + 1) / (double) kVal;
-                quantiles[i] = QuickSelectDBIDs.quantile(scratch, left, right, currentBound);
+                quantiles[i] = QuickSelectDBIDs.quantile(scratch, left+tied, right, currentBound);
                 
             }
-
-            QuickSelectDBIDs.quickSelect(scratch, left + tied, right, quantiles[quantiles.length-1]);
 
             int leftQuant = left;
             for(int i = 0; i < quantilesAmount; i++) {
@@ -341,7 +345,7 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
                     highBounds[i] = d > highBounds[i] ? d : highBounds[i];
                 }
                 
-                leftQuant += quantiles[i];
+                leftQuant = quantiles[i];
 
                 assert right > quantiles[i];
             }
@@ -360,20 +364,19 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
 
             Node current = new Node(vps);
             
+            int leftBound = left + tied;
             // Recursive build the first kVal-1 child Partititions
             // TODO: Grosser quatsch, iterator muss weiter nach rechts um größe der Partition bewegt werden
-            for(int i = 0; i < quantilesAmount; i++) {
-                if(left + tied < quantiles[i]) {
+            for(int i = 0; i < kVal -1; i++) {
                     // TODO: Check if part is empty?
-                    current.children[i] = buildTree(left + tied, quantiles[i]);
+                    current.children[i] = buildTree(leftBound, quantiles[i]);
                     current.children[i].lowBound = lowBounds[i];
                     current.children[i].highBound = highBounds[i];
-                    left += quantiles[i];
-                }
+                    leftBound = quantiles[i];
             }
 
             // Build Child for the last partitition
-            current.children[kVal - 1] = buildTree(quantiles[quantilesAmount - 1], right);
+            current.children[kVal - 1] = buildTree(quantiles[quantiles.length - 1], right);
             current.children[kVal - 1].lowBound = lowBounds[kVal - 1];
             current.children[kVal - 1].highBound = highBounds[kVal - 1];
             return current;
@@ -1288,6 +1291,84 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
             public Factory<O> make() {
                 return new Factory<>(distance, random, sampleSize, truncate, kFold, vpSelector);
             }
+        }
+    }
+
+    private class TreeParser {
+        private LinkedList<String> nodes;
+        private LinkedList<String> edges;
+        private int objectCounter;
+        private DecimalFormat decimalFormat;
+
+        public TreeParser(){
+            this.nodes = new LinkedList<String>();
+            this.edges = new LinkedList<String>();
+            this.objectCounter = 0;
+            this.decimalFormat = new DecimalFormat("0.00");
+        }
+
+        public void parseTree(){
+            parseNode(root);
+            String treeString = treeToString();
+            try {
+                FileWriter fileWriter = new FileWriter("vpk.dot");
+                fileWriter.write(treeString);
+                fileWriter.close();
+            } catch(IOException e){
+
+            }
+        }
+
+        private void parseNode(Node node){
+            DBIDRef vp = node.vp.iter();
+            int objectsInNode = node.vp.size();
+            this.objectCounter += objectsInNode;
+
+            String nodeID = String.valueOf(vp.internalGetIndex());
+            String lowBound = String.valueOf(this.decimalFormat.format(node.lowBound));
+            String highBound = String.valueOf(this.decimalFormat.format(node.highBound));
+
+            String nodeString = nodeID + " [ label = \"ID: " + nodeID +" \\n obj: " + String.valueOf(objectsInNode) + "\\n lb:" + lowBound + "\\n hb: " + highBound + "\"]\n";
+            this.nodes.add(nodeString);
+
+
+            Node[] children = node.children;
+            
+            for(int i = 0; i < children.length; i++){
+                if (children[i] != null){
+                    Node currentChild = node.children[i];
+                    DBIDRef currentChildVP = currentChild.vp.iter();
+                    String currentChildID = String.valueOf(currentChildVP.internalGetIndex());
+                    this.edges.add(nodeID + " -> " + currentChildID + "\n");
+                    parseNode(currentChild);
+                }
+            }
+        }
+
+        private String treeToString(){
+            String header = "digraph {\nrankdir=\"TB\"\nnode [shape=box]\n";
+            String stats = "stats [label=\"Objects found: " + this.objectCounter + "\"]\n";
+            String tail = "}";
+            StringBuilder bodyStringBuilder = new StringBuilder();
+            String body, result;
+
+            Iterator nodeIter = this.nodes.iterator();
+
+            while (nodeIter.hasNext()){
+                bodyStringBuilder.append(nodeIter.next());
+            }
+
+            Iterator edgesIterator = this.edges.iterator();
+
+            while (edgesIterator.hasNext()){
+                bodyStringBuilder.append(edgesIterator.next());
+            }
+
+            body = bodyStringBuilder.toString();
+
+            result = header + stats + body + tail;
+
+            return result;
         }
     }
 }

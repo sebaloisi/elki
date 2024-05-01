@@ -1,5 +1,10 @@
 package elki.index.tree.metrical.vptree;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Random;
 
 import elki.data.NumberVector;
@@ -121,8 +126,7 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
     }
 
     /**
-     * Constructor.
-     * TODO: delete truncate
+     * Constructor
      * 
      * @param relation data for tree construction
      * @param distance distance function for tree construction
@@ -149,6 +153,8 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
     public void initialize() {
         root = new Node(ReuseVPIndicator.ROOT);
         buildTree(root, relation.getDBIDs(), DBIDUtil.newVar(), DBIDUtil.newDistanceDBIDList());
+        TreeParser treeParser = new TreeParser();
+        treeParser.parseTree();
     }
 
     private enum VPSelectionAlgorithm {
@@ -849,11 +855,11 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
                 final double secondDistanceDiff = (secondDistance - firstDistance) / 2;
                 
                 // TODO Prio?
-                if(lc != null && firstDistanceDiff < tau && firstDistance <= node.firstHighBound) {
+                if(lc != null && firstDistanceDiff < tau && firstDistance - tau <= node.firstHighBound) {
                     tau = ghrpKNNSearch(knns, lc, firstDistance);
                 }
 
-                if(rc != null && secondDistanceDiff < tau && secondDistance <= node.secondHighBound ) {
+                if(rc != null && secondDistanceDiff < tau && secondDistance - tau <= node.secondHighBound ) {
                     tau = ghrpKNNSearch(knns, rc, secondDistance);
                 }
             }
@@ -1377,6 +1383,108 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
             public Object make() {
                 return new Factory<>(distance, random, sampleSize, truncate, mvAlpha, vpSelector);
             }
+        }
+    }
+
+    private class TreeParser {
+        private LinkedList<String> nodes;
+
+        private LinkedList<String> edges;
+
+        private int objectCounter;
+
+        private DecimalFormat decimalFormat;
+
+        public TreeParser() {
+            this.nodes = new LinkedList<String>();
+            this.edges = new LinkedList<String>();
+            this.objectCounter = 0;
+            this.decimalFormat = new DecimalFormat("0.00");
+        }
+
+        public void parseTree() {
+            parseNode(root);
+            String treeString = treeToString();
+            try {
+                FileWriter fileWriter = new FileWriter("ghrp.dot");
+                fileWriter.write(treeString);
+                fileWriter.close();
+            }
+            catch(IOException e) {
+
+            }
+        }
+
+        private void parseNode(Node node) {
+            DBIDRef firstVP = node.firstVP;
+            DBIDRef secondVP = node.secondVP;
+            int objectsInNode = node.vpIndicator == ReuseVPIndicator.ROOT ? 2 : 1;
+            this.objectCounter += objectsInNode;
+
+            String firstVPID = String.valueOf(firstVP.internalGetIndex()) ;
+            String seconVPID = secondVP == null ? "NaN" : String.valueOf(secondVP.internalGetIndex());
+            String nodeID = firstVPID + seconVPID;
+            String firstLowBound = String.valueOf(this.decimalFormat.format(node.firstLowBound));
+            String firstHighBound = String.valueOf(this.decimalFormat.format(node.firstHighBound));
+            String secondLowBound = node.secondLowBound == Double.MAX_VALUE ? "MAX_VAL" : String.valueOf(this.decimalFormat.format(node.secondLowBound));
+            String secondHighBound = String.valueOf(this.decimalFormat.format(node.secondHighBound));
+
+            String nodeString = nodeID + " [ label = \"ID: " + firstVPID 
+                                       + "\\n sID: " + seconVPID
+                                       + "\\n obj: " + String.valueOf(objectsInNode)
+                                       + "\\n flb: " + firstLowBound
+                                       + "\\n fhb: " + firstHighBound 
+                                       + "\\n slb: " + secondLowBound
+                                       + "\\n shb: " + secondHighBound
+                                       + "\"]\n";
+            this.nodes.add(nodeString);
+
+            Node firstChild = node.firstChild;
+            Node secondChild = node.secondChild;
+
+            if (firstChild != null){
+                DBIDRef firstChildVP = firstChild.firstVP;
+                String firstChildVPID = String.valueOf(firstChildVP.internalGetIndex());
+                String firstChildSecondVPID = firstChild.secondVP == null ? "NaN" : String.valueOf(firstChild.secondVP.internalGetIndex());
+                String firstChildID = firstChildVPID + firstChildSecondVPID;
+                this.edges.add(nodeID + " -> " + firstChildID +"\n");
+                parseNode(firstChild);
+            }
+
+            if (secondChild != null){
+                DBIDRef secondChildVP = secondChild.firstVP;
+                String secondChildFirstVPID = String.valueOf(secondChildVP.internalGetIndex());
+                String secondChildSecondVPID = secondChild.secondVP == null ? "NaN" : String.valueOf(secondChild.secondVP.internalGetIndex());
+                String secondChildID = secondChildFirstVPID + secondChildSecondVPID;
+                this.edges.add(nodeID + " -> " + secondChildID + "\n");
+                parseNode(secondChild);
+            }
+        }
+
+        private String treeToString() {
+            String header = "digraph {\nrankdir=\"TB\"\nnode [shape=box]\n";
+            String stats = "stats [label=\"Objects found: " + this.objectCounter + "\"]\n";
+            String tail = "}";
+            StringBuilder bodyStringBuilder = new StringBuilder();
+            String body, result;
+
+            Iterator nodeIter = this.nodes.iterator();
+
+            while(nodeIter.hasNext()) {
+                bodyStringBuilder.append(nodeIter.next());
+            }
+
+            Iterator edgesIterator = this.edges.iterator();
+
+            while(edgesIterator.hasNext()) {
+                bodyStringBuilder.append(edgesIterator.next());
+            }
+
+            body = bodyStringBuilder.toString();
+
+            result = header + stats + body + tail;
+
+            return result;
         }
     }
 }
