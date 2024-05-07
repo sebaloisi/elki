@@ -308,6 +308,10 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         // If second VP is empty, Leaf is reached, just set low/highbound
         // Else build childnodes
         if(secondVP.isEmpty()) {
+            for(DBIDIter contentIter = content.iter(); contentIter.valid(); contentIter.advance()) {
+                current.firstVP.add(0, contentIter);
+            }
+
             current.firstLowBound = 0;
             current.firstHighBound = 0;
         } else {
@@ -422,21 +426,17 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         worksetIter.seek(pos);
         first.set(worksetIter);
 
-        // remove all Datapoints eqaul to first VP from workset
-        for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
-            if(DBIDUtil.equal(it, first)) {
-                it.remove();
+        DBIDVar second = DBIDUtil.newVar();
+        // Set the first DBID nonequal to first vp as second vp
+        for(DBIDIter it = content.iter(); it.valid(); it.advance()) {
+            if(!DBIDUtil.equal(it, first) && !(distance(it, first) == 0)) {
+                second.set(it);
+                assert distance(first, second) > 0;
             }
         }
 
-        // Choose Second VP at Random from remaining DBID's
-        DBIDVar second = DBIDUtil.newVar();
-        if( workset.size() > 0){
-            second.set(DBIDUtil.randomSample(workset, randomThread));
-        }
-
         DBIDVarTuple result = new DBIDVarTuple(first, second);
-        
+
         return result;
     }
 
@@ -491,26 +491,16 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             }
         }
 
-        // Remove all candidates from workingset exceeding threshold
-        // Also remove all duplicates
-        double omega = GHTree.this.mvAlpha * maxDist;
+        // Only duplicates in content
+        if(bestMean == 0) {
+            return new DBIDVarTuple(firstVP, secondVP);
+        }
 
+        double omega = this.mvAlpha * maxDist;
+
+        // Select second VP
         for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
-            if(Math.abs(distance(firstVP, it) - bestMean) > omega || DBIDUtil.equal(it, firstVP)) {
-                it.remove();
-            }
-        }
-
-        // if only one left, chose this as Second VP
-        // else select according to algorithm
-        // if none left, let Second VP be null
-        if(workset.size() == 1) {
-            DBIDMIter it = workset.iter();
-            secondVP.set(it);
-        }
-        else {
-            // Select second VP
-            for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
+            if(!DBIDUtil.equal(it, firstVP) && Math.abs(distance(firstVP, it) - bestMean) <= omega && distance(firstVP, it) != 0) {
                 currentDbid.set(it);
 
                 MeanVariance currentVariance = new MeanVariance();
@@ -523,14 +513,13 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
 
                 double currentStandartDeviance = currentVariance.getSampleStddev();
 
-                if(currentStandartDeviance > secondBestStandartDeviation) {
+                // Note: if current SD == best SD => duplicate!
+                if(currentStandartDeviance != bestStandartDeviation && currentStandartDeviance > secondBestStandartDeviation) {
                     secondVP.set(it);
                     secondBestStandartDeviation = currentStandartDeviance;
                 }
             }
         }
-
-        assert !secondVP.isEmpty() && !(secondVP == null);
 
         return new DBIDVarTuple(firstVP, secondVP);
     }
@@ -549,9 +538,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
 
         DBIDVar firstVP = DBIDUtil.newVar();
         DBIDVar secondVP = DBIDUtil.newVar();
-        DBIDVar currentDbid = DBIDUtil.newVar();
 
-        // TODO: Truncate!
         if(content.size() == 1) {
             DBIDIter it = content.iter();
             firstVP.set(it);
@@ -564,76 +551,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
 
         ModifiableDBIDs workset = DBIDUtil.randomSample(scratchCopy, adjustedSampleSize, random);
 
-        double bestStandartDeviation = Double.NEGATIVE_INFINITY;
-        double bestMean = 0;
-        double secondBestStandartDeviation = Double.NEGATIVE_INFINITY;
-        double maxDist = -1;
-
-        // Select first VP
-        for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
-            currentDbid.set(it);
-
-            MeanVariance currentVariance = new MeanVariance();
-
-            for(DBIDMIter jt = workset.iter(); jt.valid(); jt.advance()) {
-                double currentDistance = distance(currentDbid, jt);
-
-                currentVariance.put(currentDistance);
-
-                if(currentDistance > maxDist) {
-                    maxDist = currentDistance;
-                }
-            }
-
-            double currentStandartDeviance = currentVariance.getSampleStddev();
-
-            if(currentStandartDeviance > bestStandartDeviation) {
-                firstVP.set(it);
-                bestStandartDeviation = currentStandartDeviance;
-                bestMean = currentVariance.getMean();
-            }
-        }
-
-        // Remove all candidates from workingset exceeding threshold
-        // Also remove all duplicates
-        double omega = GHTree.this.mvAlpha * maxDist;
-
-        for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
-            if(Math.abs(distance(firstVP, it) - bestMean) > omega || DBIDUtil.equal(it, firstVP)) {
-                it.remove();
-            }
-        }
-
-        // if only one left, chose this as Second VP
-        // else select according to algorithm
-        // if none left, let Second VP be null
-        if(workset.size() == 1) {
-            DBIDMIter it = workset.iter();
-            secondVP.set(it);
-        } else {
-            // Select second VP
-            for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
-                currentDbid.set(it);
-
-                MeanVariance currentVariance = new MeanVariance();
-
-                for(DBIDMIter jt = workset.iter(); jt.valid(); jt.advance()) {
-                    double currentDistance = distance(currentDbid, jt);
-
-                    currentVariance.put(currentDistance);
-                }
-
-                double currentStandartDeviance = currentVariance.getSampleStddev();
-
-                if(currentStandartDeviance > secondBestStandartDeviation) {
-                    secondVP.set(it);
-                    secondBestStandartDeviation = currentStandartDeviance;
-                }
-            }
-        }
-        
-        assert !secondVP.isEmpty() && !(secondVP == null);
-        return new DBIDVarTuple(firstVP, secondVP);
+        return selectMaximumVarianceVantagePoints(workset);
     }
 
     /**
@@ -917,19 +835,19 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
 
                 // TODO: Better Priortization?
                 if(firstDistance < 0) {
-                    if(lc != null && firstDistanceDiff < tau && firstDistance - tau <= node.firstHighBound) {
+                    if(lc != null && firstDistanceDiff < tau && node.firstLowBound <= firstDistance + tau && firstDistance - tau <= node.firstHighBound) {
                         tau = ghKNNSearch(knns, lc);
                     }
 
-                    if(rc != null && secondDistanceDiff < tau && secondDistance - tau <= node.secondHighBound) {
+                    if(rc != null && secondDistanceDiff < tau && node.secondLowBound <= secondDistance + tau && secondDistance - tau <= node.secondHighBound) {
                         tau = ghKNNSearch(knns, rc);
                     }
                 } else {
-                    if(rc != null && secondDistanceDiff < tau && secondDistance - tau  <= node.secondHighBound) {
+                    if(rc != null && secondDistanceDiff < tau && node.secondLowBound <= secondDistance + tau && secondDistance - tau  <= node.secondHighBound) {
                         tau = ghKNNSearch(knns, rc);
                     }
 
-                    if(lc != null && firstDistanceDiff < tau && firstDistance - tau <= node.firstHighBound) {
+                    if(lc != null && firstDistanceDiff < tau && node.firstLowBound <= firstDistance + tau  && firstDistance - tau <= node.firstHighBound) {
                         tau = ghKNNSearch(knns, lc);
                     }
                 }
@@ -1025,11 +943,11 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                 final double secondDistanceDiff = (secondVPDistance - firstDistanceDiff) / 2;
 
                 // TODO: Bounds?
-                if(lc != null && firstDistanceDiff < range && firstVPDistance <= node.firstHighBound) {
+                if(lc != null && firstDistanceDiff < range && node.firstLowBound <= firstVPDistance + range && firstVPDistance - range <= node.firstHighBound) {
                     ghRangeSearch(result, lc, range);
                 }
 
-                if(rc != null && secondDistanceDiff < range && secondVPDistance <= node.secondHighBound) {
+                if(rc != null && secondDistanceDiff < range && node.secondLowBound <= secondVPDistance + range && secondVPDistance - range <= node.secondHighBound) {
                     ghRangeSearch(result, rc, range);
                 }
             }

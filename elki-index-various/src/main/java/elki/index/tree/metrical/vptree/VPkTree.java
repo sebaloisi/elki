@@ -1311,7 +1311,7 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
             parseNode(root);
             String treeString = treeToString();
             try {
-                FileWriter fileWriter = new FileWriter("vpk.dot");
+                FileWriter fileWriter = new FileWriter("vpk_"+ VPkTree.this.kVal + ".dot");
                 fileWriter.write(treeString);
                 fileWriter.close();
             } catch(IOException e){
