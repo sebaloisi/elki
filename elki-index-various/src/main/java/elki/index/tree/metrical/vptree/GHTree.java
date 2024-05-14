@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import elki.data.NumberVector;
 import elki.data.type.TypeInformation;
@@ -174,8 +175,17 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
     public void initialize() {
         root = new Node();
         buildTree(root, relation.getDBIDs());
-        TreeParser treeParser = new TreeParser();
-        treeParser.parseTree();
+        //TreeParser parser = new TreeParser();
+        //parser.parseTree();
+        System.gc();
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        }
+        catch(InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.gc();
     }
 
     private enum VPSelectionAlgorithm {
@@ -532,7 +542,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
      * @return Vantage Points
      */
     private DBIDVarTuple selectSampledMaximumVarianceVantagePoints(DBIDs content) {
-        if(GHTree.this.sampleSize == 2) {
+        if(this.sampleSize == 2 || this.sampleSize == 1) {
             return this.selectRandomVantagePoints(content);
         }
 
@@ -625,6 +635,10 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
      * @return Vantage Points
      */
     private DBIDVarTuple selectSampledMVFFTVantagePoints(DBIDs content) {
+        if(this.sampleSize == 2 || this.sampleSize == 1) {
+            return this.selectRandomVantagePoints(content);
+        }
+
         DBIDVar firstVP = DBIDUtil.newVar();
         DBIDVar secondVP = DBIDUtil.newVar();
         DBIDVar currentDbid = DBIDUtil.newVar();
@@ -940,7 +954,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                 Node lc = node.firstChild, rc = node.secondChild;
 
                 final double firstDistanceDiff = (firstVPDistance - secondVPDistance) / 2;
-                final double secondDistanceDiff = (secondVPDistance - firstDistanceDiff) / 2;
+                final double secondDistanceDiff = (secondVPDistance - firstVPDistance) / 2;
 
                 // TODO: Bounds?
                 if(lc != null && firstDistanceDiff < range && node.firstLowBound <= firstVPDistance + range && firstVPDistance - range <= node.firstHighBound) {
@@ -1276,7 +1290,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
 
         @Override
         public Index instantiate(Relation<O> relation) {
-            return new GHTree<>(relation, distance, random, truncate, sampleSize, mvAlpha, vpSelector);
+            return new GHTree<>(relation, distance, random, sampleSize, truncate, mvAlpha, vpSelector);
         }
 
         @Override
@@ -1364,7 +1378,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                             }
                         });
                 new IntParameter(SAMPLE_SIZE_ID, 10) //
-                        .addConstraint(CommonConstraints.GREATER_THAN_ONE_INT) //
+                        .addConstraint(CommonConstraints.GREATER_EQUAL_ONE_INT) //
                         .grab(config, x -> this.sampleSize = x);
                 new IntParameter(TRUNCATE_ID, 8) //
                         .addConstraint(CommonConstraints.GREATER_EQUAL_ONE_INT) //

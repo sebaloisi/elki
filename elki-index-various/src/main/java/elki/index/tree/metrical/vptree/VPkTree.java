@@ -27,6 +27,7 @@ import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import elki.data.NumberVector;
 import elki.data.type.TypeInformation;
@@ -59,6 +60,7 @@ import elki.logging.statistics.LongStatistic;
 import elki.math.MeanVariance;
 import elki.utilities.Alias;
 import elki.utilities.datastructures.QuickSelect;
+import elki.utilities.datastructures.heap.DoubleObjectHeap;
 import elki.utilities.datastructures.heap.DoubleObjectMinHeap;
 import elki.utilities.documentation.Reference;
 import elki.utilities.optionhandling.OptionID;
@@ -195,8 +197,17 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
     @Override
     public void initialize() {
         root = new Builder().buildTree(0, relation.size());
-        TreeParser parser = new TreeParser();
-        parser.parseTree();
+        //TreeParser parser = new TreeParser();
+        //parser.parseTree();
+        System.gc();
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        }
+        catch(InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.gc();
     }
 
     private enum VPSelectionAlgorithm {
@@ -695,36 +706,25 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
 
             boolean[] searchedChilds = new boolean[childNodes.length];
 
-            // Priortize Nodes search
-            for (int i = 0; i < childNodes.length -1 ; i++){
-                Node currentChild = childNodes[i];
-                Node nextChild = null;
-                
-                // Find next non null child
-                for (int j = i+1; j < childNodes.length; j++){
-                    if (childNodes[j] != null){
-                        nextChild = childNodes[j];
-                        break;
-                    }
-                }
+            DoubleObjectMinHeap<Node> nodePrioHeap = new DoubleObjectMinHeap<>();
 
-                if (currentChild != null && nextChild != null && vpDist <(currentChild.highBound + nextChild.lowBound * 0.5)){
-                    if(currentChild.lowBound <= vpDist + tau && vpDist - tau <= currentChild.highBound ){
-                        tau = vpkKNNSearch(knns, currentChild);
-                        searchedChilds[i] = true;
-                    }
+            for(int i = 0; i < childNodes.length-1 ; i++){
+                if (childNodes[i] != null){
+                    Node currentNode = childNodes[i];
+                    double prio = (currentNode.highBound -(vpDist + tau)) + (vpDist - tau  - currentNode.lowBound);
+                    nodePrioHeap.add(prio, currentNode);
                 }
             }
 
-            // Search Nodes not already searched
-            for(int i = childNodes.length-1; i >= 0; i--) {
-                Node currentChild = childNodes[i];
+            while (!nodePrioHeap.isEmpty()){
+                Node searchNode = nodePrioHeap.peekValue();
 
-                if(!searchedChilds[i] && currentChild != null && currentChild.lowBound <= vpDist + tau && vpDist - tau <= currentChild.highBound) {
-                    tau = vpkKNNSearch(knns, currentChild);
+                if (searchNode.lowBound <= vpDist + tau && vpDist -tau <= searchNode.highBound){
+                    tau = vpkKNNSearch(knns, searchNode);
                 }
+                nodePrioHeap.poll();
             }
-
+            
             return tau;
         }
 
