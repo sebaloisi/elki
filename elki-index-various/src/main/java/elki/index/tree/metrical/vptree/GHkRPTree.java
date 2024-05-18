@@ -246,7 +246,10 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
             vps.add(0, firstVantagePoint);
 
             for(contentIter.advance(); contentIter.valid(); contentIter.advance()) {
-                vps.add(distance(contentIter, firstVantagePoint), contentIter);
+                double firstVPDist = distance(contentIter, firstVantagePoint);
+                vps.add(firstVPDist, contentIter);
+                //current.firstLowBound = current.firstLowBound > firstVPDist ? firstVPDist : current.firstLowBound;
+                //current.firstHighBound = current.firstHighBound < firstVPDist ? firstVPDist : current.firstHighBound;
             }
 
             // Set Indicator to Root, otherwise this node may not be searchable
@@ -255,12 +258,8 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
             current.firstVP = vps;
             current.secondVP = null;
             current.childNodes = null;
-            for(int i = 0; i < current.kFold ; i++){
-                current.firstLowerBounds[i] = 0;
-                current.secondLowerBounds[i] = 0;
-                current.firstUpperBounds[i] = 0;
-                current.secondUpperBounds[i] = 0;
-            }
+            current.firstLowBound = 0;
+            current.firstHighBound = Double.POSITIVE_INFINITY;
 
             return;
         }
@@ -312,12 +311,6 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
             current.firstVP = vps;
             current.secondVP = null;
             current.childNodes = null;
-            for(int i = 0; i < current.kFold; i++) {
-                current.firstLowerBounds[i] = 0;
-                current.secondLowerBounds[i] = 0;
-                current.firstUpperBounds[i] = 0;
-                current.secondUpperBounds[i] = 0;
-            }
 
             return;
         }
@@ -329,12 +322,8 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
             for(DBIDIter contentIter = content.iter(); contentIter.valid(); contentIter.advance()) {
                 current.firstVP.add(0, contentIter);
             }
-            for (int i = 0; i < kFold ; i++){
-                current.firstLowerBounds[i] = 0;
-                current.firstUpperBounds[i] = 0;
-                current.secondLowerBounds[i] = 0;
-                current.secondUpperBounds[i] = 0;
-            }
+            current.firstLowBound = 0;
+            current.firstHighBound = Double.POSITIVE_INFINITY;
         } else {
             // TODO: Wat?
             if(current.firstVP == null) {
@@ -449,14 +438,14 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
                     // firstDist <= secondDist?
                     // check middle part correct in query!
                     if(vpOffset != 0) {
-                        current.firstLowerBounds[i] = current.firstLowerBounds[i] > firstDistance ? firstDistance : current.firstLowerBounds[i];
+                        current.firstLowBound = current.firstLowBound > firstDistance ? firstDistance : current.firstLowBound;
                     }
-                    current.firstUpperBounds[i] = current.firstUpperBounds[i] < firstDistance ? firstDistance : current.firstUpperBounds[i];
+                    current.firstHighBound = current.firstHighBound < firstDistance ? firstDistance : current.firstHighBound;
 
                     if(vpOffset != 1) {
-                        current.secondLowerBounds[i] = current.secondLowerBounds[i] > secondDistance ? secondDistance : current.secondLowerBounds[i];
+                        current.secondLowBound = current.secondLowBound > secondDistance ? secondDistance : current.secondLowBound;
                     }
-                    current.secondUpperBounds[i] = current.secondUpperBounds[i] < secondDistance ? secondDistance : current.secondUpperBounds[i];
+                    current.secondHighBound = current.secondHighBound < secondDistance ? secondDistance : current.secondHighBound;
                 }
 
             }
@@ -891,12 +880,12 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
         /**
          * lower distance bounds
          */
-        double[] firstLowerBounds, secondLowerBounds;
+        double firstLowBound, secondLowBound;
 
         /**
          * upper distance bounds
          */
-        double[] firstUpperBounds, secondUpperBounds;
+        double firstHighBound, secondHighBound;
         /**
          * Constructor.
          * 
@@ -904,20 +893,12 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
         public Node(int kFold, ReuseVPIndicator vpIndicator) {
             this.kFold = kFold;
             this.vpIndicator = vpIndicator;
-            firstLowerBounds = new double[this.kFold];
-            firstUpperBounds = new double[this.kFold];
 
-            secondLowerBounds = new double[this.kFold];
-            secondUpperBounds = new double[this.kFold];
-            this.childNodes = new Node[this.kFold];
+            this.firstLowBound = Double.POSITIVE_INFINITY;
+            this.secondLowBound = Double.POSITIVE_INFINITY;
 
-            for ( int i = 0; i < this.kFold ; i ++){
-                this.firstLowerBounds[i] = Double.MAX_VALUE;
-                this.secondLowerBounds[i] = Double.MAX_VALUE;
-
-                this.firstUpperBounds[i] = -1;
-                this.secondUpperBounds[i] = -1;
-            }
+            this.firstHighBound = -1;
+            this.secondHighBound = -1;
         }
     }
 
@@ -1054,15 +1035,15 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
                             // middle
                             if(scaleFirstDistance <= scaleSecondDistance) {
                                 distanceDiff = ((scaleSecondDistance * secondVPDistance) - (scaleFirstDistance * firstVPDistance)) / 2;
-                                lowerBound = node.firstLowerBounds[i];
-                                upperBound = node.firstUpperBounds[i];
+                                lowerBound = node.firstLowBound;
+                                upperBound = node.firstHighBound;
                                 smallerDistance = scaleFirstDistance;
                                 currentReuseDistance = firstVPDistance;
                             }
                             else {
                                 distanceDiff = ((scaleFirstDistance * firstVPDistance) - (scaleSecondDistance * secondVPDistance)) / 2;
-                                lowerBound = node.secondLowerBounds[i];
-                                upperBound = node.secondUpperBounds[i];
+                                lowerBound = node.secondLowBound;
+                                upperBound = node.secondHighBound;
                                 smallerDistance = scaleSecondDistance;
                                 currentReuseDistance = secondVPDistance;
                             }
@@ -1185,15 +1166,15 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
                             // middle
                             if(scaleFirstDistance <= scaleSecondDistance) {
                                 distanceDiff = ((scaleSecondDistance * secondVPDistance) - (scaleFirstDistance * firstVPDistance)) / 2;
-                                upperBound = node.firstUpperBounds[i];
-                                lowerBound = node.firstLowerBounds[i];
+                                lowerBound = node.firstLowBound;
+                                upperBound = node.firstHighBound;
                                 smallerDistance = scaleFirstDistance;
                                 currentReuseDistance = firstVPDistance;
                             }
                             else {
                                 distanceDiff = ((scaleFirstDistance * firstVPDistance) - (scaleSecondDistance * secondVPDistance)) / 2;
-                                upperBound = node.secondUpperBounds[i];
-                                lowerBound = node.secondLowerBounds[i];
+                                lowerBound = node.secondLowBound;
+                                upperBound = node.secondHighBound;
                                 smallerDistance = scaleSecondDistance;
                                 currentReuseDistance = secondVPDistance;
                             }

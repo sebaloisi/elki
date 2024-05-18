@@ -717,7 +717,7 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
             while (!nodePrioHeap.isEmpty()){
                 Node searchNode = nodePrioHeap.peekValue();
 
-                if (searchNode.lowBound <= vpDist + tau && vpDist -tau <= searchNode.highBound){
+                if (searchNode.lowBound <= vpDist + tau && vpDist - tau <= searchNode.highBound){
                     tau = vpkKNNSearch(knns, searchNode);
                 }
                 nodePrioHeap.poll();
