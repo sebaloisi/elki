@@ -704,8 +704,6 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
             Node[] childNodes = node.children;
             double tau = knns.getKNNDistance();
 
-            boolean[] searchedChilds = new boolean[childNodes.length];
-
             DoubleObjectMinHeap<Node> nodePrioHeap = new DoubleObjectMinHeap<>();
 
             for(int i = 0; i < childNodes.length-1 ; i++){
@@ -724,7 +722,7 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
                 }
                 nodePrioHeap.poll();
             }
-            
+
             return tau;
         }
 

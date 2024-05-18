@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 import elki.data.NumberVector;
 import elki.data.type.TypeInformation;
+import elki.database.datastore.memory.MapIntegerDBIDDoubleStore;
 import elki.database.ids.ArrayModifiableDBIDs;
 import elki.database.ids.DBID;
 import elki.database.ids.DBIDArrayIter;
@@ -20,6 +21,7 @@ import elki.database.ids.DBIDRef;
 import elki.database.ids.DBIDUtil;
 import elki.database.ids.DBIDVar;
 import elki.database.ids.DBIDs;
+import elki.database.ids.DoubleDBIDHeap;
 import elki.database.ids.KNNHeap;
 import elki.database.ids.KNNList;
 import elki.database.ids.ModifiableDBIDs;
@@ -642,28 +644,24 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
         DBIDVar secondVP = DBIDUtil.newVar();
         DBIDVar currentDbid = DBIDUtil.newVar();
 
-        // TODO: Truncate!
-        if(content.size() == 1) {
+        if (content.size() == 1){
             DBIDIter it = content.iter();
             firstVP.set(it);
             return new DBIDVarTuple(firstVP, secondVP);
         }
 
-        double bestStandartDeviation = Double.NEGATIVE_INFINITY;
+        MapIntegerDBIDDoubleStore means = new MapIntegerDBIDDoubleStore(content.size());
+        DoubleDBIDHeap stds = DBIDUtil.newMaxHeap(content.size());
         double bestMean = 0;
-        double secondBestStandartDeviation = Double.NEGATIVE_INFINITY;
-        double maxDist = -1;
+        double maxDist = 0;
 
-        // Modifiable copy for selecting:
-        ArrayModifiableDBIDs workset = DBIDUtil.newArray(content);
-
-        // Select first VP
-        for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
+        // Calculate means and stds
+        for(DBIDIter it = content.iter(); it.valid(); it.advance()) {
             currentDbid.set(it);
 
             MeanVariance currentVariance = new MeanVariance();
 
-            for(DBIDMIter jt = workset.iter(); jt.valid(); jt.advance()) {
+            for(DBIDIter jt = content.iter(); jt.valid(); jt.advance()) {
                 double currentDistance = distance(currentDbid, jt);
 
                 currentVariance.put(currentDistance);
@@ -673,52 +671,37 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
                 }
             }
 
+            double currentMean = currentVariance.getMean();
             double currentStandartDeviance = currentVariance.getSampleStddev();
 
-            if(currentStandartDeviance > bestStandartDeviation) {
-                firstVP.set(it);
-                bestStandartDeviation = currentStandartDeviance;
-                bestMean = currentVariance.getMean();
+            if(currentMean > bestMean){
+                bestMean = currentMean;
             }
+
+            means.put(currentDbid,currentMean);
+            stds.insert(currentStandartDeviance, currentDbid);
         }
 
-        // Remove all candidates from workingset exceeding threshold
-        // Also remove all duplicates
         double omega = this.mvAlpha * maxDist;
+        
+        while(!stds.isEmpty() && (!secondVP.isSet() || !firstVP.isSet())) {
+            DBIDRef currentDBID = stds;
 
-        for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
-            if(Math.abs(distance(firstVP, it) - bestMean) > omega || DBIDUtil.equal(it, firstVP)) {
-                it.remove();
-            }
-        }
-
-        // if only one left, chose this as Second VP
-        // else select according to algorithm
-        // if none left, let Second VP be null
-        if(workset.size() == 1) {
-            DBIDMIter it = workset.iter();
-            secondVP.set(it);
-        }
-        else {
-            // Select second VP
-            for(DBIDMIter it = workset.iter(); it.valid(); it.advance()) {
-                currentDbid.set(it);
-
-                MeanVariance currentVariance = new MeanVariance();
-
-                for(DBIDMIter jt = workset.iter(); jt.valid(); jt.advance()) {
-                    double currentDistance = distance(currentDbid, jt);
-
-                    currentVariance.put(currentDistance);
-                }
-
-                double currentStandartDeviance = currentVariance.getSampleStddev();
-
-                if(currentStandartDeviance > secondBestStandartDeviation) {
-                    secondVP.set(it);
-                    secondBestStandartDeviation = currentStandartDeviance;
+            if(!firstVP.isSet()) {
+                firstVP.set(currentDBID);
+                // Only duplicates in content
+                if(bestMean == 0) {
+                    return new DBIDVarTuple(firstVP, secondVP);
                 }
             }
+            else {
+                double firstVPDist = distance(firstVP, stds);
+                double currentMean = means.doubleValue(currentDBID);
+                if(!DBIDUtil.equal(stds, firstVP) && Math.abs(firstVPDist - currentMean) <= omega && firstVPDist != 0) {
+                    secondVP.set(currentDBID);
+                }
+            }
+            stds.poll();
         }
         return new DBIDVarTuple(firstVP, secondVP);
     }
@@ -1657,7 +1640,7 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
                         .addConstraint(CommonConstraints.GREATER_THAN_ONE_INT) //
                         .grab(config, x -> this.kFold = x);
                 new RandomParameter(SEED_ID).grab(config, x -> random = x);
-                new DoubleParameter(MV_ALPHA_ID, 0.5) //
+                new DoubleParameter(MV_ALPHA_ID, 0.15) //
                         .addConstraint(CommonConstraints.LESS_THAN_ONE_DOUBLE).addConstraint(CommonConstraints.GREATER_EQUAL_ZERO_DOUBLE).grab(config, x -> this.mvAlpha = x);
                 new EnumParameter<>(VPSELECTOR_ID, VPSelectionAlgorithm.class).grab(config, x -> this.vpSelector = x);
             }
