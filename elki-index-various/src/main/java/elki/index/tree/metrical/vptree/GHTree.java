@@ -180,8 +180,8 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
     public void initialize() {
         root = new Node();
         buildTree(root, relation.getDBIDs());
-        //TreeParser parser = new TreeParser();
-        //parser.parseTree();
+        TreeParser parser = new TreeParser();
+        parser.parseTree();
         System.gc();
         try {
             TimeUnit.SECONDS.sleep(2);
@@ -238,19 +238,22 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
 
             vps.add(0, firstVantagePoint);
 
+            double lowBound = Double.POSITIVE_INFINITY;
+            double highBound = -1;
+
             for(contentIter.advance(); contentIter.valid(); contentIter.advance()) {
+                double vpDist = distance(firstVantagePoint, contentIter);
                 vps.add(distance(contentIter, firstVantagePoint), contentIter);
+
+                if(vpDist != 0){
+                    lowBound = lowBound < vpDist ? vpDist : lowBound;
+                }
+                highBound = highBound < vpDist ? vpDist : highBound;
             }
 
             current.firstVP = vps;
-            current.secondVP = null;
-            current.firstChild = null;
-            current.secondChild = null;
-            // TODO: highbounds to -1?
-            current.firstLowBound = 0;
-            current.firstHighBound = 0;
-            current.secondLowBound = 0;
-            current.secondHighBound = 0;
+            current.firstLowBound = lowBound;
+            current.firstHighBound = highBound;
 
             return;
         }
@@ -301,19 +304,22 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         // many duplicates of first Vantage Point
         if(tiedFirst + truncate > content.size()) {
             ModifiableDoubleDBIDList vps = DBIDUtil.newDistanceDBIDList(content.size());
+            double lowBound = Double.POSITIVE_INFINITY;
+            double highBound = -1;
+
             for(DBIDIter contentIter = content.iter(); contentIter.valid(); contentIter.advance()) {
+                double vpDist = distance(firstVP, contentIter);
                 vps.add(distance(contentIter, firstVP), contentIter);
+
+                if(vpDist != 0){
+                    lowBound = lowBound < vpDist ? vpDist : lowBound;
+                }
+                highBound = highBound < vpDist ? vpDist : highBound;
             }
 
             current.firstVP = vps;
-            current.secondVP = null;
-            current.firstChild = null;
-            current.secondChild = null;
-            current.firstLowBound = 0;
-            current.firstHighBound = 0;
-            current.secondLowBound = 0;
-            current.secondHighBound = 0;
-
+            current.firstLowBound = lowBound;
+            current.firstHighBound = highBound;
             return;
         }
 
@@ -327,9 +333,8 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             for(DBIDIter contentIter = content.iter(); contentIter.valid(); contentIter.advance()) {
                 current.firstVP.add(0, contentIter);
             }
-
             current.firstLowBound = 0;
-            current.firstHighBound = 0;
+            current.firstHighBound = Double.POSITIVE_INFINITY;
         } else {
 
             // count tied to second vp
@@ -520,8 +525,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             }
             else {
                 double firstVPDist = distance(firstVP, stds);
-                double currentMean = means.doubleValue(currentDBID);
-                if(!DBIDUtil.equal(stds, firstVP) && Math.abs(firstVPDist - currentMean) <= omega && firstVPDist != 0) {
+                if(!DBIDUtil.equal(stds, firstVP) && Math.abs(firstVPDist - bestMean) <= omega && firstVPDist != 0) {
                     secondVP.set(currentDBID);
                 }
             }

@@ -155,8 +155,8 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
     public void initialize() {
         root = new Node(ReuseVPIndicator.ROOT);
         buildTree(root, relation.getDBIDs(), DBIDUtil.newVar(), DBIDUtil.newDistanceDBIDList());
-        //TreeParser parser = new TreeParser();
-        //parser.parseTree();
+        TreeParser parser = new TreeParser();
+        parser.parseTree();
         System.gc();
         try {
             TimeUnit.SECONDS.sleep(2);
@@ -265,25 +265,26 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
 
             vps.add(0, firstVantagePoint);
 
+            double lowBound = Double.POSITIVE_INFINITY;
+            double highBound = -1;
+
             for(contentIter.advance(); contentIter.valid(); contentIter.advance()) {
+                double vpDist = distance(firstVantagePoint, contentIter);
                 vps.add(distance(contentIter, firstVantagePoint), contentIter);
+
+                if(vpDist != 0) {
+                    lowBound = vpDist < lowBound ? vpDist : lowBound;
+                }
+                highBound = highBound < vpDist ? vpDist : highBound;
             }
 
-            // Set Indicator to Root, otherwise this node may not be searchable
             current.vpIndicator = ReuseVPIndicator.ROOT;
-
             current.firstVP = vps;
-            current.secondVP = null;
-            current.firstChild = null;
-            current.secondChild = null;
-            current.firstLowBound = 0;
-            current.firstHighBound = 0;
-            current.secondLowBound = 0;
-            current.secondHighBound = 0;
+            current.firstLowBound = lowBound;
+            current.firstHighBound = highBound;
 
             return;
         }
-
         DBIDVar firstVP = DBIDUtil.newVar();
         DBIDVar secondVP = DBIDUtil.newVar();
         ReuseVPIndicator vpIndicator = current.vpIndicator;
@@ -323,22 +324,25 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
         // many duplicates of first Vantage Point
         if(tiedFirst + truncate > content.size()) {
             ModifiableDoubleDBIDList vps = DBIDUtil.newDistanceDBIDList(content.size());
+            double lowBound = Double.POSITIVE_INFINITY;
+            double highBound = -1;
+
             for(DBIDIter contentIter = content.iter(); contentIter.valid(); contentIter.advance()) {
+                double vpDist = distance(firstVP, contentIter);
                 vps.add(distance(contentIter, firstVP), contentIter);
+
+                if(vpDist != 0) {
+                    lowBound = vpDist < lowBound ? vpDist : lowBound;
+                }
+                highBound = highBound < vpDist ? vpDist : highBound;
             }
 
+            current.vpIndicator = ReuseVPIndicator.ROOT;
             current.firstVP = vps;
-            current.secondVP = null;
-            current.firstChild = null;
-            current.secondChild = null;
-            current.firstLowBound = 0;
-            current.firstHighBound = 0;
-            current.secondLowBound = 0;
-            current.secondHighBound = 0;
-
+            current.firstLowBound = lowBound;
+            current.firstHighBound = highBound;
             return;
         }
-
         
         // If second VP is empty, Leaf is reached, just set low/highbound
         // Else build childnodes
@@ -347,9 +351,8 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
             for(DBIDIter contentIter = content.iter(); contentIter.valid(); contentIter.advance()) {
                 current.firstVP.add(0, contentIter);
             }
-
             current.firstLowBound = 0;
-            current.firstHighBound = 0;
+            current.firstHighBound = Double.POSITIVE_INFINITY;
         }
         else {
             // TODO: Wat?
@@ -498,11 +501,6 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
             return selectSingleMVVP(content);
         case MAXIMUM_VARIANCE_SAMPLING:
             return selectSampledSingleMVVP(content);
-        // Note: since the two Vantage Points with most and second most Variance
-        // where selected
-        // in the Root Node of the Tree, the pruning quality degresses over
-        // recursion and technically the
-        // reused VP is not part of context, the second VP is selected by FFT.
         case MAXIMUM_VARIANCE_FFT:
             return selectSecondFFTVantagePoint(vantagePoint, content);
         case MAXIMUM_VARIANCE_FFT_SAMPLING:
@@ -664,8 +662,7 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
             }
             else {
                 double firstVPDist = distance(firstVP, stds);
-                double currentMean = means.doubleValue(currentDBID);
-                if(!DBIDUtil.equal(stds, firstVP) && Math.abs(firstVPDist - currentMean) <= omega && firstVPDist != 0) {
+                if(!DBIDUtil.equal(stds, firstVP) && Math.abs(firstVPDist - bestMean) <= omega && firstVPDist != 0) {
                     secondVP.set(currentDBID);
                 }
             }
@@ -1060,9 +1057,8 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
                 }
                 else {
                     for(DBIDIter secondVPIter = secondVP.iter(); secondVPIter.valid(); secondVPIter.advance()) {
-                        // TODO: query once?
                         secondVPDistance = queryDistance(secondVPIter);
-
+                        
                         if(secondVPDistance <= range) {
                             result.add(secondVPDistance, secondVPIter);
                         }

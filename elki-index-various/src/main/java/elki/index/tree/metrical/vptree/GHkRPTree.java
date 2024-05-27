@@ -182,9 +182,9 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
     @Override
     public void initialize() {
         root = new Node(this.kFold, ReuseVPIndicator.ROOT);
-        buildTree(root, relation.getDBIDs(), DBIDUtil.newVar(), DBIDUtil.newDistanceDBIDList());
-        //TreeParser parser = new TreeParser();
-        //parser.parseTree();
+        buildTree(root, DBIDUtil.newArray(relation.getDBIDs()), DBIDUtil.newVar(), DBIDUtil.newDistanceDBIDList());
+        TreeParser parser = new TreeParser();
+        parser.parseTree();
         System.gc();
         try {
             TimeUnit.SECONDS.sleep(2);
@@ -235,8 +235,8 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
      * @param content data to index
      * @return new node
      */
-    private void buildTree(Node current, DBIDs content, DBIDRef reusePivot, ModifiableDoubleDBIDList reuseDistances) {
-        
+    private void buildTree(Node current, ArrayModifiableDBIDs content, DBIDRef reusePivot, ModifiableDoubleDBIDList reuseDistances) {
+
         // Check for truncate Leaf
         if(content.size() <= truncate) {
             DBIDIter contentIter = content.iter();
@@ -245,26 +245,27 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
 
             vps.add(0, firstVantagePoint);
 
+            double lowBound = Double.POSITIVE_INFINITY;
+            double highBound = -1;
+
             for(contentIter.advance(); contentIter.valid(); contentIter.advance()) {
-                double firstVPDist = distance(contentIter, firstVantagePoint);
-                vps.add(firstVPDist, contentIter);
-                //current.firstLowBound = current.firstLowBound > firstVPDist ? firstVPDist : current.firstLowBound;
-                //current.firstHighBound = current.firstHighBound < firstVPDist ? firstVPDist : current.firstHighBound;
+                double vpDist = distance(firstVantagePoint, contentIter);
+                vps.add(vpDist, contentIter);
+
+                if(vpDist != 0) {
+                    lowBound = vpDist < lowBound ? vpDist : lowBound;
+                }
+                highBound = highBound < vpDist ? vpDist : highBound;
             }
 
-            // Set Indicator to Root, otherwise this node may not be searchable
             current.vpIndicator = ReuseVPIndicator.ROOT;
-
             current.firstVP = vps;
-            current.secondVP = null;
-            current.childNodes = null;
-            current.firstLowBound = 0;
-            current.firstHighBound = Double.POSITIVE_INFINITY;
+            current.firstLowBound = lowBound;
+            current.firstHighBound = highBound;
 
             return;
         }
-        
-        
+
         DBIDVar firstVP = DBIDUtil.newVar();
         DBIDVar secondVP = DBIDUtil.newVar();
         ReuseVPIndicator vpIndicator = current.vpIndicator;
@@ -304,34 +305,44 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
         // many duplicates of first Vantage Point
         if(tiedFirst + truncate > content.size()) {
             ModifiableDoubleDBIDList vps = DBIDUtil.newDistanceDBIDList(content.size());
+            double lowBound = Double.POSITIVE_INFINITY;
+            double highBound = -1;
+
             for(DBIDIter contentIter = content.iter(); contentIter.valid(); contentIter.advance()) {
-                vps.add(distance(contentIter, firstVP), contentIter);
+                double vpDist = distance(firstVP, contentIter);
+                vps.add(vpDist, contentIter);
+
+                if(vpDist != 0) {
+                    lowBound = vpDist < lowBound ? vpDist : lowBound;
+                }
+                highBound = highBound < vpDist ? vpDist : highBound;
             }
 
+            current.vpIndicator = ReuseVPIndicator.ROOT;
             current.firstVP = vps;
-            current.secondVP = null;
-            current.childNodes = null;
-
+            current.firstLowBound = lowBound;
+            current.firstHighBound = highBound;
             return;
         }
 
         // If second VP is empty, Leaf is reached, just set low/highbound
         // Else build childnodes
-        if(secondVP == null || secondVP.isEmpty() || !secondVP.isSet()) {
+        if(secondVP.isEmpty()) {
             current.firstVP = DBIDUtil.newDistanceDBIDList(tiedFirst);
             for(DBIDIter contentIter = content.iter(); contentIter.valid(); contentIter.advance()) {
                 current.firstVP.add(0, contentIter);
             }
             current.firstLowBound = 0;
             current.firstHighBound = Double.POSITIVE_INFINITY;
-        } else {
+        }
+        else {
             // TODO: Wat?
             if(current.firstVP == null) {
                 current.firstVP = DBIDUtil.newDistanceDBIDList(tiedFirst);
             }
 
             // TODO: Wat?
-            if(current.secondVP == null || current.secondVP.isEmpty()) {
+            if(current.secondVP == null) {
                 // count tied to second vp
                 int tiedSecond = 0;
                 for(DBIDIter contentIter = content.iter(); contentIter.valid(); contentIter.advance()) {
@@ -347,13 +358,11 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
             double firstDistance;
             double secondDistance;
 
-            ArrayModifiableDBIDs contentArray = DBIDUtil.newArray(content);
-
             ModifiableDoubleDBIDList[] distances = new ModifiableDoubleDBIDList[this.kFold];
 
-            ModifiableDBIDs[] children = new ModifiableDBIDs[this.kFold];
+            ArrayModifiableDBIDs[] children = new ArrayModifiableDBIDs[this.kFold];
 
-            for(DBIDArrayMIter iter = contentArray.iter(); iter.valid(); iter.advance()) {
+            for(DBIDArrayMIter iter = content.iter(); iter.valid(); iter.advance()) {
                 // If the current position is a VP, this will be set to current
                 // offset
                 int vpOffset = -1;
@@ -385,10 +394,10 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
 
                 int childOffset = -1;
 
-                if (vpOffset == -1){
+                if(vpOffset == -1) {
                     for(int i = 0; i < breakPoints; i++) {
                         int scaleFirstDistance = i + 1;
-                        int scaleSecondDistance = this.kFold - scaleFirstDistance;
+                        int scaleSecondDistance = this.kFold - i;
 
                         double distanceDiff;
 
@@ -422,8 +431,8 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
                         distances[childOffset] = DBIDUtil.newDistanceDBIDList();
                     }
 
-                    if(firstDistance < secondDistance) {
-                        distances[childOffset].add(firstDistance,iter);
+                    if(firstDistance <= secondDistance) {
+                        distances[childOffset].add(firstDistance, iter);
                     }
                     else {
                         distances[childOffset].add(secondDistance, iter);
@@ -432,35 +441,32 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
                     children[childOffset].add(iter);
                 }
 
-                for(int i = 0; i < this.kFold; i++) {
-                    // TODO: how to set bounds correctly?
-                    // left, right for even part
-                    // firstDist <= secondDist?
-                    // check middle part correct in query!
-                    if(vpOffset != 0) {
-                        current.firstLowBound = current.firstLowBound > firstDistance ? firstDistance : current.firstLowBound;
-                    }
-                    current.firstHighBound = current.firstHighBound < firstDistance ? firstDistance : current.firstHighBound;
-
-                    if(vpOffset != 1) {
-                        current.secondLowBound = current.secondLowBound > secondDistance ? secondDistance : current.secondLowBound;
-                    }
-                    current.secondHighBound = current.secondHighBound < secondDistance ? secondDistance : current.secondHighBound;
+                if(vpOffset != 0) {
+                    current.firstLowBound = current.firstLowBound > firstDistance ? firstDistance : current.firstLowBound;
                 }
+                current.firstHighBound = current.firstHighBound < firstDistance ? firstDistance : current.firstHighBound;
+
+                if(vpOffset != 1) {
+                    current.secondLowBound = current.secondLowBound > secondDistance ? secondDistance : current.secondLowBound;
+                }
+                current.secondHighBound = current.secondHighBound < secondDistance ? secondDistance : current.secondHighBound;
 
             }
 
             for(int i = 0; i < this.kFold; i++) {
-                if(children[i] != null && children.length > 0) {
+                if(children[i] != null) {
                     int leftPartititions = i;
                     int rightPartititions = this.kFold - (i + 1);
 
                     // If Odd amount of partititions, designate middle
                     // partitition as new "Root"
-                    if(leftPartititions == rightPartititions) {
-                        buildTree(current.childNodes[i] = new Node(this.kFold, ReuseVPIndicator.ROOT), children[i], DBIDUtil.newVar(), DBIDUtil.newDistanceDBIDList());
-                    }
-                    else if(leftPartititions < rightPartititions) {
+                    // if(leftPartititions == rightPartititions) {
+                    // buildTree(current.childNodes[i] = new Node(this.kFold,
+                    // ReuseVPIndicator.ROOT), children[i], DBIDUtil.newVar(),
+                    // DBIDUtil.newDistanceDBIDList());
+                    // }
+                    // else
+                    if(leftPartititions <= rightPartititions) {
                         buildTree(current.childNodes[i] = new Node(this.kFold, ReuseVPIndicator.FIRST_VP), children[i], firstVP, distances[i]);
                     }
                     else {
@@ -471,7 +477,7 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
         }
     }
 
-     private DBIDVarTuple selectVPTuple(DBIDs content){
+    private DBIDVarTuple selectVPTuple(DBIDs content) {
         DBIDVarTuple tuple;
 
         switch(this.vpSelector){
@@ -509,30 +515,41 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
      * @param vantagePoint the reused Vantage Point
      * @return Vantage Point
      */
-    private DBIDVar selectVPSingle(DBIDs content, DBIDRef vantagePoint){
+    private DBIDVar selectVPSingle(DBIDs content, DBIDRef vantagePoint) {
+        DBIDVar result = DBIDUtil.newVar();
 
         switch(this.vpSelector){
         case RANDOM:
-            if( content.size() > 1){
-                return selectSingleRandomVantagePoint(content);
+            if(content.size() > 1) {
+                result = selectSingleRandomVantagePoint(content);
             }
+            break;
         case FFT:
-            return selectSecondFFTVantagePoint(vantagePoint, content);
+            result = selectSecondFFTVantagePoint(vantagePoint, content);
+            break;
         case MAXIMUM_VARIANCE:
-            return selectSingleMVVP(content);
+            result = selectSingleMVVP(content);
+            break;
         case MAXIMUM_VARIANCE_SAMPLING:
-            return selectSampledSingleMVVP(content);
-        // Note: since the two Vantage Points with most and second most Variance where selected
-        // in the Root Node of the Tree, the pruning quality degresses over recursion and technically the
+            result = selectSampledSingleMVVP(content);
+            break;
+        // Note: since the two Vantage Points with most and second most Variance
+        // where selected
+        // in the Root Node of the Tree, the pruning quality degresses over
+        // recursion and technically the
         // reused VP is not part of context, the second VP is selected by FFT.
         case MAXIMUM_VARIANCE_FFT:
-            return selectSecondFFTVantagePoint(vantagePoint,content);
+            result = selectSecondFFTVantagePoint(vantagePoint, content);
+            break;
         case MAXIMUM_VARIANCE_FFT_SAMPLING:
-            return selectSecondFFTVantagePoint(vantagePoint,content);
+            result = selectSecondFFTVantagePoint(vantagePoint, content);
+            break;
         default:
-            return selectSecondFFTVantagePoint(vantagePoint, content);
+            result = selectSecondFFTVantagePoint(vantagePoint, content);
+            break;
         }
 
+        return result;
     }
 
     /**
@@ -553,17 +570,18 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
 
     /**
      * Selects a single Random Vantage Point from Content
+     * 
      * @param content the Set to choose a Vantage Point from
      * @return Vantage Point
      */
-    private DBIDVar selectSingleRandomVantagePoint(DBIDs content){
+    private DBIDVar selectSingleRandomVantagePoint(DBIDs content) {
         ArrayModifiableDBIDs contentArray = DBIDUtil.newArray(content);
         DBIDArrayIter contentIter = contentArray.iter();
 
         int pos = randomThread.nextInt(content.size());
-        
+
         DBIDVar first = DBIDUtil.newVar();
-        
+
         contentIter.seek(pos);
         first.set(contentIter);
 
@@ -572,11 +590,12 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
 
     /***
      * Selects a Vantage Point from content farthest away from the first one.
+     * 
      * @param firstVP the first Vantage Point
      * @param content the Set to choose a second Vantage Point from
      * @return a Vantage Point
      */
-    private DBIDVar selectSecondFFTVantagePoint(DBIDRef firstVP, DBIDs content){
+    private DBIDVar selectSecondFFTVantagePoint(DBIDRef firstVP, DBIDs content) {
         // Second VP = farthest away from first
         DBIDVar second = DBIDUtil.newVar();
         double maxDist = 0;
@@ -633,7 +652,7 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
         DBIDVar secondVP = DBIDUtil.newVar();
         DBIDVar currentDbid = DBIDUtil.newVar();
 
-        if (content.size() == 1){
+        if(content.size() == 1) {
             DBIDIter it = content.iter();
             firstVP.set(it);
             return new DBIDVarTuple(firstVP, secondVP);
@@ -663,16 +682,16 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
             double currentMean = currentVariance.getMean();
             double currentStandartDeviance = currentVariance.getSampleStddev();
 
-            if(currentMean > bestMean){
+            if(currentMean > bestMean) {
                 bestMean = currentMean;
             }
 
-            means.put(currentDbid,currentMean);
+            means.put(currentDbid, currentMean);
             stds.insert(currentStandartDeviance, currentDbid);
         }
 
         double omega = this.mvAlpha * maxDist;
-        
+
         while(!stds.isEmpty() && (!secondVP.isSet() || !firstVP.isSet())) {
             DBIDRef currentDBID = stds;
 
@@ -685,8 +704,7 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
             }
             else {
                 double firstVPDist = distance(firstVP, stds);
-                double currentMean = means.doubleValue(currentDBID);
-                if(!DBIDUtil.equal(stds, firstVP) && Math.abs(firstVPDist - currentMean) <= omega && firstVPDist != 0) {
+                if(!DBIDUtil.equal(stds, firstVP) && Math.abs(firstVPDist - bestMean) <= omega && firstVPDist != 0) {
                     secondVP.set(currentDBID);
                 }
             }
@@ -698,10 +716,11 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
     /**
      * selects only the single Vantage Point with maximum Variance
      * with no respect to a second VP
+     * 
      * @param content the set to choose the VP from
      * @return Vantage Point
      */
-    private DBIDVar selectSingleMVVP(DBIDs content){
+    private DBIDVar selectSingleMVVP(DBIDs content) {
         DBIDVar firstVP = DBIDUtil.newVar();
         DBIDVar currentDbid = DBIDUtil.newVar();
 
@@ -741,10 +760,11 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
 
     /**
      * sampled version of single Select MV Vantage Point
+     * 
      * @param content the Set to select VP from
      * @return Vantage Point
      */
-    private DBIDVar selectSampledSingleMVVP(DBIDs content){
+    private DBIDVar selectSampledSingleMVVP(DBIDs content) {
         DBIDVar result = DBIDUtil.newVar();
 
         if(this.sampleSize == 1) {
@@ -806,7 +826,6 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
         // Select first VP
         firstVP = selectSingleMVVP(content);
 
-
         // Select second VP
         secondVP = selectSecondFFTVantagePoint(firstVP, content);
 
@@ -836,7 +855,7 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
         ArrayModifiableDBIDs contentCopy = DBIDUtil.newArray(content);
         ModifiableDBIDs workset = DBIDUtil.randomSample(contentCopy, adjustedSampleSize, random);
 
-        // Select first VP 
+        // Select first VP
         firstVP = selectSingleMVVP(workset);
 
         // Select second VP
@@ -853,7 +872,7 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
      */
     protected static class Node {
         /**
-         *  Amount of K-splits in this node
+         * Amount of K-splits in this node
          */
         int kFold;
 
@@ -886,6 +905,7 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
          * upper distance bounds
          */
         double firstHighBound, secondHighBound;
+
         /**
          * Constructor.
          * 
@@ -893,6 +913,7 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
         public Node(int kFold, ReuseVPIndicator vpIndicator) {
             this.kFold = kFold;
             this.vpIndicator = vpIndicator;
+            this.childNodes = new Node[this.kFold];
 
             this.firstLowBound = Double.POSITIVE_INFINITY;
             this.secondLowBound = Double.POSITIVE_INFINITY;
@@ -999,11 +1020,11 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
                     knns.insert(firstVPDistance, firstVPiter);
                 }
             }
-            
+
             double tau = knns.getKNNDistance();
 
             if(secondVP != null) {
-                
+
                 double secondVPDistance = 0;
 
                 if(vpIndicator == ReuseVPIndicator.SECOND_VP) {
@@ -1026,9 +1047,10 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
                     for(int i = 0; i < node.kFold; i++) {
                         if(children[i] != null) {
                             int scaleFirstDistance = i + 1;
-                            int scaleSecondDistance = node.kFold - scaleFirstDistance;
+                            int scaleSecondDistance = node.kFold - i;
 
-                            double distanceDiff, lowerBound, upperBound, smallerDistance, currentReuseDistance;
+                            double distanceDiff, lowerBound, upperBound,
+                                    smallerDistance, currentReuseDistance;
 
                             // First check for Elements left of Middle
                             // Then switch VP distances to check for right of
@@ -1037,14 +1059,14 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
                                 distanceDiff = ((scaleSecondDistance * secondVPDistance) - (scaleFirstDistance * firstVPDistance)) / 2;
                                 lowerBound = node.firstLowBound;
                                 upperBound = node.firstHighBound;
-                                smallerDistance = scaleFirstDistance;
+                                smallerDistance = firstVPDistance;
                                 currentReuseDistance = firstVPDistance;
                             }
                             else {
                                 distanceDiff = ((scaleFirstDistance * firstVPDistance) - (scaleSecondDistance * secondVPDistance)) / 2;
                                 lowerBound = node.secondLowBound;
                                 upperBound = node.secondHighBound;
-                                smallerDistance = scaleSecondDistance;
+                                smallerDistance = secondVPDistance;
                                 currentReuseDistance = secondVPDistance;
                             }
 
@@ -1100,7 +1122,7 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
         public KNNList getKNN(DBIDRef query, int k) {
             final KNNHeap knns = DBIDUtil.newHeap(k);
             this.query = query;
-            ghkrpKNNSearch(knns, root,0);
+            ghkrpKNNSearch(knns, root, 0);
             return knns.toKNNList();
         }
 
@@ -1157,9 +1179,10 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
                     for(int i = 0; i < node.kFold; i++) {
                         if(children[i] != null) {
                             int scaleFirstDistance = i + 1;
-                            int scaleSecondDistance = node.kFold - scaleFirstDistance;
+                            int scaleSecondDistance = node.kFold - i;
 
-                            double distanceDiff, upperBound, smallerDistance, lowerBound, currentReuseDistance;
+                            double distanceDiff, upperBound, smallerDistance,
+                                    lowerBound, currentReuseDistance;
 
                             // First check for Elements left of Middle
                             // Then switch VP distances to check for right of
@@ -1168,14 +1191,14 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
                                 distanceDiff = ((scaleSecondDistance * secondVPDistance) - (scaleFirstDistance * firstVPDistance)) / 2;
                                 lowerBound = node.firstLowBound;
                                 upperBound = node.firstHighBound;
-                                smallerDistance = scaleFirstDistance;
+                                smallerDistance = firstVPDistance;
                                 currentReuseDistance = firstVPDistance;
                             }
                             else {
                                 distanceDiff = ((scaleFirstDistance * firstVPDistance) - (scaleSecondDistance * secondVPDistance)) / 2;
                                 lowerBound = node.secondLowBound;
                                 upperBound = node.secondHighBound;
-                                smallerDistance = scaleSecondDistance;
+                                smallerDistance = secondVPDistance;
                                 currentReuseDistance = secondVPDistance;
                             }
 
@@ -1284,25 +1307,25 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
 
             cur = heap.poll();
 
-/*             if(cur.node != null) {
+            /*             if(cur.node != null) {
                 double firstVPDist = queryDistance(cur.node.firstVP);
                 Node lc = cur.node.firstChild;
-
+            
                 if(lc != null && intersect(firstVPDist - threshold, firstVPDist + threshold, cur.node.firstLowBound, cur.node.firstHighBound)) {
                     final double mindist = Math.max(firstVPDist - cur.node.firstHighBound, cur.mindist);
                     heap.add(new PrioritySearchBranch(mindist, lc, DBIDUtil.deref(cur.node.firstVP)));
                 }
-
+            
                 if(cur.node.secondVP != null) {
                     double secondVPDist = queryDistance(cur.node.secondVP);
                     Node rc = cur.node.secondChild;
-
+            
                     if(rc != null && intersect(secondVPDist - threshold, secondVPDist + threshold, cur.node.secondLowBound, cur.node.secondHighBound)) {
                         final double mindist = Math.max(secondVPDist - cur.node.secondHighBound, cur.mindist);
                         heap.add(new PrioritySearchBranch(mindist, rc, DBIDUtil.deref(cur.node.secondVP)));
                     }
                 }
-
+            
             } */
 
             return this;
@@ -1501,7 +1524,7 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
          * @param mvAlpha Maximum Variance threshold
          * @param vpSelector Vantage Point selection Algorithm
          */
-        public Factory(Distance<? super O> distance, RandomFactory random, int sampleSize, int truncate, int kFold,  double mvAlpha, VPSelectionAlgorithm vpSelector) {
+        public Factory(Distance<? super O> distance, RandomFactory random, int sampleSize, int truncate, int kFold, double mvAlpha, VPSelectionAlgorithm vpSelector) {
             super();
             this.distance = distance;
             this.random = random;
@@ -1551,7 +1574,7 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
              * Parameter specifying k-fold split amount
              */
             public final static OptionID KFOLD_ID = new OptionID("ghkrptree.kfold", "k-fold parameter");
-            
+
             /**
              * Parameter to specify Maximum Variance Threshold
              */
@@ -1633,7 +1656,7 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
         }
     }
 
-        private class TreeParser {
+    private class TreeParser {
         private LinkedList<String> nodes;
 
         private LinkedList<String> edges;
@@ -1669,12 +1692,12 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
 
             int objectsInNode = 0;
 
-            if(vpIndicator == ReuseVPIndicator.ROOT || vpIndicator != ReuseVPIndicator.FIRST_VP) {
+            if(vpIndicator == ReuseVPIndicator.ROOT || vpIndicator == ReuseVPIndicator.SECOND_VP) {
                 objectsInNode += firstVP.size();
             }
 
             if(node.secondVP != null) {
-                if(vpIndicator == ReuseVPIndicator.ROOT || vpIndicator != ReuseVPIndicator.SECOND_VP) {
+                if(vpIndicator == ReuseVPIndicator.ROOT || vpIndicator == ReuseVPIndicator.FIRST_VP) {
                     objectsInNode += secondVP.size();
                 }
             }

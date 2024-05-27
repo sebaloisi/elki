@@ -184,8 +184,8 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
     public void initialize() {
         root = new Node(this.kFold);
         buildTree(root, relation.getDBIDs());
-        //TreeParser parser = new TreeParser();
-        //parser.parseTree();
+        TreeParser parser = new TreeParser();
+        parser.parseTree();
         System.gc();
         try {
             TimeUnit.SECONDS.sleep(2);
@@ -242,13 +242,22 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
 
             vps.add(0, firstVantagePoint);
 
+            double lowBound = Double.POSITIVE_INFINITY;
+            double highBound = -1;
+
             for(contentIter.advance(); contentIter.valid(); contentIter.advance()) {
+                double vpDist = distance(firstVantagePoint, contentIter);
                 vps.add(distance(contentIter, firstVantagePoint), contentIter);
+
+                if(vpDist != 0) {
+                    lowBound = vpDist < lowBound ? vpDist : lowBound;
+                }
+                highBound = highBound < vpDist ? vpDist : highBound;
             }
 
             current.firstVP = vps;
-            current.secondVP = null;
-            current.childNodes = null;
+            current.firstLowBound = lowBound;
+            current.firstHighBound = highBound;
 
             return;
         }
@@ -298,14 +307,22 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
         // many duplicates of first Vantage Point
         if(tiedFirst + truncate > content.size()) {
             ModifiableDoubleDBIDList vps = DBIDUtil.newDistanceDBIDList(content.size());
+            double lowBound = Double.POSITIVE_INFINITY;
+            double highBound = -1;
+
             for(DBIDIter contentIter = content.iter(); contentIter.valid(); contentIter.advance()) {
+                double vpDist = distance(firstVP, contentIter);
                 vps.add(distance(contentIter, firstVP), contentIter);
+
+                if(vpDist != 0) {
+                    lowBound = vpDist < lowBound ? vpDist : lowBound;
+                }
+                highBound = highBound < vpDist ? vpDist : highBound;
             }
 
             current.firstVP = vps;
-            current.secondVP = null;
-            current.childNodes = null;
-
+            current.firstLowBound = lowBound;
+            current.firstHighBound = highBound;
             return;
         }
 
@@ -316,11 +333,13 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
         // If second VP is empty, Leaf is reached, just set low/highbound
         // if content still has objects it means there are duplicates, add them to vps
         // Else build childnodes
+        // TODO: looks wrong
         if(secondVP.isEmpty()) {
-
             for (DBIDIter contentIter = content.iter(); contentIter.valid(); contentIter.advance()){
                     current.firstVP.add(0,contentIter);
             }
+            current.firstLowBound = 0;
+            current.firstHighBound = Double.POSITIVE_INFINITY;
         }
         else {
             int breakPoints = this.kFold - 1;
@@ -368,7 +387,7 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
                 if(vpOffset == -1) {
                     for(int i = 0; i < breakPoints; i++) {
                         int scaleFirstDistance = i + 1;
-                        int scaleSecondDistance = this.kFold - scaleFirstDistance;
+                        int scaleSecondDistance = this.kFold - i;
 
                         double distanceDiff;
 
@@ -399,21 +418,15 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
                     children[childOffset].add(iter);
                 }
 
-                for(int i = 0; i < this.kFold; i++) {
-                    // TODO: how to set bounds correctly?
-                    // left, right for even part
-                    // firstDist <= secondDist?
-                    // check middle part correct in query!
-                    if(vpOffset != 0) {
-                        current.firstLowBound = current.firstLowBound > firstDistance ? firstDistance : current.firstLowBound;
-                    }
-                    current.firstHighBound = current.firstHighBound < firstDistance ? firstDistance : current.firstHighBound;
-
-                    if(vpOffset != 1) {
-                        current.secondLowBound = current.secondLowBound > secondDistance ? secondDistance : current.secondLowBound;
-                    }
-                    current.secondHighBound = current.secondHighBound < secondDistance ? secondDistance : current.secondHighBound;
+                if(vpOffset != 0) {
+                    current.firstLowBound = current.firstLowBound > firstDistance ? firstDistance : current.firstLowBound;
                 }
+                current.firstHighBound = current.firstHighBound < firstDistance ? firstDistance : current.firstHighBound;
+
+                if(vpOffset != 1) {
+                    current.secondLowBound = current.secondLowBound > secondDistance ? secondDistance : current.secondLowBound;
+                }
+                current.secondHighBound = current.secondHighBound < secondDistance ? secondDistance : current.secondHighBound;
 
             }
 
@@ -552,8 +565,7 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
             }
             else {
                 double firstVPDist = distance(firstVP, stds);
-                double currentMean = means.doubleValue(currentDBID);
-                if(!DBIDUtil.equal(stds, firstVP) && Math.abs(firstVPDist - currentMean) <= omega && firstVPDist != 0) {
+                if(!DBIDUtil.equal(stds, firstVP) && Math.abs(firstVPDist - bestMean) <= omega && firstVPDist != 0) {
                     secondVP.set(currentDBID);
                 }
             }
@@ -892,7 +904,7 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
                     for(int i = 0; i < node.kFold; i++) {
                         if(children[i] != null) {
                             int scaleFirstDistance = i + 1;
-                            int scaleSecondDistance = node.kFold - scaleFirstDistance;
+                            int scaleSecondDistance = node.kFold - i;
 
                             double distanceDiff, upperBound, lowerBound, smallerDistance;
 
@@ -903,13 +915,13 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
                                 distanceDiff = ((scaleSecondDistance * secondVPDistance) - (scaleFirstDistance * firstVPDistance)) / 2;
                                 lowerBound = node.firstLowBound;
                                 upperBound = node.firstHighBound;
-                                smallerDistance = scaleFirstDistance;
+                                smallerDistance = firstVPDistance;
                             }
                             else {
                                 distanceDiff = ((scaleFirstDistance * firstVPDistance) - (scaleSecondDistance * secondVPDistance)) / 2;
                                 lowerBound = node.secondLowBound;
                                 upperBound = node.secondHighBound;
-                                smallerDistance = scaleSecondDistance;
+                                smallerDistance = secondVPDistance;
                             }
 
                             // TODO: Bounds correct? range?
@@ -1010,7 +1022,7 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
                     for(int i = 0; i < node.kFold; i++) {
                         if(children[i] != null) {
                             int scaleFirstDistance = i + 1;
-                            int scaleSecondDistance = node.kFold - scaleFirstDistance;
+                            int scaleSecondDistance = node.kFold - i;
 
                             double distanceDiff, lowerBound, upperBound, smallerDistance;
 
@@ -1021,13 +1033,13 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
                                 distanceDiff = ((scaleSecondDistance * secondVPDistance) - (scaleFirstDistance * firstVPDistance)) / 2;
                                 lowerBound = node.firstLowBound;
                                 upperBound = node.firstHighBound;
-                                smallerDistance = scaleFirstDistance;
+                                smallerDistance = firstVPDistance;
                             }
                             else {
                                 distanceDiff = ((scaleFirstDistance * firstVPDistance) - (scaleSecondDistance * secondVPDistance)) / 2;
                                 lowerBound = node.secondLowBound;
                                 upperBound = node.secondHighBound;
-                                smallerDistance = scaleSecondDistance;
+                                smallerDistance = secondVPDistance;
                             }
 
                             // TODO: Bounds correct? range?
