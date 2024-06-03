@@ -1,0 +1,1256 @@
+digraph {
+rankdir="TB"
+node [shape=box]
+stats [label="Objects found: 1936"]
+"1159<>1854" [ label = "ID: 1159<>1854\n sID: \n obj: 2\n flb: 20,61\n fhb: 1111,37\n slb: 16,75\n shb: 967,25"]
+"1159<>995" [ label = "ID: 1159<>995\n sID: \n obj: 1\n flb: 20,61\n fhb: 916,53\n slb: 19,16\n shb: 977,81"]
+"1569<>1156" [ label = "ID: 1569<>1156\n sID: \n obj: 2\n flb: 11,00\n fhb: 583,64\n slb: 16,31\n shb: 500,25"]
+"1569<>595" [ label = "ID: 1569<>595\n sID: \n obj: 1\n flb: 11,00\n fhb: 250,30\n slb: 52,29\n shb: 340,68"]
+"1432<>1410" [ label = "ID: 1432<>1410\n sID: \n obj: 2\n flb: 19,04\n fhb: 301,51\n slb: 13,65\n shb: 226,65"]
+"350<>NaN" [ label = "ID: 350<>NaN\n sID: \n obj: 8\n flb: 20,82\n fhb: 83,52\n slb: MAX_VAL\n shb: -1,00"]
+"860<>1410" [ label = "ID: 860<>1410\n sID: \n obj: 1\n flb: 8,30\n fhb: 245,60\n slb: 13,65\n shb: 226,65"]
+"470<>1181" [ label = "ID: 470<>1181\n sID: \n obj: 2\n flb: 14,64\n fhb: 116,24\n slb: 14,87\n shb: 84,32"]
+"1868<>NaN" [ label = "ID: 1868<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"1109<>NaN" [ label = "ID: 1109<>NaN\n sID: \n obj: 6\n flb: 25,48\n fhb: 64,59\n slb: MAX_VAL\n shb: -1,00"]
+"1094<>1310" [ label = "ID: 1094<>1310\n sID: \n obj: 2\n flb: 15,38\n fhb: 225,03\n slb: 23,21\n shb: 187,26"]
+"1094<>1828" [ label = "ID: 1094<>1828\n sID: \n obj: 1\n flb: 15,38\n fhb: 158,70\n slb: 10,55\n shb: 147,02"]
+"1135<>275" [ label = "ID: 1135<>275\n sID: \n obj: 2\n flb: 18,82\n fhb: 74,91\n slb: 24,69\n shb: 72,53"]
+"277<>NaN" [ label = "ID: 277<>NaN\n sID: \n obj: 5\n flb: 11,51\n fhb: 28,48\n slb: MAX_VAL\n shb: -1,00"]
+"395<>NaN" [ label = "ID: 395<>NaN\n sID: \n obj: 4\n flb: 32,75\n fhb: 43,23\n slb: MAX_VAL\n shb: -1,00"]
+"248<>NaN" [ label = "ID: 248<>NaN\n sID: \n obj: 8\n flb: 13,50\n fhb: 67,84\n slb: MAX_VAL\n shb: -1,00"]
+"753<>1310" [ label = "ID: 753<>1310\n sID: \n obj: 1\n flb: 18,51\n fhb: 197,50\n slb: 23,21\n shb: 187,26"]
+"488<>1529" [ label = "ID: 488<>1529\n sID: \n obj: 2\n flb: 25,85\n fhb: 94,36\n slb: 20,76\n shb: 68,61"]
+"782<>NaN" [ label = "ID: 782<>NaN\n sID: \n obj: 2\n flb: 32,19\n fhb: 32,19\n slb: MAX_VAL\n shb: -1,00"]
+"1213<>1529" [ label = "ID: 1213<>1529\n sID: \n obj: 1\n flb: 18,15\n fhb: 56,62\n slb: 20,76\n shb: 67,11"]
+"213<>NaN" [ label = "ID: 213<>NaN\n sID: \n obj: 5\n flb: 23,46\n fhb: 44,90\n slb: MAX_VAL\n shb: -1,00"]
+"463<>NaN" [ label = "ID: 463<>NaN\n sID: \n obj: 3\n flb: 11,05\n fhb: 20,23\n slb: MAX_VAL\n shb: -1,00"]
+"759<>474" [ label = "ID: 759<>474\n sID: \n obj: 2\n flb: 14,40\n fhb: 139,65\n slb: 14,26\n shb: 137,81"]
+"5<>NaN" [ label = "ID: 5<>NaN\n sID: \n obj: 6\n flb: 24,93\n fhb: 43,27\n slb: MAX_VAL\n shb: -1,00"]
+"527<>474" [ label = "ID: 527<>474\n sID: \n obj: 1\n flb: 32,31\n fhb: 127,23\n slb: 14,26\n shb: 137,81"]
+"433<>NaN" [ label = "ID: 433<>NaN\n sID: \n obj: 8\n flb: 7,67\n fhb: 52,02\n slb: MAX_VAL\n shb: -1,00"]
+"80<>NaN" [ label = "ID: 80<>NaN\n sID: \n obj: 7\n flb: 21,66\n fhb: 53,66\n slb: MAX_VAL\n shb: -1,00"]
+"1199<>904" [ label = "ID: 1199<>904\n sID: \n obj: 2\n flb: 3,03\n fhb: 221,16\n slb: 15,85\n shb: 162,45"]
+"25<>NaN" [ label = "ID: 25<>NaN\n sID: \n obj: 5\n flb: 22,17\n fhb: 51,38\n slb: MAX_VAL\n shb: -1,00"]
+"279<>904" [ label = "ID: 279<>904\n sID: \n obj: 1\n flb: 10,39\n fhb: 181,46\n slb: 15,85\n shb: 162,45"]
+"273<>NaN" [ label = "ID: 273<>NaN\n sID: \n obj: 6\n flb: 19,72\n fhb: 41,93\n slb: MAX_VAL\n shb: -1,00"]
+"734<>922" [ label = "ID: 734<>922\n sID: \n obj: 2\n flb: 23,88\n fhb: 170,72\n slb: 12,87\n shb: 123,08"]
+"495<>NaN" [ label = "ID: 495<>NaN\n sID: \n obj: 4\n flb: 11,09\n fhb: 35,92\n slb: MAX_VAL\n shb: -1,00"]
+"1888<>922" [ label = "ID: 1888<>922\n sID: \n obj: 1\n flb: 11,32\n fhb: 116,45\n slb: 12,87\n shb: 72,68"]
+"72<>NaN" [ label = "ID: 72<>NaN\n sID: \n obj: 5\n flb: 23,01\n fhb: 44,86\n slb: MAX_VAL\n shb: -1,00"]
+"1710<>479" [ label = "ID: 1710<>479\n sID: \n obj: 2\n flb: 35,59\n fhb: 114,40\n slb: 25,39\n shb: 86,08"]
+"196<>NaN" [ label = "ID: 196<>NaN\n sID: \n obj: 2\n flb: 14,19\n fhb: 14,19\n slb: MAX_VAL\n shb: -1,00"]
+"821<>479" [ label = "ID: 821<>479\n sID: \n obj: 1\n flb: 19,60\n fhb: 75,50\n slb: 25,39\n shb: 78,64"]
+"202<>NaN" [ label = "ID: 202<>NaN\n sID: \n obj: 4\n flb: 16,84\n fhb: 43,28\n slb: MAX_VAL\n shb: -1,00"]
+"130<>NaN" [ label = "ID: 130<>NaN\n sID: \n obj: 4\n flb: 17,02\n fhb: 36,88\n slb: MAX_VAL\n shb: -1,00"]
+"1507<>1156" [ label = "ID: 1507<>1156\n sID: \n obj: 1\n flb: 16,52\n fhb: 430,67\n slb: 16,31\n shb: 262,59"]
+"1656<>19" [ label = "ID: 1656<>19\n sID: \n obj: 2\n flb: 43,59\n fhb: 189,11\n slb: 14,94\n shb: 141,60"]
+"558<>NaN" [ label = "ID: 558<>NaN\n sID: \n obj: 5\n flb: 21,48\n fhb: 83,23\n slb: MAX_VAL\n shb: -1,00"]
+"989<>19" [ label = "ID: 989<>19\n sID: \n obj: 1\n flb: 18,88\n fhb: 134,54\n slb: 14,94\n shb: 92,46"]
+"3<>NaN" [ label = "ID: 3<>NaN\n sID: \n obj: 5\n flb: 9,92\n fhb: 39,11\n slb: MAX_VAL\n shb: -1,00"]
+"1289<>1412" [ label = "ID: 1289<>1412\n sID: \n obj: 2\n flb: 18,87\n fhb: 114,60\n slb: 15,91\n shb: 97,52"]
+"47<>NaN" [ label = "ID: 47<>NaN\n sID: \n obj: 7\n flb: 8,05\n fhb: 34,15\n slb: MAX_VAL\n shb: -1,00"]
+"569<>NaN" [ label = "ID: 569<>NaN\n sID: \n obj: 7\n flb: 23,24\n fhb: 75,05\n slb: MAX_VAL\n shb: -1,00"]
+"1017<>1185" [ label = "ID: 1017<>1185\n sID: \n obj: 2\n flb: 8,58\n fhb: 317,92\n slb: 8,97\n shb: 347,88"]
+"1017<>894" [ label = "ID: 1017<>894\n sID: \n obj: 1\n flb: 8,58\n fhb: 286,11\n slb: 20,22\n shb: 287,36"]
+"1053<>1061" [ label = "ID: 1053<>1061\n sID: \n obj: 2\n flb: 13,83\n fhb: 179,18\n slb: 11,47\n shb: 152,72"]
+"1053<>223" [ label = "ID: 1053<>223\n sID: \n obj: 1\n flb: 13,83\n fhb: 132,54\n slb: 18,97\n shb: 118,67"]
+"101<>NaN" [ label = "ID: 101<>NaN\n sID: \n obj: 8\n flb: 12,03\n fhb: 56,49\n slb: MAX_VAL\n shb: -1,00"]
+"75<>NaN" [ label = "ID: 75<>NaN\n sID: \n obj: 6\n flb: 15,63\n fhb: 56,94\n slb: MAX_VAL\n shb: -1,00"]
+"727<>1061" [ label = "ID: 727<>1061\n sID: \n obj: 1\n flb: 5,72\n fhb: 122,43\n slb: 11,47\n shb: 125,95"]
+"228<>1173" [ label = "ID: 228<>1173\n sID: \n obj: 2\n flb: 10,98\n fhb: 83,34\n slb: 10,78\n shb: 68,83"]
+"436<>NaN" [ label = "ID: 436<>NaN\n sID: \n obj: 7\n flb: 15,32\n fhb: 62,87\n slb: MAX_VAL\n shb: -1,00"]
+"214<>1173" [ label = "ID: 214<>1173\n sID: \n obj: 1\n flb: 17,24\n fhb: 73,84\n slb: 10,78\n shb: 68,83"]
+"665<>NaN" [ label = "ID: 665<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"220<>1783" [ label = "ID: 220<>1783\n sID: \n obj: 2\n flb: 14,13\n fhb: 73,20\n slb: 10,29\n shb: 50,87"]
+"543<>NaN" [ label = "ID: 543<>NaN\n sID: \n obj: 2\n flb: 11,70\n fhb: 11,70\n slb: MAX_VAL\n shb: -1,00"]
+"186<>NaN" [ label = "ID: 186<>NaN\n sID: \n obj: 5\n flb: 21,55\n fhb: 35,46\n slb: MAX_VAL\n shb: -1,00"]
+"1395<>1223" [ label = "ID: 1395<>1223\n sID: \n obj: 2\n flb: 6,93\n fhb: 84,29\n slb: 21,23\n shb: 60,32"]
+"398<>NaN" [ label = "ID: 398<>NaN\n sID: \n obj: 5\n flb: 15,93\n fhb: 31,20\n slb: MAX_VAL\n shb: -1,00"]
+"583<>NaN" [ label = "ID: 583<>NaN\n sID: \n obj: 5\n flb: 15,87\n fhb: 28,52\n slb: MAX_VAL\n shb: -1,00"]
+"895<>1928" [ label = "ID: 895<>1928\n sID: \n obj: 2\n flb: 16,68\n fhb: 176,21\n slb: 25,07\n shb: 132,07"]
+"895<>1689" [ label = "ID: 895<>1689\n sID: \n obj: 1\n flb: 16,68\n fhb: 108,34\n slb: 23,63\n shb: 107,06"]
+"289<>NaN" [ label = "ID: 289<>NaN\n sID: \n obj: 7\n flb: 16,33\n fhb: 50,28\n slb: MAX_VAL\n shb: -1,00"]
+"285<>NaN" [ label = "ID: 285<>NaN\n sID: \n obj: 4\n flb: 23,60\n fhb: 44,96\n slb: MAX_VAL\n shb: -1,00"]
+"67<>NaN" [ label = "ID: 67<>NaN\n sID: \n obj: 5\n flb: 42,94\n fhb: 128,85\n slb: MAX_VAL\n shb: -1,00"]
+"1390<>1185" [ label = "ID: 1390<>1185\n sID: \n obj: 1\n flb: 8,49\n fhb: 262,94\n slb: 8,97\n shb: 273,70"]
+"928<>956" [ label = "ID: 928<>956\n sID: \n obj: 2\n flb: 16,58\n fhb: 147,08\n slb: 14,77\n shb: 111,35"]
+"928<>477" [ label = "ID: 928<>477\n sID: \n obj: 1\n flb: 16,58\n fhb: 65,87\n slb: 14,59\n shb: 68,81"]
+"503<>NaN" [ label = "ID: 503<>NaN\n sID: \n obj: 5\n flb: 19,07\n fhb: 44,26\n slb: MAX_VAL\n shb: -1,00"]
+"424<>NaN" [ label = "ID: 424<>NaN\n sID: \n obj: 3\n flb: 14,27\n fhb: 15,56\n slb: MAX_VAL\n shb: -1,00"]
+"732<>956" [ label = "ID: 732<>956\n sID: \n obj: 1\n flb: 27,79\n fhb: 128,54\n slb: 14,77\n shb: 97,55"]
+"363<>NaN" [ label = "ID: 363<>NaN\n sID: \n obj: 5\n flb: 21,82\n fhb: 42,68\n slb: MAX_VAL\n shb: -1,00"]
+"1670<>1915" [ label = "ID: 1670<>1915\n sID: \n obj: 2\n flb: 17,37\n fhb: 83,19\n slb: 13,29\n shb: 66,97"]
+"375<>NaN" [ label = "ID: 375<>NaN\n sID: \n obj: 2\n flb: 23,94\n fhb: 23,94\n slb: MAX_VAL\n shb: -1,00"]
+"180<>NaN" [ label = "ID: 180<>NaN\n sID: \n obj: 7\n flb: 18,37\n fhb: 49,85\n slb: MAX_VAL\n shb: -1,00"]
+"1023<>114" [ label = "ID: 1023<>114\n sID: \n obj: 2\n flb: 14,04\n fhb: 145,56\n slb: 9,62\n shb: 118,37"]
+"1023<>1118" [ label = "ID: 1023<>1118\n sID: \n obj: 1\n flb: 14,04\n fhb: 95,83\n slb: 18,46\n shb: 99,05"]
+"644<>NaN" [ label = "ID: 644<>NaN\n sID: \n obj: 6\n flb: 16,35\n fhb: 54,01\n slb: MAX_VAL\n shb: -1,00"]
+"490<>NaN" [ label = "ID: 490<>NaN\n sID: \n obj: 3\n flb: 8,29\n fhb: 24,01\n slb: MAX_VAL\n shb: -1,00"]
+"827<>114" [ label = "ID: 827<>114\n sID: \n obj: 1\n flb: 16,20\n fhb: 114,94\n slb: 9,62\n shb: 116,71"]
+"126<>NaN" [ label = "ID: 126<>NaN\n sID: \n obj: 5\n flb: 16,63\n fhb: 92,81\n slb: MAX_VAL\n shb: -1,00"]
+"105<>1560" [ label = "ID: 105<>1560\n sID: \n obj: 2\n flb: 18,08\n fhb: 105,61\n slb: 20,94\n shb: 63,93"]
+"587<>NaN" [ label = "ID: 587<>NaN\n sID: \n obj: 4\n flb: 16,17\n fhb: 33,24\n slb: MAX_VAL\n shb: -1,00"]
+"1030<>1560" [ label = "ID: 1030<>1560\n sID: \n obj: 1\n flb: 35,55\n fhb: 86,56\n slb: 20,94\n shb: 63,93"]
+"26<>NaN" [ label = "ID: 26<>NaN\n sID: \n obj: 8\n flb: 17,31\n fhb: 58,56\n slb: MAX_VAL\n shb: -1,00"]
+"255<>1901" [ label = "ID: 255<>1901\n sID: \n obj: 2\n flb: 21,13\n fhb: 494,48\n slb: 16,64\n shb: 392,38"]
+"255<>262" [ label = "ID: 255<>262\n sID: \n obj: 1\n flb: 21,13\n fhb: 204,92\n slb: 26,66\n shb: 217,86"]
+"565<>1015" [ label = "ID: 565<>1015\n sID: \n obj: 2\n flb: 19,87\n fhb: 207,88\n slb: 12,79\n shb: 148,96"]
+"565<>224" [ label = "ID: 565<>224\n sID: \n obj: 1\n flb: 19,87\n fhb: 84,21\n slb: 16,84\n shb: 66,22"]
+"110<>NaN" [ label = "ID: 110<>NaN\n sID: \n obj: 5\n flb: 8,32\n fhb: 39,74\n slb: MAX_VAL\n shb: -1,00"]
+"112<>NaN" [ label = "ID: 112<>NaN\n sID: \n obj: 5\n flb: 13,94\n fhb: 44,25\n slb: MAX_VAL\n shb: -1,00"]
+"1669<>1015" [ label = "ID: 1669<>1015\n sID: \n obj: 1\n flb: 15,27\n fhb: 167,54\n slb: 12,79\n shb: 142,28"]
+"1328<>1021" [ label = "ID: 1328<>1021\n sID: \n obj: 2\n flb: 32,63\n fhb: 78,02\n slb: 13,16\n shb: 59,26"]
+"1235<>1021" [ label = "ID: 1235<>1021\n sID: \n obj: 1\n flb: 25,87\n fhb: 58,91\n slb: 13,16\n shb: 46,30"]
+"1723<>NaN" [ label = "ID: 1723<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"58<>NaN" [ label = "ID: 58<>NaN\n sID: \n obj: 7\n flb: 6,37\n fhb: 45,55\n slb: MAX_VAL\n shb: -1,00"]
+"1556<>1379" [ label = "ID: 1556<>1379\n sID: \n obj: 2\n flb: 9,82\n fhb: 126,19\n slb: 13,56\n shb: 93,30"]
+"478<>NaN" [ label = "ID: 478<>NaN\n sID: \n obj: 4\n flb: 11,78\n fhb: 21,50\n slb: MAX_VAL\n shb: -1,00"]
+"193<>1379" [ label = "ID: 193<>1379\n sID: \n obj: 1\n flb: 13,65\n fhb: 115,33\n slb: 13,56\n shb: 93,30"]
+"1459<>NaN" [ label = "ID: 1459<>NaN\n sID: \n obj: 2\n flb: 20,41\n fhb: 20,41\n slb: MAX_VAL\n shb: -1,00"]
+"1073<>1811" [ label = "ID: 1073<>1811\n sID: \n obj: 2\n flb: 19,48\n fhb: 108,65\n slb: 13,84\n shb: 82,07"]
+"292<>NaN" [ label = "ID: 292<>NaN\n sID: \n obj: 5\n flb: 17,00\n fhb: 37,20\n slb: MAX_VAL\n shb: -1,00"]
+"486<>1811" [ label = "ID: 486<>1811\n sID: \n obj: 1\n flb: 18,63\n fhb: 90,65\n slb: 13,84\n shb: 82,07"]
+"577<>NaN" [ label = "ID: 577<>NaN\n sID: \n obj: 2\n flb: 15,89\n fhb: 15,89\n slb: MAX_VAL\n shb: -1,00"]
+"1636<>1112" [ label = "ID: 1636<>1112\n sID: \n obj: 2\n flb: 18,52\n fhb: 83,71\n slb: 12,23\n shb: 64,40"]
+"800<>NaN" [ label = "ID: 800<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"364<>NaN" [ label = "ID: 364<>NaN\n sID: \n obj: 7\n flb: 7,74\n fhb: 50,22\n slb: MAX_VAL\n shb: -1,00"]
+"293<>NaN" [ label = "ID: 293<>NaN\n sID: \n obj: 6\n flb: 15,31\n fhb: 79,01\n slb: MAX_VAL\n shb: -1,00"]
+"686<>1901" [ label = "ID: 686<>1901\n sID: \n obj: 1\n flb: 21,84\n fhb: 373,32\n slb: 16,64\n shb: 280,02"]
+"1514<>382" [ label = "ID: 1514<>382\n sID: \n obj: 2\n flb: 13,56\n fhb: 243,24\n slb: 13,64\n shb: 182,94"]
+"454<>NaN" [ label = "ID: 454<>NaN\n sID: \n obj: 6\n flb: 20,76\n fhb: 59,52\n slb: MAX_VAL\n shb: -1,00"]
+"1469<>382" [ label = "ID: 1469<>382\n sID: \n obj: 1\n flb: 18,74\n fhb: 148,04\n slb: 13,64\n shb: 88,42"]
+"62<>NaN" [ label = "ID: 62<>NaN\n sID: \n obj: 4\n flb: 9,82\n fhb: 32,60\n slb: MAX_VAL\n shb: -1,00"]
+"526<>861" [ label = "ID: 526<>861\n sID: \n obj: 2\n flb: 28,42\n fhb: 132,23\n slb: 15,31\n shb: 93,32"]
+"368<>NaN" [ label = "ID: 368<>NaN\n sID: \n obj: 3\n flb: 19,07\n fhb: 19,95\n slb: MAX_VAL\n shb: -1,00"]
+"426<>861" [ label = "ID: 426<>861\n sID: \n obj: 1\n flb: 25,47\n fhb: 112,79\n slb: 15,31\n shb: 93,32"]
+"1836<>NaN" [ label = "ID: 1836<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"1117<>1635" [ label = "ID: 1117<>1635\n sID: \n obj: 2\n flb: 25,83\n fhb: 106,19\n slb: 26,37\n shb: 74,59"]
+"845<>NaN" [ label = "ID: 845<>NaN\n sID: \n obj: 2\n flb: 35,78\n fhb: 35,78\n slb: MAX_VAL\n shb: -1,00"]
+"79<>NaN" [ label = "ID: 79<>NaN\n sID: \n obj: 7\n flb: 18,56\n fhb: 54,03\n slb: MAX_VAL\n shb: -1,00"]
+"1688<>825" [ label = "ID: 1688<>825\n sID: \n obj: 2\n flb: 20,88\n fhb: 299,15\n slb: 5,07\n shb: 252,62"]
+"1688<>1065" [ label = "ID: 1688<>1065\n sID: \n obj: 1\n flb: 20,88\n fhb: 239,25\n slb: 14,01\n shb: 245,20"]
+"1302<>297" [ label = "ID: 1302<>297\n sID: \n obj: 2\n flb: 10,93\n fhb: 121,63\n slb: 20,92\n shb: 98,47"]
+"1302<>230" [ label = "ID: 1302<>230\n sID: \n obj: 1\n flb: 10,93\n fhb: 79,55\n slb: 21,69\n shb: 87,45"]
+"877<>1341" [ label = "ID: 877<>1341\n sID: \n obj: 2\n flb: 8,57\n fhb: 53,22\n slb: 13,65\n shb: 36,63"]
+"519<>NaN" [ label = "ID: 519<>NaN\n sID: \n obj: 2\n flb: 14,06\n fhb: 14,06\n slb: MAX_VAL\n shb: -1,00"]
+"125<>NaN" [ label = "ID: 125<>NaN\n sID: \n obj: 6\n flb: 11,91\n fhb: 32,76\n slb: MAX_VAL\n shb: -1,00"]
+"266<>NaN" [ label = "ID: 266<>NaN\n sID: \n obj: 2\n flb: 23,94\n fhb: 23,94\n slb: MAX_VAL\n shb: -1,00"]
+"1367<>297" [ label = "ID: 1367<>297\n sID: \n obj: 1\n flb: 24,92\n fhb: 107,19\n slb: 20,92\n shb: 92,47"]
+"733<>NaN" [ label = "ID: 733<>NaN\n sID: \n obj: 5\n flb: 1,85\n fhb: 42,15\n slb: MAX_VAL\n shb: -1,00"]
+"1809<>1354" [ label = "ID: 1809<>1354\n sID: \n obj: 2\n flb: 19,56\n fhb: 71,48\n slb: 16,00\n shb: 49,00"]
+"745<>NaN" [ label = "ID: 745<>NaN\n sID: \n obj: 2\n flb: 16,66\n fhb: 16,66\n slb: MAX_VAL\n shb: -1,00"]
+"511<>NaN" [ label = "ID: 511<>NaN\n sID: \n obj: 5\n flb: 24,38\n fhb: 51,96\n slb: MAX_VAL\n shb: -1,00"]
+"222<>533" [ label = "ID: 222<>533\n sID: \n obj: 2\n flb: 6,27\n fhb: 104,43\n slb: 8,32\n shb: 77,20"]
+"709<>NaN" [ label = "ID: 709<>NaN\n sID: \n obj: 6\n flb: 9,16\n fhb: 21,07\n slb: MAX_VAL\n shb: -1,00"]
+"1290<>533" [ label = "ID: 1290<>533\n sID: \n obj: 1\n flb: 10,97\n fhb: 58,42\n slb: 8,32\n shb: 40,85"]
+"1600<>NaN" [ label = "ID: 1600<>NaN\n sID: \n obj: 2\n flb: 15,15\n fhb: 15,15\n slb: MAX_VAL\n shb: -1,00"]
+"358<>1110" [ label = "ID: 358<>1110\n sID: \n obj: 2\n flb: 9,93\n fhb: 60,16\n slb: 8,03\n shb: 41,31"]
+"918<>NaN" [ label = "ID: 918<>NaN\n sID: \n obj: 5\n flb: 9,74\n fhb: 15,31\n slb: MAX_VAL\n shb: -1,00"]
+"119<>NaN" [ label = "ID: 119<>NaN\n sID: \n obj: 6\n flb: 8,60\n fhb: 25,75\n slb: MAX_VAL\n shb: -1,00"]
+"1574<>825" [ label = "ID: 1574<>825\n sID: \n obj: 1\n flb: 13,20\n fhb: 264,76\n slb: 5,07\n shb: 252,62"]
+"1699<>1009" [ label = "ID: 1699<>1009\n sID: \n obj: 2\n flb: 6,73\n fhb: 75,71\n slb: 16,94\n shb: 51,63"]
+"162<>NaN" [ label = "ID: 162<>NaN\n sID: \n obj: 2\n flb: 18,82\n fhb: 18,82\n slb: MAX_VAL\n shb: -1,00"]
+"365<>NaN" [ label = "ID: 365<>NaN\n sID: \n obj: 5\n flb: 13,30\n fhb: 26,75\n slb: MAX_VAL\n shb: -1,00"]
+"1791<>413" [ label = "ID: 1791<>413\n sID: \n obj: 2\n flb: 24,99\n fhb: 271,69\n slb: 28,49\n shb: 193,33"]
+"1791<>1743" [ label = "ID: 1791<>1743\n sID: \n obj: 1\n flb: 24,99\n fhb: 156,05\n slb: 27,31\n shb: 150,68"]
+"1072<>182" [ label = "ID: 1072<>182\n sID: \n obj: 2\n flb: 10,73\n fhb: 72,49\n slb: 11,22\n shb: 73,11"]
+"446<>NaN" [ label = "ID: 446<>NaN\n sID: \n obj: 5\n flb: 35,30\n fhb: 62,86\n slb: MAX_VAL\n shb: -1,00"]
+"328<>NaN" [ label = "ID: 328<>NaN\n sID: \n obj: 6\n flb: 19,02\n fhb: 61,76\n slb: MAX_VAL\n shb: -1,00"]
+"135<>NaN" [ label = "ID: 135<>NaN\n sID: \n obj: 5\n flb: 17,27\n fhb: 60,98\n slb: MAX_VAL\n shb: -1,00"]
+"1001<>413" [ label = "ID: 1001<>413\n sID: \n obj: 1\n flb: 20,56\n fhb: 222,11\n slb: 28,49\n shb: 193,33"]
+"1726<>594" [ label = "ID: 1726<>594\n sID: \n obj: 2\n flb: 16,70\n fhb: 108,47\n slb: 18,32\n shb: 82,81"]
+"71<>NaN" [ label = "ID: 71<>NaN\n sID: \n obj: 7\n flb: 13,08\n fhb: 47,63\n slb: MAX_VAL\n shb: -1,00"]
+"1838<>594" [ label = "ID: 1838<>594\n sID: \n obj: 1\n flb: 9,80\n fhb: 80,82\n slb: 18,32\n shb: 80,00"]
+"876<>NaN" [ label = "ID: 876<>NaN\n sID: \n obj: 6\n flb: 11,53\n fhb: 30,33\n slb: MAX_VAL\n shb: -1,00"]
+"556<>NaN" [ label = "ID: 556<>NaN\n sID: \n obj: 6\n flb: 21,57\n fhb: 40,42\n slb: MAX_VAL\n shb: -1,00"]
+"722<>1375" [ label = "ID: 722<>1375\n sID: \n obj: 2\n flb: 18,56\n fhb: 154,94\n slb: 7,56\n shb: 117,43"]
+"722<>1623" [ label = "ID: 722<>1623\n sID: \n obj: 1\n flb: 18,56\n fhb: 93,76\n slb: 29,06\n shb: 80,94"]
+"39<>NaN" [ label = "ID: 39<>NaN\n sID: \n obj: 8\n flb: 8,63\n fhb: 45,55\n slb: MAX_VAL\n shb: -1,00"]
+"428<>NaN" [ label = "ID: 428<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"341<>1375" [ label = "ID: 341<>1375\n sID: \n obj: 1\n flb: 18,80\n fhb: 98,87\n slb: 7,56\n shb: 88,09"]
+"464<>NaN" [ label = "ID: 464<>NaN\n sID: \n obj: 7\n flb: 25,47\n fhb: 59,71\n slb: MAX_VAL\n shb: -1,00"]
+"1251<>1664" [ label = "ID: 1251<>1664\n sID: \n obj: 2\n flb: 9,06\n fhb: 72,48\n slb: 18,89\n shb: 50,92"]
+"748<>NaN" [ label = "ID: 748<>NaN\n sID: \n obj: 3\n flb: 14,77\n fhb: 15,67\n slb: MAX_VAL\n shb: -1,00"]
+"179<>NaN" [ label = "ID: 179<>NaN\n sID: \n obj: 6\n flb: 14,63\n fhb: 57,39\n slb: MAX_VAL\n shb: -1,00"]
+"1715<>1854" [ label = "ID: 1715<>1854\n sID: \n obj: 1\n flb: 10,72\n fhb: 986,94\n slb: 16,75\n shb: 967,25"]
+"163<>816" [ label = "ID: 163<>816\n sID: \n obj: 2\n flb: 23,71\n fhb: 613,06\n slb: 8,10\n shb: 471,54"]
+"163<>1325" [ label = "ID: 163<>1325\n sID: \n obj: 1\n flb: 23,71\n fhb: 229,44\n slb: 53,68\n shb: 253,12"]
+"625<>394" [ label = "ID: 625<>394\n sID: \n obj: 2\n flb: 13,57\n fhb: 200,40\n slb: 13,07\n shb: 149,69"]
+"216<>NaN" [ label = "ID: 216<>NaN\n sID: \n obj: 4\n flb: 22,70\n fhb: 57,40\n slb: MAX_VAL\n shb: -1,00"]
+"1047<>394" [ label = "ID: 1047<>394\n sID: \n obj: 1\n flb: 14,29\n fhb: 124,15\n slb: 13,07\n shb: 84,08"]
+"768<>1446" [ label = "ID: 768<>1446\n sID: \n obj: 2\n flb: 16,52\n fhb: 63,11\n slb: 14,06\n shb: 41,50"]
+"1105<>NaN" [ label = "ID: 1105<>NaN\n sID: \n obj: 2\n flb: 15,99\n fhb: 15,99\n slb: MAX_VAL\n shb: -1,00"]
+"187<>NaN" [ label = "ID: 187<>NaN\n sID: \n obj: 6\n flb: 9,65\n fhb: 36,15\n slb: MAX_VAL\n shb: -1,00"]
+"59<>378" [ label = "ID: 59<>378\n sID: \n obj: 2\n flb: 13,29\n fhb: 107,98\n slb: 11,62\n shb: 79,08"]
+"617<>NaN" [ label = "ID: 617<>NaN\n sID: \n obj: 6\n flb: 19,10\n fhb: 44,25\n slb: MAX_VAL\n shb: -1,00"]
+"1003<>378" [ label = "ID: 1003<>378\n sID: \n obj: 1\n flb: 19,93\n fhb: 70,39\n slb: 11,62\n shb: 78,56"]
+"1409<>267" [ label = "ID: 1409<>267\n sID: \n obj: 2\n flb: 15,82\n fhb: 51,21\n slb: 16,20\n shb: 48,75"]
+"938<>NaN" [ label = "ID: 938<>NaN\n sID: \n obj: 3\n flb: 17,27\n fhb: 26,35\n slb: MAX_VAL\n shb: -1,00"]
+"504<>NaN" [ label = "ID: 504<>NaN\n sID: \n obj: 4\n flb: 8,57\n fhb: 38,16\n slb: MAX_VAL\n shb: -1,00"]
+"552<>816" [ label = "ID: 552<>816\n sID: \n obj: 1\n flb: 15,43\n fhb: 385,76\n slb: 8,10\n shb: 229,16"]
+"573<>122" [ label = "ID: 573<>122\n sID: \n obj: 2\n flb: 5,78\n fhb: 150,49\n slb: 4,99\n shb: 109,09"]
+"573<>1525" [ label = "ID: 573<>1525\n sID: \n obj: 1\n flb: 5,78\n fhb: 100,21\n slb: 26,96\n shb: 117,90"]
+"1005<>1298" [ label = "ID: 1005<>1298\n sID: \n obj: 2\n flb: 24,42\n fhb: 56,04\n slb: 11,59\n shb: 41,17"]
+"1382<>NaN" [ label = "ID: 1382<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"212<>NaN" [ label = "ID: 212<>NaN\n sID: \n obj: 6\n flb: 10,13\n fhb: 23,82\n slb: MAX_VAL\n shb: -1,00"]
+"576<>NaN" [ label = "ID: 576<>NaN\n sID: \n obj: 4\n flb: 13,31\n fhb: 24,67\n slb: MAX_VAL\n shb: -1,00"]
+"1008<>122" [ label = "ID: 1008<>122\n sID: \n obj: 1\n flb: 4,01\n fhb: 118,33\n slb: 4,99\n shb: 88,22"]
+"152<>NaN" [ label = "ID: 152<>NaN\n sID: \n obj: 9\n flb: 0,00\n fhb: ∞\n slb: MAX_VAL\n shb: -1,00"]
+"1233<>1746" [ label = "ID: 1233<>1746\n sID: \n obj: 2\n flb: 9,51\n fhb: 95,17\n slb: 17,18\n shb: 82,11"]
+"252<>NaN" [ label = "ID: 252<>NaN\n sID: \n obj: 7\n flb: 14,64\n fhb: 93,75\n slb: MAX_VAL\n shb: -1,00"]
+"366<>1746" [ label = "ID: 366<>1746\n sID: \n obj: 1\n flb: 16,63\n fhb: 88,24\n slb: 17,18\n shb: 82,11"]
+"1650<>NaN" [ label = "ID: 1650<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"198<>NaN" [ label = "ID: 198<>NaN\n sID: \n obj: 7\n flb: 22,88\n fhb: 66,42\n slb: MAX_VAL\n shb: -1,00"]
+"210<>1369" [ label = "ID: 210<>1369\n sID: \n obj: 2\n flb: 20,92\n fhb: 282,88\n slb: 18,21\n shb: 208,87"]
+"210<>510" [ label = "ID: 210<>510\n sID: \n obj: 1\n flb: 20,92\n fhb: 172,74\n slb: 15,98\n shb: 176,93"]
+"693<>1624" [ label = "ID: 693<>1624\n sID: \n obj: 2\n flb: 17,01\n fhb: 107,40\n slb: 21,90\n shb: 89,34"]
+"536<>NaN" [ label = "ID: 536<>NaN\n sID: \n obj: 6\n flb: 14,62\n fhb: 77,92\n slb: MAX_VAL\n shb: -1,00"]
+"955<>1624" [ label = "ID: 955<>1624\n sID: \n obj: 1\n flb: 18,53\n fhb: 84,21\n slb: 21,90\n shb: 79,69"]
+"195<>NaN" [ label = "ID: 195<>NaN\n sID: \n obj: 5\n flb: 19,08\n fhb: 37,94\n slb: MAX_VAL\n shb: -1,00"]
+"108<>NaN" [ label = "ID: 108<>NaN\n sID: \n obj: 7\n flb: 15,57\n fhb: 42,18\n slb: MAX_VAL\n shb: -1,00"]
+"93<>NaN" [ label = "ID: 93<>NaN\n sID: \n obj: 8\n flb: 28,68\n fhb: 102,25\n slb: MAX_VAL\n shb: -1,00"]
+"1088<>1369" [ label = "ID: 1088<>1369\n sID: \n obj: 1\n flb: 27,46\n fhb: 231,90\n slb: 18,21\n shb: 206,45"]
+"1800<>1612" [ label = "ID: 1800<>1612\n sID: \n obj: 2\n flb: 22,44\n fhb: 123,79\n slb: 23,70\n shb: 103,83"]
+"183<>NaN" [ label = "ID: 183<>NaN\n sID: \n obj: 4\n flb: 12,95\n fhb: 31,98\n slb: MAX_VAL\n shb: -1,00"]
+"687<>1612" [ label = "ID: 687<>1612\n sID: \n obj: 1\n flb: 29,57\n fhb: 123,41\n slb: 23,70\n shb: 103,83"]
+"1844<>1202" [ label = "ID: 1844<>1202\n sID: \n obj: 2\n flb: 20,86\n fhb: 99,13\n slb: 11,21\n shb: 75,41"]
+"596<>NaN" [ label = "ID: 596<>NaN\n sID: \n obj: 5\n flb: 10,48\n fhb: 66,49\n slb: MAX_VAL\n shb: -1,00"]
+"22<>NaN" [ label = "ID: 22<>NaN\n sID: \n obj: 8\n flb: 14,41\n fhb: 79,99\n slb: MAX_VAL\n shb: -1,00"]
+"1376<>302" [ label = "ID: 1376<>302\n sID: \n obj: 2\n flb: 46,69\n fhb: 172,57\n slb: 17,66\n shb: 142,74"]
+"129<>NaN" [ label = "ID: 129<>NaN\n sID: \n obj: 7\n flb: 13,39\n fhb: 78,83\n slb: MAX_VAL\n shb: -1,00"]
+"1821<>302" [ label = "ID: 1821<>302\n sID: \n obj: 1\n flb: 14,61\n fhb: 141,61\n slb: 17,66\n shb: 142,74"]
+"27<>NaN" [ label = "ID: 27<>NaN\n sID: \n obj: 7\n flb: 12,18\n fhb: 101,80\n slb: MAX_VAL\n shb: -1,00"]
+"1190<>641" [ label = "ID: 1190<>641\n sID: \n obj: 2\n flb: 36,04\n fhb: 117,19\n slb: 5,17\n shb: 69,51"]
+"1618<>NaN" [ label = "ID: 1618<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"1340<>641" [ label = "ID: 1340<>641\n sID: \n obj: 1\n flb: 7,30\n fhb: 80,16\n slb: 5,17\n shb: 69,51"]
+"131<>NaN" [ label = "ID: 131<>NaN\n sID: \n obj: 4\n flb: 17,68\n fhb: 42,83\n slb: MAX_VAL\n shb: -1,00"]
+"865<>738" [ label = "ID: 865<>738\n sID: \n obj: 2\n flb: 14,75\n fhb: 68,36\n slb: 13,65\n shb: 55,40"]
+"70<>NaN" [ label = "ID: 70<>NaN\n sID: \n obj: 3\n flb: 11,58\n fhb: 28,93\n slb: MAX_VAL\n shb: -1,00"]
+"309<>NaN" [ label = "ID: 309<>NaN\n sID: \n obj: 5\n flb: 18,09\n fhb: 32,66\n slb: MAX_VAL\n shb: -1,00"]
+"420<>317" [ label = "ID: 420<>317\n sID: \n obj: 2\n flb: 17,18\n fhb: 897,60\n slb: 22,37\n shb: 716,04"]
+"420<>1483" [ label = "ID: 420<>1483\n sID: \n obj: 1\n flb: 17,18\n fhb: 607,40\n slb: 8,56\n shb: 671,49"]
+"1454<>142" [ label = "ID: 1454<>142\n sID: \n obj: 2\n flb: 14,99\n fhb: 380,99\n slb: 16,07\n shb: 403,64"]
+"1454<>554" [ label = "ID: 1454<>554\n sID: \n obj: 1\n flb: 14,99\n fhb: 317,11\n slb: 12,17\n shb: 387,23"]
+"582<>1209" [ label = "ID: 582<>1209\n sID: \n obj: 2\n flb: 14,72\n fhb: 244,28\n slb: 16,41\n shb: 201,13"]
+"582<>344" [ label = "ID: 582<>344\n sID: \n obj: 1\n flb: 14,72\n fhb: 147,38\n slb: 11,84\n shb: 158,11"]
+"1488<>1734" [ label = "ID: 1488<>1734\n sID: \n obj: 2\n flb: 12,42\n fhb: 105,35\n slb: 13,10\n shb: 81,80"]
+"96<>NaN" [ label = "ID: 96<>NaN\n sID: \n obj: 8\n flb: 14,71\n fhb: 52,16\n slb: MAX_VAL\n shb: -1,00"]
+"94<>NaN" [ label = "ID: 94<>NaN\n sID: \n obj: 8\n flb: 12,14\n fhb: 68,49\n slb: MAX_VAL\n shb: -1,00"]
+"1570<>388" [ label = "ID: 1570<>388\n sID: \n obj: 2\n flb: 17,55\n fhb: 83,33\n slb: 14,06\n shb: 83,07"]
+"225<>NaN" [ label = "ID: 225<>NaN\n sID: \n obj: 4\n flb: 8,14\n fhb: 37,08\n slb: MAX_VAL\n shb: -1,00"]
+"1201<>388" [ label = "ID: 1201<>388\n sID: \n obj: 1\n flb: 30,07\n fhb: 77,52\n slb: 14,06\n shb: 83,07"]
+"627<>NaN" [ label = "ID: 627<>NaN\n sID: \n obj: 2\n flb: 20,95\n fhb: 20,95\n slb: MAX_VAL\n shb: -1,00"]
+"81<>NaN" [ label = "ID: 81<>NaN\n sID: \n obj: 8\n flb: 12,40\n fhb: 33,38\n slb: MAX_VAL\n shb: -1,00"]
+"815<>1209" [ label = "ID: 815<>1209\n sID: \n obj: 1\n flb: 14,14\n fhb: 179,05\n slb: 16,41\n shb: 145,82"]
+"497<>331" [ label = "ID: 497<>331\n sID: \n obj: 2\n flb: 12,32\n fhb: 121,76\n slb: 13,44\n shb: 94,05"]
+"683<>NaN" [ label = "ID: 683<>NaN\n sID: \n obj: 8\n flb: 12,18\n fhb: 41,72\n slb: MAX_VAL\n shb: -1,00"]
+"1893<>331" [ label = "ID: 1893<>331\n sID: \n obj: 1\n flb: 15,76\n fhb: 100,39\n slb: 13,44\n shb: 94,05"]
+"770<>NaN" [ label = "ID: 770<>NaN\n sID: \n obj: 6\n flb: 26,50\n fhb: 61,45\n slb: MAX_VAL\n shb: -1,00"]
+"779<>702" [ label = "ID: 779<>702\n sID: \n obj: 2\n flb: 14,53\n fhb: 89,73\n slb: 9,29\n shb: 63,45"]
+"469<>NaN" [ label = "ID: 469<>NaN\n sID: \n obj: 3\n flb: 15,42\n fhb: 17,02\n slb: MAX_VAL\n shb: -1,00"]
+"1816<>702" [ label = "ID: 1816<>702\n sID: \n obj: 1\n flb: 13,06\n fhb: 55,54\n slb: 9,29\n shb: 33,01"]
+"811<>NaN" [ label = "ID: 811<>NaN\n sID: \n obj: 3\n flb: 14,31\n fhb: 19,60\n slb: MAX_VAL\n shb: -1,00"]
+"86<>NaN" [ label = "ID: 86<>NaN\n sID: \n obj: 8\n flb: 2,51\n fhb: 37,75\n slb: MAX_VAL\n shb: -1,00"]
+"838<>1175" [ label = "ID: 838<>1175\n sID: \n obj: 2\n flb: 17,08\n fhb: 148,74\n slb: 18,39\n shb: 111,20"]
+"838<>291" [ label = "ID: 838<>291\n sID: \n obj: 1\n flb: 17,08\n fhb: 66,90\n slb: 12,63\n shb: 86,21"]
+"1778<>259" [ label = "ID: 1778<>259\n sID: \n obj: 2\n flb: 10,38\n fhb: 65,54\n slb: 16,70\n shb: 43,17"]
+"515<>NaN" [ label = "ID: 515<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"345<>NaN" [ label = "ID: 345<>NaN\n sID: \n obj: 6\n flb: 19,01\n fhb: 23,45\n slb: MAX_VAL\n shb: -1,00"]
+"188<>NaN" [ label = "ID: 188<>NaN\n sID: \n obj: 3\n flb: 18,96\n fhb: 33,75\n slb: MAX_VAL\n shb: -1,00"]
+"468<>1175" [ label = "ID: 468<>1175\n sID: \n obj: 1\n flb: 19,72\n fhb: 124,23\n slb: 18,39\n shb: 91,30"]
+"407<>NaN" [ label = "ID: 407<>NaN\n sID: \n obj: 4\n flb: 9,13\n fhb: 33,10\n slb: MAX_VAL\n shb: -1,00"]
+"1259<>618" [ label = "ID: 1259<>618\n sID: \n obj: 2\n flb: 23,06\n fhb: 101,23\n slb: 16,26\n shb: 77,60"]
+"278<>NaN" [ label = "ID: 278<>NaN\n sID: \n obj: 3\n flb: 11,13\n fhb: 44,65\n slb: MAX_VAL\n shb: -1,00"]
+"776<>618" [ label = "ID: 776<>618\n sID: \n obj: 1\n flb: 12,70\n fhb: 69,58\n slb: 16,26\n shb: 39,56"]
+"1136<>NaN" [ label = "ID: 1136<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"427<>NaN" [ label = "ID: 427<>NaN\n sID: \n obj: 8\n flb: 14,67\n fhb: 61,93\n slb: MAX_VAL\n shb: -1,00"]
+"1713<>236" [ label = "ID: 1713<>236\n sID: \n obj: 2\n flb: 13,10\n fhb: 194,67\n slb: 16,58\n shb: 161,19"]
+"1713<>604" [ label = "ID: 1713<>604\n sID: \n obj: 1\n flb: 13,10\n fhb: 131,07\n slb: 7,86\n shb: 149,42"]
+"1562<>1705" [ label = "ID: 1562<>1705\n sID: \n obj: 2\n flb: 15,76\n fhb: 80,15\n slb: 20,93\n shb: 72,05"]
+"10<>NaN" [ label = "ID: 10<>NaN\n sID: \n obj: 8\n flb: 6,64\n fhb: 43,90\n slb: MAX_VAL\n shb: -1,00"]
+"144<>NaN" [ label = "ID: 144<>NaN\n sID: \n obj: 7\n flb: 16,58\n fhb: 70,21\n slb: MAX_VAL\n shb: -1,00"]
+"332<>NaN" [ label = "ID: 332<>NaN\n sID: \n obj: 8\n flb: 7,71\n fhb: 48,20\n slb: MAX_VAL\n shb: -1,00"]
+"919<>236" [ label = "ID: 919<>236\n sID: \n obj: 1\n flb: 14,83\n fhb: 168,72\n slb: 16,58\n shb: 139,60"]
+"440<>NaN" [ label = "ID: 440<>NaN\n sID: \n obj: 9\n flb: 0,00\n fhb: ∞\n slb: MAX_VAL\n shb: -1,00"]
+"760<>1866" [ label = "ID: 760<>1866\n sID: \n obj: 2\n flb: 28,65\n fhb: 162,11\n slb: 18,85\n shb: 111,62"]
+"512<>NaN" [ label = "ID: 512<>NaN\n sID: \n obj: 5\n flb: 23,05\n fhb: 40,86\n slb: MAX_VAL\n shb: -1,00"]
+"1101<>1866" [ label = "ID: 1101<>1866\n sID: \n obj: 1\n flb: 7,83\n fhb: 133,37\n slb: 18,85\n shb: 111,62"]
+"276<>NaN" [ label = "ID: 276<>NaN\n sID: \n obj: 5\n flb: 39,42\n fhb: 103,24\n slb: MAX_VAL\n shb: -1,00"]
+"91<>NaN" [ label = "ID: 91<>NaN\n sID: \n obj: 4\n flb: 42,07\n fhb: 99,01\n slb: MAX_VAL\n shb: -1,00"]
+"806<>142" [ label = "ID: 806<>142\n sID: \n obj: 1\n flb: 15,71\n fhb: 311,38\n slb: 16,07\n shb: 277,90"]
+"705<>962" [ label = "ID: 705<>962\n sID: \n obj: 2\n flb: 13,14\n fhb: 197,71\n slb: 12,62\n shb: 147,61"]
+"206<>NaN" [ label = "ID: 206<>NaN\n sID: \n obj: 8\n flb: 12,30\n fhb: 56,74\n slb: MAX_VAL\n shb: -1,00"]
+"1825<>962" [ label = "ID: 1825<>962\n sID: \n obj: 1\n flb: 13,91\n fhb: 121,89\n slb: 12,62\n shb: 75,39"]
+"724<>NaN" [ label = "ID: 724<>NaN\n sID: \n obj: 7\n flb: 14,05\n fhb: 25,20\n slb: MAX_VAL\n shb: -1,00"]
+"327<>824" [ label = "ID: 327<>824\n sID: \n obj: 2\n flb: 15,18\n fhb: 101,85\n slb: 16,43\n shb: 79,41"]
+"327<>967" [ label = "ID: 327<>967\n sID: \n obj: 1\n flb: 15,18\n fhb: 58,47\n slb: 5,38\n shb: 45,46"]
+"238<>NaN" [ label = "ID: 238<>NaN\n sID: \n obj: 3\n flb: 22,49\n fhb: 26,86\n slb: MAX_VAL\n shb: -1,00"]
+"250<>NaN" [ label = "ID: 250<>NaN\n sID: \n obj: 5\n flb: 5,98\n fhb: 20,23\n slb: MAX_VAL\n shb: -1,00"]
+"97<>824" [ label = "ID: 97<>824\n sID: \n obj: 1\n flb: 12,52\n fhb: 83,49\n slb: 16,43\n shb: 79,41"]
+"307<>NaN" [ label = "ID: 307<>NaN\n sID: \n obj: 5\n flb: 9,93\n fhb: 49,04\n slb: MAX_VAL\n shb: -1,00"]
+"218<>NaN" [ label = "ID: 218<>NaN\n sID: \n obj: 7\n flb: 14,94\n fhb: 37,85\n slb: MAX_VAL\n shb: -1,00"]
+"1239<>1288" [ label = "ID: 1239<>1288\n sID: \n obj: 2\n flb: 18,92\n fhb: 302,96\n slb: 22,52\n shb: 231,96"]
+"1239<>52" [ label = "ID: 1239<>52\n sID: \n obj: 1\n flb: 18,92\n fhb: 137,92\n slb: 17,32\n shb: 157,82"]
+"651<>548" [ label = "ID: 651<>548\n sID: \n obj: 2\n flb: 15,35\n fhb: 125,01\n slb: 9,54\n shb: 82,50"]
+"44<>NaN" [ label = "ID: 44<>NaN\n sID: \n obj: 5\n flb: 9,01\n fhb: 34,68\n slb: MAX_VAL\n shb: -1,00"]
+"258<>548" [ label = "ID: 258<>548\n sID: \n obj: 1\n flb: 12,52\n fhb: 88,06\n slb: 9,54\n shb: 76,69"]
+"817<>NaN" [ label = "ID: 817<>NaN\n sID: \n obj: 5\n flb: 16,80\n fhb: 53,06\n slb: MAX_VAL\n shb: -1,00"]
+"1810<>356" [ label = "ID: 1810<>356\n sID: \n obj: 2\n flb: 18,70\n fhb: 81,81\n slb: 12,51\n shb: 60,21"]
+"731<>NaN" [ label = "ID: 731<>NaN\n sID: \n obj: 2\n flb: 50,10\n fhb: 50,10\n slb: MAX_VAL\n shb: -1,00"]
+"799<>356" [ label = "ID: 799<>356\n sID: \n obj: 1\n flb: 1,87\n fhb: 44,85\n slb: 12,51\n shb: 40,99"]
+"728<>NaN" [ label = "ID: 728<>NaN\n sID: \n obj: 5\n flb: 13,26\n fhb: 30,29\n slb: MAX_VAL\n shb: -1,00"]
+"316<>NaN" [ label = "ID: 316<>NaN\n sID: \n obj: 7\n flb: 7,56\n fhb: 50,91\n slb: MAX_VAL\n shb: -1,00"]
+"1276<>1248" [ label = "ID: 1276<>1248\n sID: \n obj: 2\n flb: 5,71\n fhb: 90,95\n slb: 5,57\n shb: 59,48"]
+"866<>NaN" [ label = "ID: 866<>NaN\n sID: \n obj: 5\n flb: 17,15\n fhb: 27,65\n slb: MAX_VAL\n shb: -1,00"]
+"1232<>1248" [ label = "ID: 1232<>1248\n sID: \n obj: 1\n flb: 8,01\n fhb: 54,54\n slb: 5,57\n shb: 44,05"]
+"789<>NaN" [ label = "ID: 789<>NaN\n sID: \n obj: 5\n flb: 7,34\n fhb: 29,38\n slb: MAX_VAL\n shb: -1,00"]
+"1141<>NaN" [ label = "ID: 1141<>NaN\n sID: \n obj: 7\n flb: 6,63\n fhb: 43,54\n slb: MAX_VAL\n shb: -1,00"]
+"1869<>1288" [ label = "ID: 1869<>1288\n sID: \n obj: 1\n flb: 32,70\n fhb: 211,96\n slb: 22,52\n shb: 129,28"]
+"1188<>NaN" [ label = "ID: 1188<>NaN\n sID: \n obj: 3\n flb: 30,57\n fhb: 63,57\n slb: MAX_VAL\n shb: -1,00"]
+"609<>1138" [ label = "ID: 609<>1138\n sID: \n obj: 2\n flb: 9,61\n fhb: 180,32\n slb: 5,77\n shb: 176,78"]
+"609<>1307" [ label = "ID: 609<>1307\n sID: \n obj: 1\n flb: 9,61\n fhb: 169,00\n slb: 18,15\n shb: 172,43"]
+"1610<>87" [ label = "ID: 1610<>87\n sID: \n obj: 2\n flb: 15,99\n fhb: 68,96\n slb: 14,35\n shb: 52,83"]
+"226<>NaN" [ label = "ID: 226<>NaN\n sID: \n obj: 3\n flb: 5,52\n fhb: 36,05\n slb: MAX_VAL\n shb: -1,00"]
+"272<>NaN" [ label = "ID: 272<>NaN\n sID: \n obj: 6\n flb: 12,26\n fhb: 35,70\n slb: MAX_VAL\n shb: -1,00"]
+"616<>NaN" [ label = "ID: 616<>NaN\n sID: \n obj: 5\n flb: 15,32\n fhb: 69,90\n slb: MAX_VAL\n shb: -1,00"]
+"1803<>1138" [ label = "ID: 1803<>1138\n sID: \n obj: 1\n flb: 12,60\n fhb: 167,39\n slb: 5,77\n shb: 173,63"]
+"589<>227" [ label = "ID: 589<>227\n sID: \n obj: 2\n flb: 16,27\n fhb: 164,44\n slb: 11,95\n shb: 105,37"]
+"12<>NaN" [ label = "ID: 12<>NaN\n sID: \n obj: 6\n flb: 13,23\n fhb: 32,41\n slb: MAX_VAL\n shb: -1,00"]
+"330<>227" [ label = "ID: 330<>227\n sID: \n obj: 1\n flb: 10,33\n fhb: 112,13\n slb: 11,95\n shb: 68,75"]
+"1422<>NaN" [ label = "ID: 1422<>NaN\n sID: \n obj: 2\n flb: 20,92\n fhb: 20,92\n slb: MAX_VAL\n shb: -1,00"]
+"1482<>95" [ label = "ID: 1482<>95\n sID: \n obj: 2\n flb: 11,99\n fhb: 81,32\n slb: 16,46\n shb: 52,23"]
+"42<>NaN" [ label = "ID: 42<>NaN\n sID: \n obj: 2\n flb: 18,52\n fhb: 18,52\n slb: MAX_VAL\n shb: -1,00"]
+"638<>NaN" [ label = "ID: 638<>NaN\n sID: \n obj: 6\n flb: 19,82\n fhb: 46,89\n slb: MAX_VAL\n shb: -1,00"]
+"853<>1255" [ label = "ID: 853<>1255\n sID: \n obj: 2\n flb: 12,54\n fhb: 127,88\n slb: 7,56\n shb: 87,82"]
+"208<>NaN" [ label = "ID: 208<>NaN\n sID: \n obj: 6\n flb: 9,65\n fhb: 23,24\n slb: MAX_VAL\n shb: -1,00"]
+"1107<>1255" [ label = "ID: 1107<>1255\n sID: \n obj: 1\n flb: 11,85\n fhb: 94,15\n slb: 7,56\n shb: 59,98"]
+"742<>NaN" [ label = "ID: 742<>NaN\n sID: \n obj: 3\n flb: 12,54\n fhb: 12,59\n slb: MAX_VAL\n shb: -1,00"]
+"1582<>270" [ label = "ID: 1582<>270\n sID: \n obj: 2\n flb: 12,69\n fhb: 74,67\n slb: 12,20\n shb: 48,39"]
+"128<>NaN" [ label = "ID: 128<>NaN\n sID: \n obj: 4\n flb: 11,07\n fhb: 23,93\n slb: MAX_VAL\n shb: -1,00"]
+"1679<>270" [ label = "ID: 1679<>270\n sID: \n obj: 1\n flb: 21,24\n fhb: 49,67\n slb: 12,20\n shb: 48,35"]
+"1224<>NaN" [ label = "ID: 1224<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"120<>NaN" [ label = "ID: 120<>NaN\n sID: \n obj: 7\n flb: 9,75\n fhb: 29,11\n slb: MAX_VAL\n shb: -1,00"]
+"1580<>324" [ label = "ID: 1580<>324\n sID: \n obj: 2\n flb: 16,31\n fhb: 294,15\n slb: 11,65\n shb: 256,32"]
+"1580<>1215" [ label = "ID: 1580<>1215\n sID: \n obj: 1\n flb: 16,31\n fhb: 136,90\n slb: 5,37\n shb: 148,14"]
+"301<>890" [ label = "ID: 301<>890\n sID: \n obj: 2\n flb: 22,43\n fhb: 132,40\n slb: 14,25\n shb: 102,49"]
+"288<>NaN" [ label = "ID: 288<>NaN\n sID: \n obj: 4\n flb: 23,05\n fhb: 72,50\n slb: MAX_VAL\n shb: -1,00"]
+"933<>890" [ label = "ID: 933<>890\n sID: \n obj: 1\n flb: 18,22\n fhb: 109,08\n slb: 14,25\n shb: 102,49"]
+"37<>NaN" [ label = "ID: 37<>NaN\n sID: \n obj: 8\n flb: 7,34\n fhb: 49,76\n slb: MAX_VAL\n shb: -1,00"]
+"1575<>1581" [ label = "ID: 1575<>1581\n sID: \n obj: 2\n flb: 27,14\n fhb: 67,86\n slb: 17,89\n shb: 48,45"]
+"1775<>NaN" [ label = "ID: 1775<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"74<>NaN" [ label = "ID: 74<>NaN\n sID: \n obj: 7\n flb: 5,06\n fhb: 42,24\n slb: MAX_VAL\n shb: -1,00"]
+"30<>NaN" [ label = "ID: 30<>NaN\n sID: \n obj: 4\n flb: 35,48\n fhb: 61,43\n slb: MAX_VAL\n shb: -1,00"]
+"204<>324" [ label = "ID: 204<>324\n sID: \n obj: 1\n flb: 16,28\n fhb: 213,49\n slb: 11,65\n shb: 177,57"]
+"966<>1738" [ label = "ID: 966<>1738\n sID: \n obj: 2\n flb: 10,57\n fhb: 132,68\n slb: 9,92\n shb: 102,25"]
+"445<>NaN" [ label = "ID: 445<>NaN\n sID: \n obj: 7\n flb: 22,87\n fhb: 36,78\n slb: MAX_VAL\n shb: -1,00"]
+"1476<>1738" [ label = "ID: 1476<>1738\n sID: \n obj: 1\n flb: 10,90\n fhb: 83,40\n slb: 9,92\n shb: 76,89"]
+"1512<>189" [ label = "ID: 1512<>189\n sID: \n obj: 2\n flb: 10,07\n fhb: 56,62\n slb: 12,84\n shb: 43,90"]
+"669<>NaN" [ label = "ID: 669<>NaN\n sID: \n obj: 3\n flb: 11,31\n fhb: 13,62\n slb: MAX_VAL\n shb: -1,00"]
+"158<>NaN" [ label = "ID: 158<>NaN\n sID: \n obj: 6\n flb: 7,74\n fhb: 31,98\n slb: MAX_VAL\n shb: -1,00"]
+"1074<>531" [ label = "ID: 1074<>531\n sID: \n obj: 2\n flb: 20,86\n fhb: 78,29\n slb: 12,93\n shb: 43,88"]
+"538<>NaN" [ label = "ID: 538<>NaN\n sID: \n obj: 2\n flb: 25,73\n fhb: 25,73\n slb: MAX_VAL\n shb: -1,00"]
+"1534<>531" [ label = "ID: 1534<>531\n sID: \n obj: 1\n flb: 10,77\n fhb: 50,98\n slb: 12,93\n shb: 43,54"]
+"340<>NaN" [ label = "ID: 340<>NaN\n sID: \n obj: 4\n flb: 11,65\n fhb: 23,38\n slb: MAX_VAL\n shb: -1,00"]
+"61<>NaN" [ label = "ID: 61<>NaN\n sID: \n obj: 4\n flb: 16,95\n fhb: 35,67\n slb: MAX_VAL\n shb: -1,00"]
+"137<>878" [ label = "ID: 137<>878\n sID: \n obj: 2\n flb: 15,05\n fhb: 188,90\n slb: 8,58\n shb: 139,72"]
+"137<>1097" [ label = "ID: 137<>1097\n sID: \n obj: 1\n flb: 15,05\n fhb: 94,49\n slb: 5,74\n shb: 106,68"]
+"1576<>985" [ label = "ID: 1576<>985\n sID: \n obj: 2\n flb: 10,33\n fhb: 94,65\n slb: 10,18\n shb: 67,13"]
+"716<>NaN" [ label = "ID: 716<>NaN\n sID: \n obj: 3\n flb: 11,43\n fhb: 31,13\n slb: MAX_VAL\n shb: -1,00"]
+"1910<>985" [ label = "ID: 1910<>985\n sID: \n obj: 1\n flb: 13,03\n fhb: 55,86\n slb: 10,18\n shb: 44,28"]
+"73<>NaN" [ label = "ID: 73<>NaN\n sID: \n obj: 6\n flb: 3,88\n fhb: 25,89\n slb: MAX_VAL\n shb: -1,00"]
+"143<>NaN" [ label = "ID: 143<>NaN\n sID: \n obj: 8\n flb: 8,74\n fhb: 36,40\n slb: MAX_VAL\n shb: -1,00"]
+"1498<>92" [ label = "ID: 1498<>92\n sID: \n obj: 2\n flb: 20,61\n fhb: 69,98\n slb: 3,69\n shb: 55,98"]
+"1418<>NaN" [ label = "ID: 1418<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"35<>NaN" [ label = "ID: 35<>NaN\n sID: \n obj: 8\n flb: 12,94\n fhb: 35,00\n slb: MAX_VAL\n shb: -1,00"]
+"1475<>878" [ label = "ID: 1475<>878\n sID: \n obj: 1\n flb: 12,25\n fhb: 149,74\n slb: 8,58\n shb: 102,73"]
+"610<>737" [ label = "ID: 610<>737\n sID: \n obj: 2\n flb: 15,71\n fhb: 82,63\n slb: 5,21\n shb: 57,85"]
+"1283<>NaN" [ label = "ID: 1283<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"20<>NaN" [ label = "ID: 20<>NaN\n sID: \n obj: 8\n flb: 9,65\n fhb: 37,40\n slb: MAX_VAL\n shb: -1,00"]
+"481<>1137" [ label = "ID: 481<>1137\n sID: \n obj: 2\n flb: 15,07\n fhb: 127,92\n slb: 3,99\n shb: 94,29"]
+"481<>819" [ label = "ID: 481<>819\n sID: \n obj: 1\n flb: 15,07\n fhb: 66,52\n slb: 5,72\n shb: 64,44"]
+"100<>50" [ label = "ID: 100<>50\n sID: \n obj: 2\n flb: 11,21\n fhb: 55,23\n slb: 5,32\n shb: 37,31"]
+"69<>NaN" [ label = "ID: 69<>NaN\n sID: \n obj: 3\n flb: 7,33\n fhb: 10,93\n slb: MAX_VAL\n shb: -1,00"]
+"286<>NaN" [ label = "ID: 286<>NaN\n sID: \n obj: 5\n flb: 8,34\n fhb: 21,74\n slb: MAX_VAL\n shb: -1,00"]
+"168<>893" [ label = "ID: 168<>893\n sID: \n obj: 2\n flb: 4,50\n fhb: 30,62\n slb: 5,37\n shb: 23,90"]
+"229<>NaN" [ label = "ID: 229<>NaN\n sID: \n obj: 3\n flb: 6,27\n fhb: 10,72\n slb: MAX_VAL\n shb: -1,00"]
+"15<>NaN" [ label = "ID: 15<>NaN\n sID: \n obj: 6\n flb: 3,88\n fhb: 32,03\n slb: MAX_VAL\n shb: -1,00"]
+"1240<>1137" [ label = "ID: 1240<>1137\n sID: \n obj: 1\n flb: 4,99\n fhb: 99,68\n slb: 3,99\n shb: 75,38"]
+"1567<>898" [ label = "ID: 1567<>898\n sID: \n obj: 2\n flb: 13,18\n fhb: 57,76\n slb: 4,92\n shb: 39,77"]
+"564<>NaN" [ label = "ID: 564<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"563<>898" [ label = "ID: 563<>898\n sID: \n obj: 1\n flb: 9,63\n fhb: 37,13\n slb: 4,92\n shb: 19,05"]
+"284<>NaN" [ label = "ID: 284<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"323<>NaN" [ label = "ID: 323<>NaN\n sID: \n obj: 8\n flb: 13,05\n fhb: 27,51\n slb: MAX_VAL\n shb: -1,00"]
+"1889<>643" [ label = "ID: 1889<>643\n sID: \n obj: 2\n flb: 5,04\n fhb: 87,79\n slb: 14,40\n shb: 67,03"]
+"13<>NaN" [ label = "ID: 13<>NaN\n sID: \n obj: 8\n flb: 13,54\n fhb: 54,28\n slb: MAX_VAL\n shb: -1,00"]
+"653<>643" [ label = "ID: 653<>643\n sID: \n obj: 1\n flb: 9,26\n fhb: 69,97\n slb: 14,40\n shb: 67,03"]
+"43<>NaN" [ label = "ID: 43<>NaN\n sID: \n obj: 8\n flb: 4,88\n fhb: 46,20\n slb: MAX_VAL\n shb: -1,00"]
+"221<>NaN" [ label = "ID: 221<>NaN\n sID: \n obj: 2\n flb: 38,38\n fhb: 38,38\n slb: MAX_VAL\n shb: -1,00"]
+"24<>317" [ label = "ID: 24<>317\n sID: \n obj: 1\n flb: 38,24\n fhb: 892,09\n slb: 22,37\n shb: 716,04"]
+"1768<>400" [ label = "ID: 1768<>400\n sID: \n obj: 2\n flb: 88,83\n fhb: 218,96\n slb: 7,14\n shb: 172,20"]
+"140<>NaN" [ label = "ID: 140<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"972<>400" [ label = "ID: 972<>400\n sID: \n obj: 1\n flb: 24,58\n fhb: 126,07\n slb: 7,14\n shb: 83,14"]
+"109<>NaN" [ label = "ID: 109<>NaN\n sID: \n obj: 2\n flb: 23,43\n fhb: 23,43\n slb: MAX_VAL\n shb: -1,00"]
+"697<>1833" [ label = "ID: 697<>1833\n sID: \n obj: 2\n flb: 7,57\n fhb: 89,22\n slb: 4,53\n shb: 79,86"]
+"320<>NaN" [ label = "ID: 320<>NaN\n sID: \n obj: 6\n flb: 18,52\n fhb: 38,20\n slb: MAX_VAL\n shb: -1,00"]
+"541<>1833" [ label = "ID: 541<>1833\n sID: \n obj: 1\n flb: 27,20\n fhb: 79,10\n slb: 4,53\n shb: 79,86"]
+"1790<>NaN" [ label = "ID: 1790<>NaN\n sID: \n obj: 2\n flb: 15,21\n fhb: 15,21\n slb: MAX_VAL\n shb: -1,00"]
+"294<>NaN" [ label = "ID: 294<>NaN\n sID: \n obj: 6\n flb: 18,20\n fhb: 44,90\n slb: MAX_VAL\n shb: -1,00"]
+"1709<>1675" [ label = "ID: 1709<>1675\n sID: \n obj: 2\n flb: 14,62\n fhb: 729,74\n slb: 8,35\n shb: 517,26"]
+"1709<>1520" [ label = "ID: 1709<>1520\n sID: \n obj: 1\n flb: 14,62\n fhb: 421,47\n slb: 13,86\n shb: 426,27"]
+"990<>636" [ label = "ID: 990<>636\n sID: \n obj: 2\n flb: 17,04\n fhb: 364,94\n slb: 14,71\n shb: 277,69"]
+"990<>1300" [ label = "ID: 990<>1300\n sID: \n obj: 1\n flb: 17,04\n fhb: 256,30\n slb: 23,88\n shb: 258,10"]
+"790<>1706" [ label = "ID: 790<>1706\n sID: \n obj: 2\n flb: 20,69\n fhb: 140,71\n slb: 9,34\n shb: 121,18"]
+"790<>1016" [ label = "ID: 790<>1016\n sID: \n obj: 1\n flb: 20,69\n fhb: 114,34\n slb: 28,32\n shb: 110,65"]
+"149<>NaN" [ label = "ID: 149<>NaN\n sID: \n obj: 6\n flb: 22,90\n fhb: 56,21\n slb: MAX_VAL\n shb: -1,00"]
+"415<>NaN" [ label = "ID: 415<>NaN\n sID: \n obj: 5\n flb: 16,81\n fhb: 28,23\n slb: MAX_VAL\n shb: -1,00"]
+"1750<>1706" [ label = "ID: 1750<>1706\n sID: \n obj: 1\n flb: 20,91\n fhb: 108,47\n slb: 9,34\n shb: 117,68"]
+"654<>NaN" [ label = "ID: 654<>NaN\n sID: \n obj: 6\n flb: 16,42\n fhb: 44,16\n slb: MAX_VAL\n shb: -1,00"]
+"1183<>769" [ label = "ID: 1183<>769\n sID: \n obj: 2\n flb: 21,03\n fhb: 75,99\n slb: 21,70\n shb: 59,66"]
+"16<>NaN" [ label = "ID: 16<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"264<>NaN" [ label = "ID: 264<>NaN\n sID: \n obj: 6\n flb: 16,62\n fhb: 41,60\n slb: MAX_VAL\n shb: -1,00"]
+"1352<>649" [ label = "ID: 1352<>649\n sID: \n obj: 2\n flb: 14,29\n fhb: 123,03\n slb: 27,00\n shb: 94,13"]
+"667<>NaN" [ label = "ID: 667<>NaN\n sID: \n obj: 4\n flb: 18,32\n fhb: 30,99\n slb: MAX_VAL\n shb: -1,00"]
+"393<>649" [ label = "ID: 393<>649\n sID: \n obj: 1\n flb: 11,17\n fhb: 92,81\n slb: 27,00\n shb: 94,13"]
+"352<>NaN" [ label = "ID: 352<>NaN\n sID: \n obj: 5\n flb: 14,14\n fhb: 26,29\n slb: MAX_VAL\n shb: -1,00"]
+"201<>NaN" [ label = "ID: 201<>NaN\n sID: \n obj: 7\n flb: 26,62\n fhb: 50,04\n slb: MAX_VAL\n shb: -1,00"]
+"1486<>636" [ label = "ID: 1486<>636\n sID: \n obj: 1\n flb: 8,81\n fhb: 242,33\n slb: 14,71\n shb: 249,22"]
+"605<>585" [ label = "ID: 605<>585\n sID: \n obj: 2\n flb: 8,61\n fhb: 162,49\n slb: 14,51\n shb: 121,96"]
+"605<>1904" [ label = "ID: 605<>1904\n sID: \n obj: 1\n flb: 8,61\n fhb: 102,35\n slb: 14,27\n shb: 95,48"]
+"452<>NaN" [ label = "ID: 452<>NaN\n sID: \n obj: 7\n flb: 19,02\n fhb: 43,97\n slb: MAX_VAL\n shb: -1,00"]
+"185<>NaN" [ label = "ID: 185<>NaN\n sID: \n obj: 5\n flb: 8,86\n fhb: 31,57\n slb: MAX_VAL\n shb: -1,00"]
+"1515<>585" [ label = "ID: 1515<>585\n sID: \n obj: 1\n flb: 10,78\n fhb: 115,83\n slb: 14,51\n shb: 115,29"]
+"1605<>1471" [ label = "ID: 1605<>1471\n sID: \n obj: 2\n flb: 11,01\n fhb: 52,90\n slb: 18,50\n shb: 59,67"]
+"167<>NaN" [ label = "ID: 167<>NaN\n sID: \n obj: 4\n flb: 15,14\n fhb: 47,41\n slb: MAX_VAL\n shb: -1,00"]
+"34<>NaN" [ label = "ID: 34<>NaN\n sID: \n obj: 4\n flb: 15,60\n fhb: 28,04\n slb: MAX_VAL\n shb: -1,00"]
+"772<>1841" [ label = "ID: 772<>1841\n sID: \n obj: 2\n flb: 15,31\n fhb: 71,55\n slb: 19,63\n shb: 62,71"]
+"104<>NaN" [ label = "ID: 104<>NaN\n sID: \n obj: 3\n flb: 17,28\n fhb: 19,80\n slb: MAX_VAL\n shb: -1,00"]
+"312<>NaN" [ label = "ID: 312<>NaN\n sID: \n obj: 6\n flb: 17,05\n fhb: 63,83\n slb: MAX_VAL\n shb: -1,00"]
+"355<>1849" [ label = "ID: 355<>1849\n sID: \n obj: 2\n flb: 13,51\n fhb: 231,06\n slb: 11,25\n shb: 165,09"]
+"355<>801" [ label = "ID: 355<>801\n sID: \n obj: 1\n flb: 13,51\n fhb: 89,15\n slb: 33,09\n shb: 99,94"]
+"38<>NaN" [ label = "ID: 38<>NaN\n sID: \n obj: 8\n flb: 5,81\n fhb: 53,04\n slb: MAX_VAL\n shb: -1,00"]
+"568<>NaN" [ label = "ID: 568<>NaN\n sID: \n obj: 2\n flb: 2,45\n fhb: 2,45\n slb: MAX_VAL\n shb: -1,00"]
+"1776<>1849" [ label = "ID: 1776<>1849\n sID: \n obj: 1\n flb: 14,69\n fhb: 196,61\n slb: 11,25\n shb: 165,09"]
+"1281<>NaN" [ label = "ID: 1281<>NaN\n sID: \n obj: 2\n flb: 9,37\n fhb: 9,37\n slb: MAX_VAL\n shb: -1,00"]
+"306<>1621" [ label = "ID: 306<>1621\n sID: \n obj: 2\n flb: 16,51\n fhb: 170,13\n slb: 9,66\n shb: 161,11"]
+"306<>628" [ label = "ID: 306<>628\n sID: \n obj: 1\n flb: 16,51\n fhb: 153,07\n slb: 10,25\n shb: 146,71"]
+"456<>NaN" [ label = "ID: 456<>NaN\n sID: \n obj: 7\n flb: 12,53\n fhb: 44,84\n slb: MAX_VAL\n shb: -1,00"]
+"310<>NaN" [ label = "ID: 310<>NaN\n sID: \n obj: 5\n flb: 23,41\n fhb: 53,89\n slb: MAX_VAL\n shb: -1,00"]
+"673<>1621" [ label = "ID: 673<>1621\n sID: \n obj: 1\n flb: 17,79\n fhb: 164,68\n slb: 9,66\n shb: 150,55"]
+"1121<>315" [ label = "ID: 1121<>315\n sID: \n obj: 2\n flb: 14,76\n fhb: 146,92\n slb: 14,57\n shb: 109,08"]
+"1121<>1301" [ label = "ID: 1121<>1301\n sID: \n obj: 1\n flb: 14,76\n fhb: 59,85\n slb: 6,84\n shb: 59,30"]
+"553<>NaN" [ label = "ID: 553<>NaN\n sID: \n obj: 5\n flb: 12,03\n fhb: 19,10\n slb: MAX_VAL\n shb: -1,00"]
+"133<>NaN" [ label = "ID: 133<>NaN\n sID: \n obj: 5\n flb: 4,44\n fhb: 52,62\n slb: MAX_VAL\n shb: -1,00"]
+"1080<>315" [ label = "ID: 1080<>315\n sID: \n obj: 1\n flb: 13,73\n fhb: 116,01\n slb: 14,57\n shb: 67,95"]
+"29<>NaN" [ label = "ID: 29<>NaN\n sID: \n obj: 5\n flb: 23,62\n fhb: 41,42\n slb: MAX_VAL\n shb: -1,00"]
+"1155<>174" [ label = "ID: 1155<>174\n sID: \n obj: 2\n flb: 11,06\n fhb: 84,59\n slb: 14,24\n shb: 67,12"]
+"419<>NaN" [ label = "ID: 419<>NaN\n sID: \n obj: 4\n flb: 13,34\n fhb: 37,18\n slb: MAX_VAL\n shb: -1,00"]
+"157<>174" [ label = "ID: 157<>174\n sID: \n obj: 1\n flb: 16,91\n fhb: 74,91\n slb: 14,24\n shb: 67,12"]
+"1250<>NaN" [ label = "ID: 1250<>NaN\n sID: \n obj: 2\n flb: 27,30\n fhb: 27,30\n slb: MAX_VAL\n shb: -1,00"]
+"123<>NaN" [ label = "ID: 123<>NaN\n sID: \n obj: 7\n flb: 11,74\n fhb: 50,00\n slb: MAX_VAL\n shb: -1,00"]
+"1456<>1510" [ label = "ID: 1456<>1510\n sID: \n obj: 2\n flb: 5,39\n fhb: 286,70\n slb: 14,00\n shb: 228,34"]
+"1456<>1374" [ label = "ID: 1456<>1374\n sID: \n obj: 1\n flb: 5,39\n fhb: 165,76\n slb: 15,47\n shb: 161,69"]
+"566<>NaN" [ label = "ID: 566<>NaN\n sID: \n obj: 4\n flb: 8,98\n fhb: 82,94\n slb: MAX_VAL\n shb: -1,00"]
+"1725<>9" [ label = "ID: 1725<>9\n sID: \n obj: 2\n flb: 13,23\n fhb: 146,22\n slb: 32,82\n shb: 120,23"]
+"1725<>1687" [ label = "ID: 1725<>1687\n sID: \n obj: 1\n flb: 13,23\n fhb: 59,54\n slb: 17,95\n shb: 58,48"]
+"339<>NaN" [ label = "ID: 339<>NaN\n sID: \n obj: 4\n flb: 10,02\n fhb: 35,72\n slb: MAX_VAL\n shb: -1,00"]
+"83<>NaN" [ label = "ID: 83<>NaN\n sID: \n obj: 4\n flb: 7,87\n fhb: 21,37\n slb: MAX_VAL\n shb: -1,00"]
+"346<>NaN" [ label = "ID: 346<>NaN\n sID: \n obj: 8\n flb: 11,48\n fhb: 68,50\n slb: MAX_VAL\n shb: -1,00"]
+"1245<>1510" [ label = "ID: 1245<>1510\n sID: \n obj: 1\n flb: 34,68\n fhb: 234,41\n slb: 14,00\n shb: 228,34"]
+"232<>916" [ label = "ID: 232<>916\n sID: \n obj: 2\n flb: 23,22\n fhb: 92,72\n slb: 18,86\n shb: 85,85"]
+"807<>NaN" [ label = "ID: 807<>NaN\n sID: \n obj: 5\n flb: 17,08\n fhb: 36,18\n slb: MAX_VAL\n shb: -1,00"]
+"33<>NaN" [ label = "ID: 33<>NaN\n sID: \n obj: 8\n flb: 25,78\n fhb: 50,85\n slb: MAX_VAL\n shb: -1,00"]
+"1357<>408" [ label = "ID: 1357<>408\n sID: \n obj: 2\n flb: 13,58\n fhb: 143,20\n slb: 15,62\n shb: 99,90"]
+"1357<>1739" [ label = "ID: 1357<>1739\n sID: \n obj: 1\n flb: 13,58\n fhb: 75,42\n slb: 17,48\n shb: 65,71"]
+"691<>1356" [ label = "ID: 691<>1356\n sID: \n obj: 2\n flb: 12,34\n fhb: 56,58\n slb: 20,07\n shb: 58,58"]
+"64<>NaN" [ label = "ID: 64<>NaN\n sID: \n obj: 4\n flb: 5,72\n fhb: 34,39\n slb: MAX_VAL\n shb: -1,00"]
+"349<>NaN" [ label = "ID: 349<>NaN\n sID: \n obj: 4\n flb: 16,94\n fhb: 23,41\n slb: MAX_VAL\n shb: -1,00"]
+"493<>408" [ label = "ID: 493<>408\n sID: \n obj: 1\n flb: 17,05\n fhb: 116,13\n slb: 15,62\n shb: 99,90"]
+"530<>NaN" [ label = "ID: 530<>NaN\n sID: \n obj: 2\n flb: 73,74\n fhb: 73,74\n slb: MAX_VAL\n shb: -1,00"]
+"921<>1113" [ label = "ID: 921<>1113\n sID: \n obj: 2\n flb: 17,13\n fhb: 108,46\n slb: 17,50\n shb: 63,93"]
+"442<>NaN" [ label = "ID: 442<>NaN\n sID: \n obj: 3\n flb: 14,78\n fhb: 26,45\n slb: MAX_VAL\n shb: -1,00"]
+"1148<>1113" [ label = "ID: 1148<>1113\n sID: \n obj: 1\n flb: 7,47\n fhb: 48,58\n slb: 17,50\n shb: 60,87"]
+"166<>NaN" [ label = "ID: 166<>NaN\n sID: \n obj: 5\n flb: 13,10\n fhb: 30,13\n slb: MAX_VAL\n shb: -1,00"]
+"657<>NaN" [ label = "ID: 657<>NaN\n sID: \n obj: 3\n flb: 10,80\n fhb: 14,32\n slb: MAX_VAL\n shb: -1,00"]
+"826<>1675" [ label = "ID: 826<>1675\n sID: \n obj: 1\n flb: 8,11\n fhb: 530,25\n slb: 8,35\n shb: 452,52"]
+"7<>369" [ label = "ID: 7<>369\n sID: \n obj: 2\n flb: 28,48\n fhb: 430,50\n slb: 4,20\n shb: 367,14"]
+"7<>1126" [ label = "ID: 7<>1126\n sID: \n obj: 1\n flb: 28,48\n fhb: 177,51\n slb: 6,55\n shb: 149,33"]
+"17<>NaN" [ label = "ID: 17<>NaN\n sID: \n obj: 5\n flb: 5,42\n fhb: 63,96\n slb: MAX_VAL\n shb: -1,00"]
+"546<>253" [ label = "ID: 546<>253\n sID: \n obj: 2\n flb: 7,91\n fhb: 82,95\n slb: 16,87\n shb: 59,04"]
+"251<>NaN" [ label = "ID: 251<>NaN\n sID: \n obj: 6\n flb: 12,71\n fhb: 40,55\n slb: MAX_VAL\n shb: -1,00"]
+"514<>NaN" [ label = "ID: 514<>NaN\n sID: \n obj: 5\n flb: 23,53\n fhb: 44,19\n slb: MAX_VAL\n shb: -1,00"]
+"502<>369" [ label = "ID: 502<>369\n sID: \n obj: 1\n flb: 29,60\n fhb: 246,76\n slb: 4,20\n shb: 182,38"]
+"645<>1037" [ label = "ID: 645<>1037\n sID: \n obj: 2\n flb: 14,08\n fhb: 135,78\n slb: 19,55\n shb: 95,75"]
+"659<>NaN" [ label = "ID: 659<>NaN\n sID: \n obj: 6\n flb: 16,01\n fhb: 44,54\n slb: MAX_VAL\n shb: -1,00"]
+"1127<>1037" [ label = "ID: 1127<>1037\n sID: \n obj: 1\n flb: 16,02\n fhb: 97,42\n slb: 19,55\n shb: 95,75"]
+"117<>NaN" [ label = "ID: 117<>NaN\n sID: \n obj: 8\n flb: 22,22\n fhb: 54,79\n slb: MAX_VAL\n shb: -1,00"]
+"535<>NaN" [ label = "ID: 535<>NaN\n sID: \n obj: 4\n flb: 16,68\n fhb: 38,10\n slb: MAX_VAL\n shb: -1,00"]
+"940<>121" [ label = "ID: 940<>121\n sID: \n obj: 2\n flb: 7,19\n fhb: 171,53\n slb: 6,51\n shb: 194,09"]
+"940<>1025" [ label = "ID: 940<>1025\n sID: \n obj: 1\n flb: 7,19\n fhb: 168,47\n slb: 19,10\n shb: 167,93"]
+"56<>681" [ label = "ID: 56<>681\n sID: \n obj: 2\n flb: 3,40\n fhb: 83,88\n slb: 5,79\n shb: 65,10"]
+"56<>1055" [ label = "ID: 56<>1055\n sID: \n obj: 1\n flb: 3,40\n fhb: 42,43\n slb: 17,00\n shb: 53,09"]
+"41<>NaN" [ label = "ID: 41<>NaN\n sID: \n obj: 8\n flb: 18,46\n fhb: 39,03\n slb: MAX_VAL\n shb: -1,00"]
+"246<>NaN" [ label = "ID: 246<>NaN\n sID: \n obj: 2\n flb: 9,74\n fhb: 9,74\n slb: MAX_VAL\n shb: -1,00"]
+"53<>681" [ label = "ID: 53<>681\n sID: \n obj: 1\n flb: 8,17\n fhb: 63,65\n slb: 5,79\n shb: 59,62"]
+"260<>1090" [ label = "ID: 260<>1090\n sID: \n obj: 2\n flb: 14,40\n fhb: 36,53\n slb: 3,69\n shb: 21,06"]
+"500<>NaN" [ label = "ID: 500<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"40<>NaN" [ label = "ID: 40<>NaN\n sID: \n obj: 7\n flb: 3,55\n fhb: 18,23\n slb: MAX_VAL\n shb: -1,00"]
+"1207<>343" [ label = "ID: 1207<>343\n sID: \n obj: 2\n flb: 8,29\n fhb: 50,80\n slb: 5,38\n shb: 35,65"]
+"82<>NaN" [ label = "ID: 82<>NaN\n sID: \n obj: 5\n flb: 8,76\n fhb: 14,78\n slb: MAX_VAL\n shb: -1,00"]
+"491<>NaN" [ label = "ID: 491<>NaN\n sID: \n obj: 5\n flb: 4,70\n fhb: 19,67\n slb: MAX_VAL\n shb: -1,00"]
+"1451<>1807" [ label = "ID: 1451<>1807\n sID: \n obj: 2\n flb: 9,79\n fhb: 68,50\n slb: 21,59\n shb: 66,56"]
+"2<>NaN" [ label = "ID: 2<>NaN\n sID: \n obj: 8\n flb: 18,83\n fhb: 58,36\n slb: MAX_VAL\n shb: -1,00"]
+"18<>NaN" [ label = "ID: 18<>NaN\n sID: \n obj: 4\n flb: 27,71\n fhb: 52,76\n slb: MAX_VAL\n shb: -1,00"]
+"987<>121" [ label = "ID: 987<>121\n sID: \n obj: 1\n flb: 14,11\n fhb: 138,14\n slb: 6,51\n shb: 134,04"]
+"99<>57" [ label = "ID: 99<>57\n sID: \n obj: 2\n flb: 27,45\n fhb: 76,04\n slb: 2,62\n shb: 56,26"]
+"203<>NaN" [ label = "ID: 203<>NaN\n sID: \n obj: 2\n flb: 16,00\n fhb: 16,00\n slb: MAX_VAL\n shb: -1,00"]
+"254<>57" [ label = "ID: 254<>57\n sID: \n obj: 1\n flb: 15,70\n fhb: 61,81\n slb: 2,62\n shb: 50,65"]
+"455<>NaN" [ label = "ID: 455<>NaN\n sID: \n obj: 3\n flb: 23,18\n fhb: 25,64\n slb: MAX_VAL\n shb: -1,00"]
+"23<>NaN" [ label = "ID: 23<>NaN\n sID: \n obj: 6\n flb: 1,98\n fhb: 31,55\n slb: MAX_VAL\n shb: -1,00"]
+"55<>1572" [ label = "ID: 55<>1572\n sID: \n obj: 2\n flb: 8,36\n fhb: 92,34\n slb: 16,34\n shb: 75,25"]
+"303<>NaN" [ label = "ID: 303<>NaN\n sID: \n obj: 7\n flb: 9,98\n fhb: 29,32\n slb: MAX_VAL\n shb: -1,00"]
+"630<>1572" [ label = "ID: 630<>1572\n sID: \n obj: 1\n flb: 17,15\n fhb: 77,69\n slb: 16,34\n shb: 75,25"]
+"51<>NaN" [ label = "ID: 51<>NaN\n sID: \n obj: 3\n flb: 11,25\n fhb: 13,35\n slb: MAX_VAL\n shb: -1,00"]
+"409<>NaN" [ label = "ID: 409<>NaN\n sID: \n obj: 6\n flb: 17,40\n fhb: 37,85\n slb: MAX_VAL\n shb: -1,00"]
+"171<>1068" [ label = "ID: 171<>1068\n sID: \n obj: 2\n flb: 16,41\n fhb: 514,36\n slb: 21,33\n shb: 474,18"]
+"171<>1923" [ label = "ID: 171<>1923\n sID: \n obj: 1\n flb: 16,41\n fhb: 445,05\n slb: 6,68\n shb: 459,73"]
+"520<>447" [ label = "ID: 520<>447\n sID: \n obj: 2\n flb: 34,41\n fhb: 226,04\n slb: 30,39\n shb: 223,30"]
+"520<>177" [ label = "ID: 520<>177\n sID: \n obj: 1\n flb: 34,41\n fhb: 200,96\n slb: 13,45\n shb: 214,59"]
+"988<>971" [ label = "ID: 988<>971\n sID: \n obj: 2\n flb: 12,05\n fhb: 115,07\n slb: 9,27\n shb: 77,13"]
+"6<>NaN" [ label = "ID: 6<>NaN\n sID: \n obj: 2\n flb: 23,81\n fhb: 23,81\n slb: MAX_VAL\n shb: -1,00"]
+"1444<>971" [ label = "ID: 1444<>971\n sID: \n obj: 1\n flb: 15,82\n fhb: 70,23\n slb: 9,27\n shb: 44,48"]
+"1744<>NaN" [ label = "ID: 1744<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"1818<>1831" [ label = "ID: 1818<>1831\n sID: \n obj: 2\n flb: 12,04\n fhb: 73,04\n slb: 17,50\n shb: 46,53"]
+"36<>NaN" [ label = "ID: 36<>NaN\n sID: \n obj: 3\n flb: 16,43\n fhb: 18,06\n slb: MAX_VAL\n shb: -1,00"]
+"383<>NaN" [ label = "ID: 383<>NaN\n sID: \n obj: 4\n flb: 25,63\n fhb: 30,86\n slb: MAX_VAL\n shb: -1,00"]
+"31<>NaN" [ label = "ID: 31<>NaN\n sID: \n obj: 7\n flb: 13,00\n fhb: 71,07\n slb: MAX_VAL\n shb: -1,00"]
+"329<>447" [ label = "ID: 329<>447\n sID: \n obj: 1\n flb: 15,69\n fhb: 214,82\n slb: 30,39\n shb: 223,30"]
+"1919<>1879" [ label = "ID: 1919<>1879\n sID: \n obj: 2\n flb: 19,18\n fhb: 200,40\n slb: 13,77\n shb: 130,51"]
+"197<>NaN" [ label = "ID: 197<>NaN\n sID: \n obj: 3\n flb: 12,46\n fhb: 38,97\n slb: MAX_VAL\n shb: -1,00"]
+"435<>1879" [ label = "ID: 435<>1879\n sID: \n obj: 1\n flb: 43,51\n fhb: 136,68\n slb: 13,77\n shb: 82,57"]
+"1322<>NaN" [ label = "ID: 1322<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"49<>399" [ label = "ID: 49<>399\n sID: \n obj: 2\n flb: 12,71\n fhb: 85,29\n slb: 8,15\n shb: 57,09"]
+"1384<>NaN" [ label = "ID: 1384<>NaN\n sID: \n obj: 2\n flb: 27,43\n fhb: 27,43\n slb: MAX_VAL\n shb: -1,00"]
+"560<>NaN" [ label = "ID: 560<>NaN\n sID: \n obj: 8\n flb: 14,01\n fhb: 41,68\n slb: MAX_VAL\n shb: -1,00"]
+"1152<>608" [ label = "ID: 1152<>608\n sID: \n obj: 2\n flb: 23,49\n fhb: 122,31\n slb: 10,12\n shb: 70,75"]
+"28<>NaN" [ label = "ID: 28<>NaN\n sID: \n obj: 4\n flb: 13,30\n fhb: 44,45\n slb: MAX_VAL\n shb: -1,00"]
+"1817<>608" [ label = "ID: 1817<>608\n sID: \n obj: 1\n flb: 15,61\n fhb: 85,26\n slb: 10,12\n shb: 63,03"]
+"1436<>NaN" [ label = "ID: 1436<>NaN\n sID: \n obj: 2\n flb: 27,74\n fhb: 27,74\n slb: MAX_VAL\n shb: -1,00"]
+"555<>NaN" [ label = "ID: 555<>NaN\n sID: \n obj: 7\n flb: 21,25\n fhb: 60,58\n slb: MAX_VAL\n shb: -1,00"]
+"1606<>626" [ label = "ID: 1606<>626\n sID: \n obj: 2\n flb: 15,49\n fhb: 206,52\n slb: 7,58\n shb: 130,86"]
+"662<>NaN" [ label = "ID: 662<>NaN\n sID: \n obj: 3\n flb: 16,15\n fhb: 29,45\n slb: MAX_VAL\n shb: -1,00"]
+"984<>626" [ label = "ID: 984<>626\n sID: \n obj: 1\n flb: 25,23\n fhb: 164,34\n slb: 7,58\n shb: 130,86"]
+"319<>1731" [ label = "ID: 319<>1731\n sID: \n obj: 2\n flb: 13,47\n fhb: 139,64\n slb: 9,85\n shb: 90,68"]
+"241<>NaN" [ label = "ID: 241<>NaN\n sID: \n obj: 6\n flb: 13,66\n fhb: 38,23\n slb: MAX_VAL\n shb: -1,00"]
+"124<>NaN" [ label = "ID: 124<>NaN\n sID: \n obj: 7\n flb: 25,72\n fhb: 84,18\n slb: MAX_VAL\n shb: -1,00"]
+"1815<>1068" [ label = "ID: 1815<>1068\n sID: \n obj: 1\n flb: 7,52\n fhb: 436,67\n slb: 21,33\n shb: 474,18"]
+"147<>1733" [ label = "ID: 147<>1733\n sID: \n obj: 2\n flb: 6,44\n fhb: 308,40\n slb: 9,17\n shb: 234,51"]
+"147<>575" [ label = "ID: 147<>575\n sID: \n obj: 1\n flb: 6,44\n fhb: 231,08\n slb: 9,00\n shb: 231,87"]
+"150<>513" [ label = "ID: 150<>513\n sID: \n obj: 2\n flb: 14,68\n fhb: 124,04\n slb: 12,36\n shb: 101,78"]
+"150<>269" [ label = "ID: 150<>269\n sID: \n obj: 1\n flb: 14,68\n fhb: 93,51\n slb: 11,40\n shb: 95,29"]
+"63<>14" [ label = "ID: 63<>14\n sID: \n obj: 2\n flb: 11,72\n fhb: 49,24\n slb: 11,57\n shb: 36,83"]
+"347<>NaN" [ label = "ID: 347<>NaN\n sID: \n obj: 2\n flb: 7,31\n fhb: 7,31\n slb: MAX_VAL\n shb: -1,00"]
+"154<>NaN" [ label = "ID: 154<>NaN\n sID: \n obj: 7\n flb: 7,19\n fhb: 33,53\n slb: MAX_VAL\n shb: -1,00"]
+"113<>NaN" [ label = "ID: 113<>NaN\n sID: \n obj: 4\n flb: 23,81\n fhb: 39,72\n slb: MAX_VAL\n shb: -1,00"]
+"1875<>513" [ label = "ID: 1875<>513\n sID: \n obj: 1\n flb: 13,04\n fhb: 106,75\n slb: 12,36\n shb: 97,92"]
+"46<>929" [ label = "ID: 46<>929\n sID: \n obj: 2\n flb: 10,76\n fhb: 54,31\n slb: 6,52\n shb: 54,33"]
+"619<>NaN" [ label = "ID: 619<>NaN\n sID: \n obj: 4\n flb: 11,33\n fhb: 33,46\n slb: MAX_VAL\n shb: -1,00"]
+"351<>NaN" [ label = "ID: 351<>NaN\n sID: \n obj: 5\n flb: 14,20\n fhb: 38,60\n slb: MAX_VAL\n shb: -1,00"]
+"200<>549" [ label = "ID: 200<>549\n sID: \n obj: 2\n flb: 13,77\n fhb: 59,13\n slb: 18,82\n shb: 64,23"]
+"66<>NaN" [ label = "ID: 66<>NaN\n sID: \n obj: 8\n flb: 7,85\n fhb: 39,70\n slb: MAX_VAL\n shb: -1,00"]
+"68<>NaN" [ label = "ID: 68<>NaN\n sID: \n obj: 5\n flb: 6,96\n fhb: 29,18\n slb: MAX_VAL\n shb: -1,00"]
+"1722<>1149" [ label = "ID: 1722<>1149\n sID: \n obj: 2\n flb: 12,84\n fhb: 103,88\n slb: 7,42\n shb: 85,76"]
+"1718<>NaN" [ label = "ID: 1718<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"943<>1149" [ label = "ID: 943<>1149\n sID: \n obj: 1\n flb: 11,45\n fhb: 62,89\n slb: 7,42\n shb: 42,34"]
+"755<>NaN" [ label = "ID: 755<>NaN\n sID: \n obj: 2\n flb: 14,63\n fhb: 14,63\n slb: MAX_VAL\n shb: -1,00"]
+"155<>NaN" [ label = "ID: 155<>NaN\n sID: \n obj: 7\n flb: 13,53\n fhb: 42,18\n slb: MAX_VAL\n shb: -1,00"]
+"690<>1733" [ label = "ID: 690<>1733\n sID: \n obj: 1\n flb: 7,86\n fhb: 251,84\n slb: 9,17\n shb: 234,46"]
+"775<>431" [ label = "ID: 775<>431\n sID: \n obj: 2\n flb: 15,94\n fhb: 123,10\n slb: 17,46\n shb: 113,56"]
+"60<>NaN" [ label = "ID: 60<>NaN\n sID: \n obj: 7\n flb: 27,95\n fhb: 38,37\n slb: MAX_VAL\n shb: -1,00"]
+"570<>431" [ label = "ID: 570<>431\n sID: \n obj: 1\n flb: 26,96\n fhb: 116,73\n slb: 17,46\n shb: 113,56"]
+"116<>NaN" [ label = "ID: 116<>NaN\n sID: \n obj: 3\n flb: 18,78\n fhb: 20,54\n slb: MAX_VAL\n shb: -1,00"]
+"311<>NaN" [ label = "ID: 311<>NaN\n sID: \n obj: 6\n flb: 31,31\n fhb: 63,02\n slb: MAX_VAL\n shb: -1,00"]
+"1393<>404" [ label = "ID: 1393<>404\n sID: \n obj: 2\n flb: 6,18\n fhb: 218,24\n slb: 8,65\n shb: 156,87"]
+"1393<>76" [ label = "ID: 1393<>76\n sID: \n obj: 1\n flb: 6,18\n fhb: 109,40\n slb: 14,14\n shb: 127,21"]
+"313<>1140" [ label = "ID: 313<>1140\n sID: \n obj: 2\n flb: 22,08\n fhb: 105,67\n slb: 11,91\n shb: 62,12"]
+"695<>NaN" [ label = "ID: 695<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"647<>1140" [ label = "ID: 647<>1140\n sID: \n obj: 1\n flb: 18,33\n fhb: 81,78\n slb: 11,91\n shb: 62,12"]
+"118<>NaN" [ label = "ID: 118<>NaN\n sID: \n obj: 4\n flb: 14,34\n fhb: 24,52\n slb: MAX_VAL\n shb: -1,00"]
+"32<>NaN" [ label = "ID: 32<>NaN\n sID: \n obj: 8\n flb: 8,58\n fhb: 39,73\n slb: MAX_VAL\n shb: -1,00"]
+"1438<>1784" [ label = "ID: 1438<>1784\n sID: \n obj: 2\n flb: 10,14\n fhb: 49,55\n slb: 12,71\n shb: 40,52"]
+"615<>NaN" [ label = "ID: 615<>NaN\n sID: \n obj: 2\n flb: 11,14\n fhb: 11,14\n slb: MAX_VAL\n shb: -1,00"]
+"471<>NaN" [ label = "ID: 471<>NaN\n sID: \n obj: 5\n flb: 15,52\n fhb: 32,76\n slb: MAX_VAL\n shb: -1,00"]
+"334<>404" [ label = "ID: 334<>404\n sID: \n obj: 1\n flb: 12,00\n fhb: 144,05\n slb: 8,65\n shb: 103,95"]
+"696<>1416" [ label = "ID: 696<>1416\n sID: \n obj: 2\n flb: 19,51\n fhb: 95,72\n slb: 15,83\n shb: 73,80"]
+"261<>NaN" [ label = "ID: 261<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"1561<>1416" [ label = "ID: 1561<>1416\n sID: \n obj: 1\n flb: 4,44\n fhb: 54,95\n slb: 15,83\n shb: 38,92"]
+"1440<>NaN" [ label = "ID: 1440<>NaN\n sID: \n obj: 3\n flb: 3,76\n fhb: 8,10\n slb: MAX_VAL\n shb: -1,00"]
+"432<>NaN" [ label = "ID: 432<>NaN\n sID: \n obj: 6\n flb: 20,07\n fhb: 57,78\n slb: MAX_VAL\n shb: -1,00"]
+"111<>444" [ label = "ID: 111<>444\n sID: \n obj: 2\n flb: 8,73\n fhb: 131,96\n slb: 13,13\n shb: 101,19"]
+"1<>NaN" [ label = "ID: 1<>NaN\n sID: \n obj: 8\n flb: 17,56\n fhb: 63,54\n slb: MAX_VAL\n shb: -1,00"]
+"1661<>444" [ label = "ID: 1661<>444\n sID: \n obj: 1\n flb: 18,93\n fhb: 100,70\n slb: 13,13\n shb: 101,19"]
+"680<>NaN" [ label = "ID: 680<>NaN\n sID: \n obj: 4\n flb: 19,65\n fhb: 37,11\n slb: MAX_VAL\n shb: -1,00"]
+"521<>506" [ label = "ID: 521<>506\n sID: \n obj: 2\n flb: 7,61\n fhb: 60,53\n slb: 12,01\n shb: 54,77"]
+"178<>NaN" [ label = "ID: 178<>NaN\n sID: \n obj: 4\n flb: 17,11\n fhb: 30,10\n slb: MAX_VAL\n shb: -1,00"]
+"234<>NaN" [ label = "ID: 234<>NaN\n sID: \n obj: 3\n flb: 16,95\n fhb: 44,21\n slb: MAX_VAL\n shb: -1,00"]
+"1847<>1840" [ label = "ID: 1847<>1840\n sID: \n obj: 2\n flb: 18,26\n fhb: 305,47\n slb: 13,47\n shb: 235,39"]
+"1847<>846" [ label = "ID: 1847<>846\n sID: \n obj: 1\n flb: 18,26\n fhb: 188,03\n slb: 19,64\n shb: 190,36"]
+"184<>1133" [ label = "ID: 184<>1133\n sID: \n obj: 2\n flb: 30,48\n fhb: 137,90\n slb: 10,17\n shb: 94,69"]
+"242<>NaN" [ label = "ID: 242<>NaN\n sID: \n obj: 3\n flb: 27,90\n fhb: 37,82\n slb: MAX_VAL\n shb: -1,00"]
+"1180<>1133" [ label = "ID: 1180<>1133\n sID: \n obj: 1\n flb: 14,92\n fhb: 109,83\n slb: 10,17\n shb: 94,69"]
+"85<>NaN" [ label = "ID: 85<>NaN\n sID: \n obj: 4\n flb: 23,39\n fhb: 74,04\n slb: MAX_VAL\n shb: -1,00"]
+"391<>249" [ label = "ID: 391<>249\n sID: \n obj: 2\n flb: 16,62\n fhb: 86,60\n slb: 26,16\n shb: 81,65"]
+"247<>NaN" [ label = "ID: 247<>NaN\n sID: \n obj: 5\n flb: 14,47\n fhb: 33,63\n slb: MAX_VAL\n shb: -1,00"]
+"472<>NaN" [ label = "ID: 472<>NaN\n sID: \n obj: 6\n flb: 17,99\n fhb: 48,14\n slb: MAX_VAL\n shb: -1,00"]
+"1174<>127" [ label = "ID: 1174<>127\n sID: \n obj: 2\n flb: 14,91\n fhb: 99,99\n slb: 14,27\n shb: 80,32"]
+"21<>NaN" [ label = "ID: 21<>NaN\n sID: \n obj: 3\n flb: 13,80\n fhb: 19,57\n slb: MAX_VAL\n shb: -1,00"]
+"1264<>127" [ label = "ID: 1264<>127\n sID: \n obj: 1\n flb: 24,81\n fhb: 87,76\n slb: 14,27\n shb: 80,32"]
+"106<>NaN" [ label = "ID: 106<>NaN\n sID: \n obj: 3\n flb: 11,58\n fhb: 13,60\n slb: MAX_VAL\n shb: -1,00"]
+"361<>NaN" [ label = "ID: 361<>NaN\n sID: \n obj: 7\n flb: 16,58\n fhb: 59,92\n slb: MAX_VAL\n shb: -1,00"]
+"1916<>1840" [ label = "ID: 1916<>1840\n sID: \n obj: 1\n flb: 22,05\n fhb: 231,01\n slb: 13,47\n shb: 211,76"]
+"1742<>1077" [ label = "ID: 1742<>1077\n sID: \n obj: 2\n flb: 12,53\n fhb: 189,46\n slb: 17,95\n shb: 124,31"]
+"239<>NaN" [ label = "ID: 239<>NaN\n sID: \n obj: 6\n flb: 12,80\n fhb: 42,22\n slb: MAX_VAL\n shb: -1,00"]
+"557<>1077" [ label = "ID: 557<>1077\n sID: \n obj: 1\n flb: 20,16\n fhb: 129,05\n slb: 17,95\n shb: 66,78"]
+"1225<>NaN" [ label = "ID: 1225<>NaN\n sID: \n obj: 3\n flb: 12,96\n fhb: 21,32\n slb: MAX_VAL\n shb: -1,00"]
+"670<>156" [ label = "ID: 670<>156\n sID: \n obj: 2\n flb: 19,45\n fhb: 98,34\n slb: 21,85\n shb: 62,86"]
+"280<>NaN" [ label = "ID: 280<>NaN\n sID: \n obj: 4\n flb: 14,04\n fhb: 27,78\n slb: MAX_VAL\n shb: -1,00"]
+"98<>NaN" [ label = "ID: 98<>NaN\n sID: \n obj: 5\n flb: 14,38\n fhb: 55,61\n slb: MAX_VAL\n shb: -1,00"]
+"1794<>1157" [ label = "ID: 1794<>1157\n sID: \n obj: 2\n flb: 25,79\n fhb: 208,45\n slb: 12,67\n shb: 158,40"]
+"1794<>961" [ label = "ID: 1794<>961\n sID: \n obj: 1\n flb: 25,79\n fhb: 86,33\n slb: 27,55\n shb: 85,45"]
+"843<>NaN" [ label = "ID: 843<>NaN\n sID: \n obj: 6\n flb: 10,06\n fhb: 59,67\n slb: MAX_VAL\n shb: -1,00"]
+"296<>NaN" [ label = "ID: 296<>NaN\n sID: \n obj: 3\n flb: 49,96\n fhb: 61,68\n slb: MAX_VAL\n shb: -1,00"]
+"550<>1157" [ label = "ID: 550<>1157\n sID: \n obj: 1\n flb: 24,55\n fhb: 144,54\n slb: 12,67\n shb: 90,56"]
+"318<>NaN" [ label = "ID: 318<>NaN\n sID: \n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+"832<>357" [ label = "ID: 832<>357\n sID: \n obj: 2\n flb: 18,96\n fhb: 124,12\n slb: 14,49\n shb: 112,38"]
+"832<>1038" [ label = "ID: 832<>1038\n sID: \n obj: 1\n flb: 18,96\n fhb: 81,33\n slb: 14,19\n shb: 75,85"]
+"974<>NaN" [ label = "ID: 974<>NaN\n sID: \n obj: 2\n flb: 5,83\n fhb: 5,83\n slb: MAX_VAL\n shb: -1,00"]
+"578<>NaN" [ label = "ID: 578<>NaN\n sID: \n obj: 8\n flb: 13,72\n fhb: 55,93\n slb: MAX_VAL\n shb: -1,00"]
+"1423<>357" [ label = "ID: 1423<>357\n sID: \n obj: 1\n flb: 34,55\n fhb: 127,89\n slb: 14,49\n shb: 112,38"]
+"1441<>1415" [ label = "ID: 1441<>1415\n sID: \n obj: 2\n flb: 18,50\n fhb: 99,09\n slb: 12,70\n shb: 68,98"]
+"545<>NaN" [ label = "ID: 545<>NaN\n sID: \n obj: 3\n flb: 15,96\n fhb: 24,37\n slb: MAX_VAL\n shb: -1,00"]
+"4<>NaN" [ label = "ID: 4<>NaN\n sID: \n obj: 8\n flb: 23,40\n fhb: 57,47\n slb: MAX_VAL\n shb: -1,00"]
+"1159<>1854" -> "1159<>995"
+"1159<>995" -> "1569<>1156"
+"1569<>1156" -> "1569<>595"
+"1569<>595" -> "1432<>1410"
+"1432<>1410" -> "350<>NaN"
+"1432<>1410" -> "860<>1410"
+"860<>1410" -> "470<>1181"
+"470<>1181" -> "1868<>NaN"
+"470<>1181" -> "1109<>NaN"
+"860<>1410" -> "1094<>1310"
+"1094<>1310" -> "1094<>1828"
+"1094<>1828" -> "1135<>275"
+"1135<>275" -> "277<>NaN"
+"1135<>275" -> "395<>NaN"
+"1094<>1828" -> "248<>NaN"
+"1094<>1310" -> "753<>1310"
+"753<>1310" -> "488<>1529"
+"488<>1529" -> "782<>NaN"
+"488<>1529" -> "1213<>1529"
+"1213<>1529" -> "213<>NaN"
+"1213<>1529" -> "463<>NaN"
+"753<>1310" -> "759<>474"
+"759<>474" -> "5<>NaN"
+"759<>474" -> "527<>474"
+"527<>474" -> "433<>NaN"
+"527<>474" -> "80<>NaN"
+"1569<>595" -> "1199<>904"
+"1199<>904" -> "25<>NaN"
+"1199<>904" -> "279<>904"
+"279<>904" -> "273<>NaN"
+"279<>904" -> "734<>922"
+"734<>922" -> "495<>NaN"
+"734<>922" -> "1888<>922"
+"1888<>922" -> "72<>NaN"
+"1888<>922" -> "1710<>479"
+"1710<>479" -> "196<>NaN"
+"1710<>479" -> "821<>479"
+"821<>479" -> "202<>NaN"
+"821<>479" -> "130<>NaN"
+"1569<>1156" -> "1507<>1156"
+"1507<>1156" -> "1656<>19"
+"1656<>19" -> "558<>NaN"
+"1656<>19" -> "989<>19"
+"989<>19" -> "3<>NaN"
+"989<>19" -> "1289<>1412"
+"1289<>1412" -> "47<>NaN"
+"1289<>1412" -> "569<>NaN"
+"1507<>1156" -> "1017<>1185"
+"1017<>1185" -> "1017<>894"
+"1017<>894" -> "1053<>1061"
+"1053<>1061" -> "1053<>223"
+"1053<>223" -> "101<>NaN"
+"1053<>223" -> "75<>NaN"
+"1053<>1061" -> "727<>1061"
+"727<>1061" -> "228<>1173"
+"228<>1173" -> "436<>NaN"
+"228<>1173" -> "214<>1173"
+"214<>1173" -> "665<>NaN"
+"214<>1173" -> "220<>1783"
+"220<>1783" -> "543<>NaN"
+"220<>1783" -> "186<>NaN"
+"727<>1061" -> "1395<>1223"
+"1395<>1223" -> "398<>NaN"
+"1395<>1223" -> "583<>NaN"
+"1017<>894" -> "895<>1928"
+"895<>1928" -> "895<>1689"
+"895<>1689" -> "289<>NaN"
+"895<>1689" -> "285<>NaN"
+"895<>1928" -> "67<>NaN"
+"1017<>1185" -> "1390<>1185"
+"1390<>1185" -> "928<>956"
+"928<>956" -> "928<>477"
+"928<>477" -> "503<>NaN"
+"928<>477" -> "424<>NaN"
+"928<>956" -> "732<>956"
+"732<>956" -> "363<>NaN"
+"732<>956" -> "1670<>1915"
+"1670<>1915" -> "375<>NaN"
+"1670<>1915" -> "180<>NaN"
+"1390<>1185" -> "1023<>114"
+"1023<>114" -> "1023<>1118"
+"1023<>1118" -> "644<>NaN"
+"1023<>1118" -> "490<>NaN"
+"1023<>114" -> "827<>114"
+"827<>114" -> "126<>NaN"
+"827<>114" -> "105<>1560"
+"105<>1560" -> "587<>NaN"
+"105<>1560" -> "1030<>1560"
+"1030<>1560" -> "26<>NaN"
+"1159<>995" -> "255<>1901"
+"255<>1901" -> "255<>262"
+"255<>262" -> "565<>1015"
+"565<>1015" -> "565<>224"
+"565<>224" -> "110<>NaN"
+"565<>224" -> "112<>NaN"
+"565<>1015" -> "1669<>1015"
+"1669<>1015" -> "1328<>1021"
+"1328<>1021" -> "1235<>1021"
+"1235<>1021" -> "1723<>NaN"
+"1235<>1021" -> "58<>NaN"
+"1669<>1015" -> "1556<>1379"
+"1556<>1379" -> "478<>NaN"
+"1556<>1379" -> "193<>1379"
+"193<>1379" -> "1459<>NaN"
+"193<>1379" -> "1073<>1811"
+"1073<>1811" -> "292<>NaN"
+"1073<>1811" -> "486<>1811"
+"486<>1811" -> "577<>NaN"
+"486<>1811" -> "1636<>1112"
+"1636<>1112" -> "800<>NaN"
+"1636<>1112" -> "364<>NaN"
+"255<>262" -> "293<>NaN"
+"255<>1901" -> "686<>1901"
+"686<>1901" -> "1514<>382"
+"1514<>382" -> "454<>NaN"
+"1514<>382" -> "1469<>382"
+"1469<>382" -> "62<>NaN"
+"1469<>382" -> "526<>861"
+"526<>861" -> "368<>NaN"
+"526<>861" -> "426<>861"
+"426<>861" -> "1836<>NaN"
+"426<>861" -> "1117<>1635"
+"1117<>1635" -> "845<>NaN"
+"1117<>1635" -> "79<>NaN"
+"686<>1901" -> "1688<>825"
+"1688<>825" -> "1688<>1065"
+"1688<>1065" -> "1302<>297"
+"1302<>297" -> "1302<>230"
+"1302<>230" -> "877<>1341"
+"877<>1341" -> "519<>NaN"
+"877<>1341" -> "125<>NaN"
+"1302<>230" -> "266<>NaN"
+"1302<>297" -> "1367<>297"
+"1367<>297" -> "733<>NaN"
+"1367<>297" -> "1809<>1354"
+"1809<>1354" -> "745<>NaN"
+"1809<>1354" -> "511<>NaN"
+"1688<>1065" -> "222<>533"
+"222<>533" -> "709<>NaN"
+"222<>533" -> "1290<>533"
+"1290<>533" -> "1600<>NaN"
+"1290<>533" -> "358<>1110"
+"358<>1110" -> "918<>NaN"
+"358<>1110" -> "119<>NaN"
+"1688<>825" -> "1574<>825"
+"1574<>825" -> "1699<>1009"
+"1699<>1009" -> "162<>NaN"
+"1699<>1009" -> "365<>NaN"
+"1574<>825" -> "1791<>413"
+"1791<>413" -> "1791<>1743"
+"1791<>1743" -> "1072<>182"
+"1072<>182" -> "446<>NaN"
+"1072<>182" -> "328<>NaN"
+"1791<>1743" -> "135<>NaN"
+"1791<>413" -> "1001<>413"
+"1001<>413" -> "1726<>594"
+"1726<>594" -> "71<>NaN"
+"1726<>594" -> "1838<>594"
+"1838<>594" -> "876<>NaN"
+"1838<>594" -> "556<>NaN"
+"1001<>413" -> "722<>1375"
+"722<>1375" -> "722<>1623"
+"722<>1623" -> "39<>NaN"
+"722<>1623" -> "428<>NaN"
+"722<>1375" -> "341<>1375"
+"341<>1375" -> "464<>NaN"
+"341<>1375" -> "1251<>1664"
+"1251<>1664" -> "748<>NaN"
+"1251<>1664" -> "179<>NaN"
+"1159<>1854" -> "1715<>1854"
+"1715<>1854" -> "163<>816"
+"163<>816" -> "163<>1325"
+"163<>1325" -> "625<>394"
+"625<>394" -> "216<>NaN"
+"625<>394" -> "1047<>394"
+"1047<>394" -> "768<>1446"
+"768<>1446" -> "1105<>NaN"
+"768<>1446" -> "187<>NaN"
+"1047<>394" -> "59<>378"
+"59<>378" -> "617<>NaN"
+"59<>378" -> "1003<>378"
+"1003<>378" -> "1409<>267"
+"1409<>267" -> "938<>NaN"
+"1409<>267" -> "504<>NaN"
+"163<>816" -> "552<>816"
+"552<>816" -> "573<>122"
+"573<>122" -> "573<>1525"
+"573<>1525" -> "1005<>1298"
+"1005<>1298" -> "1382<>NaN"
+"1005<>1298" -> "212<>NaN"
+"573<>1525" -> "576<>NaN"
+"573<>122" -> "1008<>122"
+"1008<>122" -> "152<>NaN"
+"1008<>122" -> "1233<>1746"
+"1233<>1746" -> "252<>NaN"
+"1233<>1746" -> "366<>1746"
+"366<>1746" -> "1650<>NaN"
+"366<>1746" -> "198<>NaN"
+"552<>816" -> "210<>1369"
+"210<>1369" -> "210<>510"
+"210<>510" -> "693<>1624"
+"693<>1624" -> "536<>NaN"
+"693<>1624" -> "955<>1624"
+"955<>1624" -> "195<>NaN"
+"955<>1624" -> "108<>NaN"
+"210<>510" -> "93<>NaN"
+"210<>1369" -> "1088<>1369"
+"1088<>1369" -> "1800<>1612"
+"1800<>1612" -> "183<>NaN"
+"1800<>1612" -> "687<>1612"
+"687<>1612" -> "1844<>1202"
+"1844<>1202" -> "596<>NaN"
+"1844<>1202" -> "22<>NaN"
+"1088<>1369" -> "1376<>302"
+"1376<>302" -> "129<>NaN"
+"1376<>302" -> "1821<>302"
+"1821<>302" -> "27<>NaN"
+"1821<>302" -> "1190<>641"
+"1190<>641" -> "1618<>NaN"
+"1190<>641" -> "1340<>641"
+"1340<>641" -> "131<>NaN"
+"1340<>641" -> "865<>738"
+"865<>738" -> "70<>NaN"
+"865<>738" -> "309<>NaN"
+"1715<>1854" -> "420<>317"
+"420<>317" -> "420<>1483"
+"420<>1483" -> "1454<>142"
+"1454<>142" -> "1454<>554"
+"1454<>554" -> "582<>1209"
+"582<>1209" -> "582<>344"
+"582<>344" -> "1488<>1734"
+"1488<>1734" -> "96<>NaN"
+"1488<>1734" -> "94<>NaN"
+"582<>344" -> "1570<>388"
+"1570<>388" -> "225<>NaN"
+"1570<>388" -> "1201<>388"
+"1201<>388" -> "627<>NaN"
+"1201<>388" -> "81<>NaN"
+"582<>1209" -> "815<>1209"
+"815<>1209" -> "497<>331"
+"497<>331" -> "683<>NaN"
+"497<>331" -> "1893<>331"
+"1893<>331" -> "770<>NaN"
+"1893<>331" -> "779<>702"
+"779<>702" -> "469<>NaN"
+"779<>702" -> "1816<>702"
+"1816<>702" -> "811<>NaN"
+"1816<>702" -> "86<>NaN"
+"815<>1209" -> "838<>1175"
+"838<>1175" -> "838<>291"
+"838<>291" -> "1778<>259"
+"1778<>259" -> "515<>NaN"
+"1778<>259" -> "345<>NaN"
+"838<>291" -> "188<>NaN"
+"838<>1175" -> "468<>1175"
+"468<>1175" -> "407<>NaN"
+"468<>1175" -> "1259<>618"
+"1259<>618" -> "278<>NaN"
+"1259<>618" -> "776<>618"
+"776<>618" -> "1136<>NaN"
+"776<>618" -> "427<>NaN"
+"1454<>554" -> "1713<>236"
+"1713<>236" -> "1713<>604"
+"1713<>604" -> "1562<>1705"
+"1562<>1705" -> "10<>NaN"
+"1562<>1705" -> "144<>NaN"
+"1713<>604" -> "332<>NaN"
+"1713<>236" -> "919<>236"
+"919<>236" -> "440<>NaN"
+"919<>236" -> "760<>1866"
+"760<>1866" -> "512<>NaN"
+"760<>1866" -> "1101<>1866"
+"1101<>1866" -> "276<>NaN"
+"1101<>1866" -> "91<>NaN"
+"1454<>142" -> "806<>142"
+"806<>142" -> "705<>962"
+"705<>962" -> "206<>NaN"
+"705<>962" -> "1825<>962"
+"1825<>962" -> "724<>NaN"
+"1825<>962" -> "327<>824"
+"327<>824" -> "327<>967"
+"327<>967" -> "238<>NaN"
+"327<>967" -> "250<>NaN"
+"327<>824" -> "97<>824"
+"97<>824" -> "307<>NaN"
+"97<>824" -> "218<>NaN"
+"806<>142" -> "1239<>1288"
+"1239<>1288" -> "1239<>52"
+"1239<>52" -> "651<>548"
+"651<>548" -> "44<>NaN"
+"651<>548" -> "258<>548"
+"258<>548" -> "817<>NaN"
+"258<>548" -> "1810<>356"
+"1810<>356" -> "731<>NaN"
+"1810<>356" -> "799<>356"
+"799<>356" -> "728<>NaN"
+"799<>356" -> "316<>NaN"
+"1239<>52" -> "1276<>1248"
+"1276<>1248" -> "866<>NaN"
+"1276<>1248" -> "1232<>1248"
+"1232<>1248" -> "789<>NaN"
+"1232<>1248" -> "1141<>NaN"
+"1239<>1288" -> "1869<>1288"
+"1869<>1288" -> "1188<>NaN"
+"1869<>1288" -> "609<>1138"
+"609<>1138" -> "609<>1307"
+"609<>1307" -> "1610<>87"
+"1610<>87" -> "226<>NaN"
+"1610<>87" -> "272<>NaN"
+"609<>1307" -> "616<>NaN"
+"609<>1138" -> "1803<>1138"
+"1803<>1138" -> "589<>227"
+"589<>227" -> "12<>NaN"
+"589<>227" -> "330<>227"
+"330<>227" -> "1422<>NaN"
+"330<>227" -> "1482<>95"
+"1482<>95" -> "42<>NaN"
+"1482<>95" -> "638<>NaN"
+"1803<>1138" -> "853<>1255"
+"853<>1255" -> "208<>NaN"
+"853<>1255" -> "1107<>1255"
+"1107<>1255" -> "742<>NaN"
+"1107<>1255" -> "1582<>270"
+"1582<>270" -> "128<>NaN"
+"1582<>270" -> "1679<>270"
+"1679<>270" -> "1224<>NaN"
+"1679<>270" -> "120<>NaN"
+"420<>1483" -> "1580<>324"
+"1580<>324" -> "1580<>1215"
+"1580<>1215" -> "301<>890"
+"301<>890" -> "288<>NaN"
+"301<>890" -> "933<>890"
+"933<>890" -> "37<>NaN"
+"933<>890" -> "1575<>1581"
+"1575<>1581" -> "1775<>NaN"
+"1575<>1581" -> "74<>NaN"
+"1580<>1215" -> "30<>NaN"
+"1580<>324" -> "204<>324"
+"204<>324" -> "966<>1738"
+"966<>1738" -> "445<>NaN"
+"966<>1738" -> "1476<>1738"
+"1476<>1738" -> "1512<>189"
+"1512<>189" -> "669<>NaN"
+"1512<>189" -> "158<>NaN"
+"1476<>1738" -> "1074<>531"
+"1074<>531" -> "538<>NaN"
+"1074<>531" -> "1534<>531"
+"1534<>531" -> "340<>NaN"
+"1534<>531" -> "61<>NaN"
+"204<>324" -> "137<>878"
+"137<>878" -> "137<>1097"
+"137<>1097" -> "1576<>985"
+"1576<>985" -> "716<>NaN"
+"1576<>985" -> "1910<>985"
+"1910<>985" -> "73<>NaN"
+"1910<>985" -> "143<>NaN"
+"137<>1097" -> "1498<>92"
+"1498<>92" -> "1418<>NaN"
+"1498<>92" -> "35<>NaN"
+"137<>878" -> "1475<>878"
+"1475<>878" -> "610<>737"
+"610<>737" -> "1283<>NaN"
+"610<>737" -> "20<>NaN"
+"1475<>878" -> "481<>1137"
+"481<>1137" -> "481<>819"
+"481<>819" -> "100<>50"
+"100<>50" -> "69<>NaN"
+"100<>50" -> "286<>NaN"
+"481<>819" -> "168<>893"
+"168<>893" -> "229<>NaN"
+"168<>893" -> "15<>NaN"
+"481<>1137" -> "1240<>1137"
+"1240<>1137" -> "1567<>898"
+"1567<>898" -> "564<>NaN"
+"1567<>898" -> "563<>898"
+"563<>898" -> "284<>NaN"
+"563<>898" -> "323<>NaN"
+"1240<>1137" -> "1889<>643"
+"1889<>643" -> "13<>NaN"
+"1889<>643" -> "653<>643"
+"653<>643" -> "43<>NaN"
+"653<>643" -> "221<>NaN"
+"420<>317" -> "24<>317"
+"24<>317" -> "1768<>400"
+"1768<>400" -> "140<>NaN"
+"1768<>400" -> "972<>400"
+"972<>400" -> "109<>NaN"
+"972<>400" -> "697<>1833"
+"697<>1833" -> "320<>NaN"
+"697<>1833" -> "541<>1833"
+"541<>1833" -> "1790<>NaN"
+"541<>1833" -> "294<>NaN"
+"24<>317" -> "1709<>1675"
+"1709<>1675" -> "1709<>1520"
+"1709<>1520" -> "990<>636"
+"990<>636" -> "990<>1300"
+"990<>1300" -> "790<>1706"
+"790<>1706" -> "790<>1016"
+"790<>1016" -> "149<>NaN"
+"790<>1016" -> "415<>NaN"
+"790<>1706" -> "1750<>1706"
+"1750<>1706" -> "654<>NaN"
+"1750<>1706" -> "1183<>769"
+"1183<>769" -> "16<>NaN"
+"1183<>769" -> "264<>NaN"
+"990<>1300" -> "1352<>649"
+"1352<>649" -> "667<>NaN"
+"1352<>649" -> "393<>649"
+"393<>649" -> "352<>NaN"
+"393<>649" -> "201<>NaN"
+"990<>636" -> "1486<>636"
+"1486<>636" -> "605<>585"
+"605<>585" -> "605<>1904"
+"605<>1904" -> "452<>NaN"
+"605<>1904" -> "185<>NaN"
+"605<>585" -> "1515<>585"
+"1515<>585" -> "1605<>1471"
+"1605<>1471" -> "167<>NaN"
+"1605<>1471" -> "34<>NaN"
+"1515<>585" -> "772<>1841"
+"772<>1841" -> "104<>NaN"
+"772<>1841" -> "312<>NaN"
+"1486<>636" -> "355<>1849"
+"355<>1849" -> "355<>801"
+"355<>801" -> "38<>NaN"
+"355<>801" -> "568<>NaN"
+"355<>1849" -> "1776<>1849"
+"1776<>1849" -> "1281<>NaN"
+"1776<>1849" -> "306<>1621"
+"306<>1621" -> "306<>628"
+"306<>628" -> "456<>NaN"
+"306<>628" -> "310<>NaN"
+"306<>1621" -> "673<>1621"
+"673<>1621" -> "1121<>315"
+"1121<>315" -> "1121<>1301"
+"1121<>1301" -> "553<>NaN"
+"1121<>1301" -> "133<>NaN"
+"1121<>315" -> "1080<>315"
+"1080<>315" -> "29<>NaN"
+"1080<>315" -> "1155<>174"
+"1155<>174" -> "419<>NaN"
+"1155<>174" -> "157<>174"
+"157<>174" -> "1250<>NaN"
+"157<>174" -> "123<>NaN"
+"1709<>1520" -> "1456<>1510"
+"1456<>1510" -> "1456<>1374"
+"1456<>1374" -> "566<>NaN"
+"1456<>1374" -> "1725<>9"
+"1725<>9" -> "1725<>1687"
+"1725<>1687" -> "339<>NaN"
+"1725<>1687" -> "83<>NaN"
+"1725<>9" -> "346<>NaN"
+"1456<>1510" -> "1245<>1510"
+"1245<>1510" -> "232<>916"
+"232<>916" -> "807<>NaN"
+"232<>916" -> "33<>NaN"
+"1245<>1510" -> "1357<>408"
+"1357<>408" -> "1357<>1739"
+"1357<>1739" -> "691<>1356"
+"691<>1356" -> "64<>NaN"
+"691<>1356" -> "349<>NaN"
+"1357<>408" -> "493<>408"
+"493<>408" -> "530<>NaN"
+"493<>408" -> "921<>1113"
+"921<>1113" -> "442<>NaN"
+"921<>1113" -> "1148<>1113"
+"1148<>1113" -> "166<>NaN"
+"1148<>1113" -> "657<>NaN"
+"1709<>1675" -> "826<>1675"
+"826<>1675" -> "7<>369"
+"7<>369" -> "7<>1126"
+"7<>1126" -> "17<>NaN"
+"7<>1126" -> "546<>253"
+"546<>253" -> "251<>NaN"
+"546<>253" -> "514<>NaN"
+"7<>369" -> "502<>369"
+"502<>369" -> "645<>1037"
+"645<>1037" -> "659<>NaN"
+"645<>1037" -> "1127<>1037"
+"1127<>1037" -> "117<>NaN"
+"1127<>1037" -> "535<>NaN"
+"502<>369" -> "940<>121"
+"940<>121" -> "940<>1025"
+"940<>1025" -> "56<>681"
+"56<>681" -> "56<>1055"
+"56<>1055" -> "41<>NaN"
+"56<>1055" -> "246<>NaN"
+"56<>681" -> "53<>681"
+"53<>681" -> "260<>1090"
+"260<>1090" -> "500<>NaN"
+"260<>1090" -> "40<>NaN"
+"53<>681" -> "1207<>343"
+"1207<>343" -> "82<>NaN"
+"1207<>343" -> "491<>NaN"
+"940<>1025" -> "1451<>1807"
+"1451<>1807" -> "2<>NaN"
+"1451<>1807" -> "18<>NaN"
+"940<>121" -> "987<>121"
+"987<>121" -> "99<>57"
+"99<>57" -> "203<>NaN"
+"99<>57" -> "254<>57"
+"254<>57" -> "455<>NaN"
+"254<>57" -> "23<>NaN"
+"987<>121" -> "55<>1572"
+"55<>1572" -> "303<>NaN"
+"55<>1572" -> "630<>1572"
+"630<>1572" -> "51<>NaN"
+"630<>1572" -> "409<>NaN"
+"826<>1675" -> "171<>1068"
+"171<>1068" -> "171<>1923"
+"171<>1923" -> "520<>447"
+"520<>447" -> "520<>177"
+"520<>177" -> "988<>971"
+"988<>971" -> "6<>NaN"
+"988<>971" -> "1444<>971"
+"1444<>971" -> "1744<>NaN"
+"1444<>971" -> "1818<>1831"
+"1818<>1831" -> "36<>NaN"
+"1818<>1831" -> "383<>NaN"
+"520<>177" -> "31<>NaN"
+"520<>447" -> "329<>447"
+"329<>447" -> "1919<>1879"
+"1919<>1879" -> "197<>NaN"
+"1919<>1879" -> "435<>1879"
+"435<>1879" -> "1322<>NaN"
+"435<>1879" -> "49<>399"
+"49<>399" -> "1384<>NaN"
+"49<>399" -> "560<>NaN"
+"329<>447" -> "1152<>608"
+"1152<>608" -> "28<>NaN"
+"1152<>608" -> "1817<>608"
+"1817<>608" -> "1436<>NaN"
+"1817<>608" -> "555<>NaN"
+"171<>1923" -> "1606<>626"
+"1606<>626" -> "662<>NaN"
+"1606<>626" -> "984<>626"
+"984<>626" -> "319<>1731"
+"319<>1731" -> "241<>NaN"
+"319<>1731" -> "124<>NaN"
+"171<>1068" -> "1815<>1068"
+"1815<>1068" -> "147<>1733"
+"147<>1733" -> "147<>575"
+"147<>575" -> "150<>513"
+"150<>513" -> "150<>269"
+"150<>269" -> "63<>14"
+"63<>14" -> "347<>NaN"
+"63<>14" -> "154<>NaN"
+"150<>269" -> "113<>NaN"
+"150<>513" -> "1875<>513"
+"1875<>513" -> "46<>929"
+"46<>929" -> "619<>NaN"
+"46<>929" -> "351<>NaN"
+"1875<>513" -> "200<>549"
+"200<>549" -> "66<>NaN"
+"200<>549" -> "68<>NaN"
+"147<>575" -> "1722<>1149"
+"1722<>1149" -> "1718<>NaN"
+"1722<>1149" -> "943<>1149"
+"943<>1149" -> "755<>NaN"
+"943<>1149" -> "155<>NaN"
+"147<>1733" -> "690<>1733"
+"690<>1733" -> "775<>431"
+"775<>431" -> "60<>NaN"
+"775<>431" -> "570<>431"
+"570<>431" -> "116<>NaN"
+"570<>431" -> "311<>NaN"
+"690<>1733" -> "1393<>404"
+"1393<>404" -> "1393<>76"
+"1393<>76" -> "313<>1140"
+"313<>1140" -> "695<>NaN"
+"313<>1140" -> "647<>1140"
+"647<>1140" -> "118<>NaN"
+"647<>1140" -> "32<>NaN"
+"1393<>76" -> "1438<>1784"
+"1438<>1784" -> "615<>NaN"
+"1438<>1784" -> "471<>NaN"
+"1393<>404" -> "334<>404"
+"334<>404" -> "696<>1416"
+"696<>1416" -> "261<>NaN"
+"696<>1416" -> "1561<>1416"
+"1561<>1416" -> "1440<>NaN"
+"1561<>1416" -> "432<>NaN"
+"334<>404" -> "111<>444"
+"111<>444" -> "1<>NaN"
+"111<>444" -> "1661<>444"
+"1661<>444" -> "680<>NaN"
+"1661<>444" -> "521<>506"
+"521<>506" -> "178<>NaN"
+"521<>506" -> "234<>NaN"
+"1815<>1068" -> "1847<>1840"
+"1847<>1840" -> "1847<>846"
+"1847<>846" -> "184<>1133"
+"184<>1133" -> "242<>NaN"
+"184<>1133" -> "1180<>1133"
+"1180<>1133" -> "85<>NaN"
+"1180<>1133" -> "391<>249"
+"391<>249" -> "247<>NaN"
+"391<>249" -> "472<>NaN"
+"1847<>846" -> "1174<>127"
+"1174<>127" -> "21<>NaN"
+"1174<>127" -> "1264<>127"
+"1264<>127" -> "106<>NaN"
+"1264<>127" -> "361<>NaN"
+"1847<>1840" -> "1916<>1840"
+"1916<>1840" -> "1742<>1077"
+"1742<>1077" -> "239<>NaN"
+"1742<>1077" -> "557<>1077"
+"557<>1077" -> "1225<>NaN"
+"557<>1077" -> "670<>156"
+"670<>156" -> "280<>NaN"
+"670<>156" -> "98<>NaN"
+"1916<>1840" -> "1794<>1157"
+"1794<>1157" -> "1794<>961"
+"1794<>961" -> "843<>NaN"
+"1794<>961" -> "296<>NaN"
+"1794<>1157" -> "550<>1157"
+"550<>1157" -> "318<>NaN"
+"550<>1157" -> "832<>357"
+"832<>357" -> "832<>1038"
+"832<>1038" -> "974<>NaN"
+"832<>1038" -> "578<>NaN"
+"832<>357" -> "1423<>357"
+"1423<>357" -> "1441<>1415"
+"1441<>1415" -> "545<>NaN"
+"1441<>1415" -> "4<>NaN"
+}

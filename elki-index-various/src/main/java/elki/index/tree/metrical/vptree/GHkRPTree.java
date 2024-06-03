@@ -466,11 +466,17 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
                     // DBIDUtil.newDistanceDBIDList());
                     // }
                     // else
+
                     if(leftPartititions <= rightPartititions) {
-                        buildTree(current.childNodes[i] = new Node(this.kFold, ReuseVPIndicator.FIRST_VP), children[i], firstVP, distances[i]);
+                        // Only pass closest VP
+                        ReuseVPIndicator childIndicator = current.vpIndicator != ReuseVPIndicator.ROOT ? ReuseVPIndicator.ROOT : ReuseVPIndicator.FIRST_VP;
+
+                        buildTree(current.childNodes[i] = new Node(this.kFold, childIndicator), children[i], firstVP, distances[i]);
                     }
                     else {
-                        buildTree(current.childNodes[i] = new Node(this.kFold, ReuseVPIndicator.SECOND_VP), children[i], secondVP, distances[i]);
+                        // Only pass closest VP
+                        ReuseVPIndicator childIndicator = current.vpIndicator != ReuseVPIndicator.ROOT ? ReuseVPIndicator.ROOT : ReuseVPIndicator.SECOND_VP;
+                        buildTree(current.childNodes[i] = new Node(this.kFold, childIndicator), children[i], secondVP, distances[i]);
                     }
                 }
             }
@@ -658,7 +664,6 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
             return new DBIDVarTuple(firstVP, secondVP);
         }
 
-        MapIntegerDBIDDoubleStore means = new MapIntegerDBIDDoubleStore(content.size());
         DoubleDBIDHeap stds = DBIDUtil.newMaxHeap(content.size());
         double bestMean = 0;
         double maxDist = 0;
@@ -686,7 +691,6 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
                 bestMean = currentMean;
             }
 
-            means.put(currentDbid, currentMean);
             stds.insert(currentStandartDeviance, currentDbid);
         }
 
@@ -724,7 +728,6 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
         DBIDVar firstVP = DBIDUtil.newVar();
         DBIDVar currentDbid = DBIDUtil.newVar();
 
-        // TODO: Truncate!
         if(content.size() == 1) {
             DBIDIter it = content.iter();
             firstVP.set(it);

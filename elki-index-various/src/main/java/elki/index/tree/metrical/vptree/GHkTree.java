@@ -519,12 +519,11 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
             return new DBIDVarTuple(firstVP, secondVP);
         }
 
-        MapIntegerDBIDDoubleStore means = new MapIntegerDBIDDoubleStore(content.size());
         DoubleDBIDHeap stds = DBIDUtil.newMaxHeap(content.size());
         double bestMean = 0;
         double maxDist = 0;
 
-        // Calculate means and stds
+        // Calculate mean and stds
         for(DBIDIter it = content.iter(); it.valid(); it.advance()) {
             currentDbid.set(it);
 
@@ -547,7 +546,6 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
                 bestMean = currentMean;
             }
 
-            means.put(currentDbid,currentMean);
             stds.insert(currentStandartDeviance, currentDbid);
         }
 
@@ -911,6 +909,8 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
                             // First check for Elements left of Middle
                             // Then switch VP distances to check for right of
                             // middle
+                            // TODO: kann eigentlich gelöscht weren, etnscheidend ist nur ob linke oder rechte seite
+                            // rest kann anhand hb,lb entscheiden werden.
                             if(scaleFirstDistance <= scaleSecondDistance) {
                                 distanceDiff = ((scaleSecondDistance * secondVPDistance) - (scaleFirstDistance * firstVPDistance)) / 2;
                                 lowerBound = node.firstLowBound;

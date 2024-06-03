@@ -442,12 +442,18 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
                 current.secondHighBound = current.secondHighBound < secondDistance ? secondDistance : current.secondHighBound;
             }
 
+
             if(firstChildren != null) {
-                buildTree(current.firstChild = new Node(ReuseVPIndicator.FIRST_VP), firstChildren, firstVP, firstDistances);
+                // Only pass closest VP
+                ReuseVPIndicator childIndicator = current.vpIndicator != ReuseVPIndicator.ROOT ? ReuseVPIndicator.ROOT : ReuseVPIndicator.FIRST_VP;
+
+                buildTree(current.firstChild = new Node(childIndicator), firstChildren, firstVP, firstDistances);
             }
 
             if(secondChildren != null) {
-                buildTree(current.secondChild = new Node(ReuseVPIndicator.SECOND_VP), secondChildren, secondVP, secondDistances);
+                // Only pass closest VP
+                ReuseVPIndicator childIndicator = current.vpIndicator != ReuseVPIndicator.ROOT ? ReuseVPIndicator.ROOT : ReuseVPIndicator.SECOND_VP;
+                buildTree(current.secondChild = new Node(childIndicator), secondChildren, secondVP, secondDistances);
             }
         }
     }
@@ -616,7 +622,6 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
             return new DBIDVarTuple(firstVP, secondVP);
         }
 
-        MapIntegerDBIDDoubleStore means = new MapIntegerDBIDDoubleStore(content.size());
         DoubleDBIDHeap stds = DBIDUtil.newMaxHeap(content.size());
         double bestMean = 0;
         double maxDist = 0;
@@ -644,7 +649,6 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
                 bestMean = currentMean;
             }
 
-            means.put(currentDbid,currentMean);
             stds.insert(currentStandartDeviance, currentDbid);
         }
 
@@ -910,8 +914,6 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
             final DBIDs firstVP = node.firstVP;
             final DBIDs secondVP = node.secondVP;
 
-            double tau = knns.getKNNDistance();
-
             double firstDistance = 0;
 
             if(vpIndicator == ReuseVPIndicator.FIRST_VP) {
@@ -924,8 +926,8 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
                     knns.insert(firstDistance, firstVPiter);
                 }
             }
-
-            tau = knns.getKNNDistance();
+            
+            double tau = knns.getKNNDistance();
 
             if(secondVP != null && !secondVP.isEmpty()) {
                 Node lc = node.firstChild;
@@ -950,7 +952,7 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
                 final double secondDistanceDiff = (secondDistance - firstDistance) / 2;
 
                 // TODO: less or equal less?
-                if(firstDistance < 0) {
+                if(firstDistanceDiff < 0) {
                     if(lc != null && firstDistanceDiff < tau && node.firstLowBound <= firstDistance + tau && firstDistance - tau <= node.firstHighBound) {
                         tau = ghrpKNNSearch(knns, lc, firstDistance);
                     }

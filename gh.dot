@@ -1,0 +1,1196 @@
+digraph {
+rankdir="TB"
+node [shape=box]
+stats [label="Objects found: 1936"]
+7518 [ label = "ID: 7518\n sID: 5893\n obj: 2\n flb: 35,59\n fhb: 1033,10\n slb: 18,26\n shb: 897,07"]
+6153 [ label = "ID: 6153\n sID: 6097\n obj: 2\n flb: 19,01\n fhb: 857,04\n slb: 16,33\n shb: 691,42"]
+6247 [ label = "ID: 6247\n sID: 7167\n obj: 2\n flb: 13,39\n fhb: 452,77\n slb: 14,75\n shb: 367,87"]
+6500 [ label = "ID: 6500\n sID: 6162\n obj: 2\n flb: 6,72\n fhb: 267,78\n slb: 6,88\n shb: 227,56"]
+6998 [ label = "ID: 6998\n sID: 7184\n obj: 2\n flb: 19,18\n fhb: 129,90\n slb: 46,69\n shb: 125,42"]
+7081 [ label = "ID: 7081\n sID: 6379\n obj: 2\n flb: 20,64\n fhb: 110,65\n slb: 16,81\n shb: 79,87"]
+6667 [ label = "ID: 6667\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 17,21\n slb: MAX_VAL\n shb: -1,00"]
+5835 [ label = "ID: 5835\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 51,71\n slb: MAX_VAL\n shb: -1,00"]
+5937 [ label = "ID: 5937\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 63,65\n slb: MAX_VAL\n shb: -1,00"]
+7432 [ label = "ID: 7432\n sID: 6847\n obj: 2\n flb: 10,93\n fhb: 231,44\n slb: 17,40\n shb: 169,36"]
+6449 [ label = "ID: 6449\n sID: 6269\n obj: 2\n flb: 5,17\n fhb: 100,01\n slb: 13,26\n shb: 78,19"]
+6015 [ label = "ID: 6015\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 63,67\n slb: MAX_VAL\n shb: -1,00"]
+6546 [ label = "ID: 6546\n sID: 6501\n obj: 2\n flb: 13,65\n fhb: 82,69\n slb: 16,25\n shb: 64,59"]
+5878 [ label = "ID: 5878\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 20,88\n slb: MAX_VAL\n shb: -1,00"]
+6673 [ label = "ID: 6673\n sID: 7092\n obj: 2\n flb: 14,75\n fhb: 60,58\n slb: 13,13\n shb: 50,35"]
+6624 [ label = "ID: 6624\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 20,71\n slb: MAX_VAL\n shb: -1,00"]
+6214 [ label = "ID: 6214\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 42,13\n slb: MAX_VAL\n shb: -1,00"]
+5939 [ label = "ID: 5939\n sID: 7124\n obj: 2\n flb: 7,30\n fhb: 147,49\n slb: 22,55\n shb: 129,60"]
+5899 [ label = "ID: 5899\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 47,72\n slb: MAX_VAL\n shb: -1,00"]
+6909 [ label = "ID: 6909\n sID: 6084\n obj: 2\n flb: 7,83\n fhb: 133,37\n slb: 39,42\n shb: 110,92"]
+6044 [ label = "ID: 6044\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 46,53\n slb: MAX_VAL\n shb: -1,00"]
+6091 [ label = "ID: 6091\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 79,82\n slb: MAX_VAL\n shb: -1,00"]
+6178 [ label = "ID: 6178\n sID: 6344\n obj: 2\n flb: 16,12\n fhb: 354,70\n slb: 14,62\n shb: 378,85"]
+7262 [ label = "ID: 7262\n sID: 5928\n obj: 2\n flb: 14,99\n fhb: 359,10\n slb: 9,75\n shb: 251,91"]
+7062 [ label = "ID: 7062\n sID: 7080\n obj: 2\n flb: 15,62\n fhb: 130,45\n slb: 8,40\n shb: 94,35"]
+5902 [ label = "ID: 5902\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 46,81\n slb: MAX_VAL\n shb: -1,00"]
+7339 [ label = "ID: 7339\n sID: 6067\n obj: 2\n flb: 9,75\n fhb: 108,15\n slb: 19,51\n shb: 84,48"]
+5996 [ label = "ID: 5996\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 32,46\n slb: MAX_VAL\n shb: -1,00"]
+6323 [ label = "ID: 6323\n sID: 6692\n obj: 2\n flb: 20,29\n fhb: 80,10\n slb: 20,08\n shb: 64,95"]
+6019 [ label = "ID: 6019\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 21,62\n slb: MAX_VAL\n shb: -1,00"]
+7701 [ label = "ID: 7701\n sID: 7214\n obj: 2\n flb: 21,41\n fhb: 63,09\n slb: 8,40\n shb: 50,31"]
+6491 [ label = "ID: 6491\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+6276 [ label = "ID: 6276\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 39,74\n slb: MAX_VAL\n shb: -1,00"]
+6578 [ label = "ID: 6578\n sID: 6562\n obj: 2\n flb: 12,51\n fhb: 238,15\n slb: 10,18\n shb: 176,22"]
+7390 [ label = "ID: 7390\n sID: 6613\n obj: 2\n flb: 12,69\n fhb: 109,07\n slb: 7,94\n shb: 96,46"]
+6014 [ label = "ID: 6014\n sID: 6290\n obj: 2\n flb: 12,30\n fhb: 85,71\n slb: 15,28\n shb: 56,74"]
+6878 [ label = "ID: 6878\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 32,50\n slb: MAX_VAL\n shb: -1,00"]
+7433 [ label = "ID: 7433\n sID: 7487\n obj: 2\n flb: 5,12\n fhb: 52,82\n slb: 12,74\n shb: 50,49"]
+6742 [ label = "ID: 6742\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 19,81\n slb: MAX_VAL\n shb: -1,00"]
+6459 [ label = "ID: 6459\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 37,10\n slb: MAX_VAL\n shb: -1,00"]
+7527 [ label = "ID: 7527\n sID: 6883\n obj: 2\n flb: 12,70\n fhb: 83,32\n slb: 15,10\n shb: 68,05"]
+5894 [ label = "ID: 5894\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 24,68\n slb: MAX_VAL\n shb: -1,00"]
+6619 [ label = "ID: 6619\n sID: 7358\n obj: 2\n flb: 13,06\n fhb: 57,30\n slb: 14,53\n shb: 40,43"]
+7603 [ label = "ID: 7603\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 14,70\n slb: MAX_VAL\n shb: -1,00"]
+6139 [ label = "ID: 6139\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 32,90\n slb: MAX_VAL\n shb: -1,00"]
+6078 [ label = "ID: 6078\n sID: 6946\n obj: 2\n flb: 15,08\n fhb: 151,68\n slb: 5,77\n shb: 115,86"]
+7242 [ label = "ID: 7242\n sID: 6265\n obj: 2\n flb: 15,26\n fhb: 91,58\n slb: 5,32\n shb: 69,43"]
+6134 [ label = "ID: 6134\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 37,90\n slb: MAX_VAL\n shb: -1,00"]
+7126 [ label = "ID: 7126\n sID: 6035\n obj: 2\n flb: 18,81\n fhb: 67,48\n slb: 11,95\n shb: 43,05"]
+6446 [ label = "ID: 6446\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+5850 [ label = "ID: 5850\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 37,75\n slb: MAX_VAL\n shb: -1,00"]
+6915 [ label = "ID: 6915\n sID: 5869\n obj: 2\n flb: 7,84\n fhb: 101,96\n slb: 7,34\n shb: 104,21"]
+7418 [ label = "ID: 7418\n sID: 7258\n obj: 2\n flb: 44,93\n fhb: 103,80\n slb: 12,59\n shb: 82,26"]
+6949 [ label = "ID: 6949\n sID: 6420\n obj: 2\n flb: 13,34\n fhb: 59,40\n slb: 9,65\n shb: 44,64"]
+6550 [ label = "ID: 6550\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 19,14\n slb: MAX_VAL\n shb: -1,00"]
+5820 [ label = "ID: 5820\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 33,60\n slb: MAX_VAL\n shb: -1,00"]
+6359 [ label = "ID: 6359\n sID: 5946\n obj: 2\n flb: 5,52\n fhb: 93,52\n slb: 13,31\n shb: 60,84"]
+5895 [ label = "ID: 5895\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 28,92\n slb: MAX_VAL\n shb: -1,00"]
+7515 [ label = "ID: 7515\n sID: 6661\n obj: 2\n flb: 11,45\n fhb: 64,61\n slb: 12,54\n shb: 42,64"]
+6397 [ label = "ID: 6397\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 26,33\n slb: MAX_VAL\n shb: -1,00"]
+6419 [ label = "ID: 6419\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 48,17\n slb: MAX_VAL\n shb: -1,00"]
+7660 [ label = "ID: 7660\n sID: 7355\n obj: 2\n flb: 13,30\n fhb: 338,09\n slb: 19,72\n shb: 236,50"]
+6412 [ label = "ID: 6412\n sID: 6802\n obj: 2\n flb: 7,86\n fhb: 120,13\n slb: 16,41\n shb: 96,55"]
+6086 [ label = "ID: 6086\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 39,24\n slb: MAX_VAL\n shb: -1,00"]
+6662 [ label = "ID: 6662\n sID: 7620\n obj: 2\n flb: 15,85\n fhb: 106,54\n slb: 16,62\n shb: 71,22"]
+6426 [ label = "ID: 6426\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 42,20\n slb: MAX_VAL\n shb: -1,00"]
+6228 [ label = "ID: 6228\n sID: 6647\n obj: 2\n flb: 19,12\n fhb: 68,49\n slb: 18,05\n shb: 60,22"]
+7017 [ label = "ID: 7017\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 21,98\n slb: MAX_VAL\n shb: -1,00"]
+6340 [ label = "ID: 6340\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 45,86\n slb: MAX_VAL\n shb: -1,00"]
+6140 [ label = "ID: 6140\n sID: 7661\n obj: 2\n flb: 7,11\n fhb: 227,20\n slb: 9,41\n shb: 204,05"]
+7046 [ label = "ID: 7046\n sID: 6954\n obj: 2\n flb: 35,59\n fhb: 164,52\n slb: 1,33\n shb: 132,88"]
+6568 [ label = "ID: 6568\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 15,05\n slb: MAX_VAL\n shb: -1,00"]
+7117 [ label = "ID: 7117\n sID: 6875\n obj: 2\n flb: 14,78\n fhb: 98,60\n slb: 1,12\n shb: 62,80"]
+6248 [ label = "ID: 6248\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 39,84\n slb: MAX_VAL\n shb: -1,00"]
+6832 [ label = "ID: 6832\n sID: 7188\n obj: 2\n flb: 11,99\n fhb: 62,07\n slb: 2,99\n shb: 56,72"]
+6281 [ label = "ID: 6281\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 42,43\n slb: MAX_VAL\n shb: -1,00"]
+5947 [ label = "ID: 5947\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 53,28\n slb: MAX_VAL\n shb: -1,00"]
+6235 [ label = "ID: 6235\n sID: 7314\n obj: 2\n flb: 10,17\n fhb: 218,59\n slb: 24,81\n shb: 164,68"]
+7290 [ label = "ID: 7290\n sID: 7492\n obj: 2\n flb: 16,71\n fhb: 81,90\n slb: 9,51\n shb: 64,71"]
+5952 [ label = "ID: 5952\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 20,63\n slb: MAX_VAL\n shb: -1,00"]
+6013 [ label = "ID: 6013\n sID: 5818\n obj: 3\n flb: 14,21\n fhb: 68,50\n slb: 6,64\n shb: 54,00"]
+6225 [ label = "ID: 6225\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 44,55\n slb: MAX_VAL\n shb: -1,00"]
+5968 [ label = "ID: 5968\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 37,04\n slb: MAX_VAL\n shb: -1,00"]
+6003 [ label = "ID: 6003\n sID: 7115\n obj: 2\n flb: 22,00\n fhb: 167,26\n slb: 13,13\n shb: 125,50"]
+6996 [ label = "ID: 6996\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 66,10\n slb: MAX_VAL\n shb: -1,00"]
+6694 [ label = "ID: 6694\n sID: 7250\n obj: 2\n flb: 18,39\n fhb: 106,58\n slb: 19,35\n shb: 107,62"]
+6747 [ label = "ID: 6747\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 50,08\n slb: MAX_VAL\n shb: -1,00"]
+6138 [ label = "ID: 6138\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 44,08\n slb: MAX_VAL\n shb: -1,00"]
+6168 [ label = "ID: 6168\n sID: 7512\n obj: 2\n flb: 16,72\n fhb: 694,95\n slb: 11,01\n shb: 519,61"]
+6967 [ label = "ID: 6967\n sID: 7220\n obj: 2\n flb: 28,05\n fhb: 513,33\n slb: 15,91\n shb: 399,76"]
+7077 [ label = "ID: 7077\n sID: 6544\n obj: 2\n flb: 41,08\n fhb: 225,02\n slb: 14,19\n shb: 162,44"]
+6712 [ label = "ID: 6712\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 44,97\n slb: MAX_VAL\n shb: -1,00"]
+6287 [ label = "ID: 6287\n sID: 7186\n obj: 2\n flb: 25,39\n fhb: 145,65\n slb: 13,04\n shb: 123,01"]
+6004 [ label = "ID: 6004\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 70,12\n slb: MAX_VAL\n shb: -1,00"]
+5875 [ label = "ID: 5875\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 79,94\n slb: MAX_VAL\n shb: -1,00"]
+6494 [ label = "ID: 6494\n sID: 7486\n obj: 2\n flb: 21,84\n fhb: 326,04\n slb: 8,49\n shb: 227,63"]
+6334 [ label = "ID: 6334\n sID: 6187\n obj: 2\n flb: 28,42\n fhb: 168,08\n slb: 7,74\n shb: 124,73"]
+6176 [ label = "ID: 6176\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 48,23\n slb: MAX_VAL\n shb: -1,00"]
+7097 [ label = "ID: 7097\n sID: 5887\n obj: 2\n flb: 18,87\n fhb: 115,82\n slb: 38,44\n shb: 113,73"]
+7079 [ label = "ID: 7079\n sID: 6760\n obj: 2\n flb: 45,49\n fhb: 94,08\n slb: 14,94\n shb: 77,97"]
+7222 [ label = "ID: 7222\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+5827 [ label = "ID: 5827\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 40,83\n slb: MAX_VAL\n shb: -1,00"]
+6336 [ label = "ID: 6336\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 52,94\n slb: MAX_VAL\n shb: -1,00"]
+6797 [ label = "ID: 6797\n sID: 6156\n obj: 2\n flb: 18,41\n fhb: 234,51\n slb: 50,66\n shb: 272,10"]
+6612 [ label = "ID: 6612\n sID: 7537\n obj: 2\n flb: 22,98\n fhb: 238,86\n slb: 21,00\n shb: 164,20"]
+5834 [ label = "ID: 5834\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 75,88\n slb: MAX_VAL\n shb: -1,00"]
+7698 [ label = "ID: 7698\n sID: 5988\n obj: 2\n flb: 12,59\n fhb: 149,54\n slb: 14,77\n shb: 109,35"]
+6171 [ label = "ID: 6171\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 55,18\n slb: MAX_VAL\n shb: -1,00"]
+6183 [ label = "ID: 6183\n sID: 7464\n obj: 2\n flb: 17,27\n fhb: 116,72\n slb: 19,52\n shb: 101,55"]
+6764 [ label = "ID: 6764\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 87,30\n slb: MAX_VAL\n shb: -1,00"]
+7013 [ label = "ID: 7013\n sID: 6753\n obj: 2\n flb: 20,48\n fhb: 98,52\n slb: 21,48\n shb: 67,84"]
+5811 [ label = "ID: 5811\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 31,04\n slb: MAX_VAL\n shb: -1,00"]
+6184 [ label = "ID: 6184\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 74,19\n slb: MAX_VAL\n shb: -1,00"]
+6702 [ label = "ID: 6702\n sID: 6502\n obj: 2\n flb: 20,22\n fhb: 178,28\n slb: 14,61\n shb: 130,98"]
+5981 [ label = "ID: 5981\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 42,61\n slb: MAX_VAL\n shb: -1,00"]
+7313 [ label = "ID: 7313\n sID: 7544\n obj: 2\n flb: 19,37\n fhb: 118,04\n slb: 17,37\n shb: 85,23"]
+6232 [ label = "ID: 6232\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 31,84\n slb: MAX_VAL\n shb: -1,00"]
+7478 [ label = "ID: 7478\n sID: 7654\n obj: 2\n flb: 13,41\n fhb: 78,35\n slb: 20,34\n shb: 55,23"]
+6442 [ label = "ID: 6442\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 20,19\n slb: MAX_VAL\n shb: -1,00"]
+6283 [ label = "ID: 6283\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 45,90\n slb: MAX_VAL\n shb: -1,00"]
+6576 [ label = "ID: 6576\n sID: 7450\n obj: 2\n flb: 12,54\n fhb: 490,77\n slb: 15,02\n shb: 421,32"]
+6408 [ label = "ID: 6408\n sID: 7427\n obj: 2\n flb: 16,00\n fhb: 359,40\n slb: 9,62\n shb: 266,87"]
+7288 [ label = "ID: 7288\n sID: 7159\n obj: 2\n flb: 17,82\n fhb: 199,80\n slb: 4,01\n shb: 153,17"]
+7553 [ label = "ID: 7553\n sID: 6923\n obj: 2\n flb: 19,96\n fhb: 72,02\n slb: 13,25\n shb: 45,73"]
+7470 [ label = "ID: 7470\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+6206 [ label = "ID: 6206\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 31,20\n slb: MAX_VAL\n shb: -1,00"]
+7071 [ label = "ID: 7071\n sID: 7111\n obj: 2\n flb: 14,11\n fhb: 121,77\n slb: 12,01\n shb: 99,26"]
+6060 [ label = "ID: 6060\n sID: 7170\n obj: 2\n flb: 14,64\n fhb: 73,10\n slb: 7,22\n shb: 54,78"]
+6384 [ label = "ID: 6384\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 27,71\n slb: MAX_VAL\n shb: -1,00"]
+7240 [ label = "ID: 7240\n sID: 7685\n obj: 2\n flb: 16,71\n fhb: 50,21\n slb: 13,55\n shb: 42,73"]
+6288 [ label = "ID: 6288\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 25,95\n slb: MAX_VAL\n shb: -1,00"]
+6020 [ label = "ID: 6020\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 41,90\n slb: MAX_VAL\n shb: -1,00"]
+5916 [ label = "ID: 5916\n sID: 6213\n obj: 2\n flb: 19,69\n fhb: 112,07\n slb: 0,26\n shb: 81,68"]
+6441 [ label = "ID: 6441\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 26,06\n slb: MAX_VAL\n shb: -1,00"]
+6174 [ label = "ID: 6174\n sID: 6018\n obj: 2\n flb: 16,63\n fhb: 83,46\n slb: 14,15\n shb: 59,72"]
+6428 [ label = "ID: 6428\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 47,40\n slb: MAX_VAL\n shb: -1,00"]
+5930 [ label = "ID: 5930\n sID: 7100\n obj: 2\n flb: 4,99\n fhb: 53,20\n slb: 8,75\n shb: 40,80"]
+6631 [ label = "ID: 6631\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 9,51\n slb: MAX_VAL\n shb: -1,00"]
+5960 [ label = "ID: 5960\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 32,06\n slb: MAX_VAL\n shb: -1,00"]
+6837 [ label = "ID: 6837\n sID: 6981\n obj: 2\n flb: 9,07\n fhb: 263,91\n slb: 10,78\n shb: 200,56"]
+7303 [ label = "ID: 7303\n sID: 7342\n obj: 2\n flb: 23,97\n fhb: 154,65\n slb: 14,68\n shb: 134,13"]
+6202 [ label = "ID: 6202\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 44,27\n slb: MAX_VAL\n shb: -1,00"]
+6346 [ label = "ID: 6346\n sID: 6928\n obj: 2\n flb: 13,46\n fhb: 129,99\n slb: 16,17\n shb: 93,76"]
+6388 [ label = "ID: 6388\n sID: 6907\n obj: 2\n flb: 21,44\n fhb: 77,93\n slb: 11,31\n shb: 50,20"]
+7120 [ label = "ID: 7120\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+5966 [ label = "ID: 5966\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 49,43\n slb: MAX_VAL\n shb: -1,00"]
+7320 [ label = "ID: 7320\n sID: 6811\n obj: 2\n flb: 19,30\n fhb: 99,65\n slb: 11,62\n shb: 77,10"]
+5997 [ label = "ID: 5997\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 61,26\n slb: MAX_VAL\n shb: -1,00"]
+7284 [ label = "ID: 7284\n sID: 7066\n obj: 2\n flb: 17,50\n fhb: 71,83\n slb: 8,88\n shb: 61,87"]
+6006 [ label = "ID: 6006\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 18,23\n slb: MAX_VAL\n shb: -1,00"]
+6053 [ label = "ID: 6053\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 59,65\n slb: MAX_VAL\n shb: -1,00"]
+6275 [ label = "ID: 6275\n sID: 6927\n obj: 2\n flb: 15,43\n fhb: 203,04\n slb: 13,71\n shb: 170,82"]
+7333 [ label = "ID: 7333\n sID: 7572\n obj: 2\n flb: 16,90\n fhb: 141,02\n slb: 9,55\n shb: 96,14"]
+7312 [ label = "ID: 7312\n sID: 5867\n obj: 2\n flb: 12,79\n fhb: 60,36\n slb: 13,29\n shb: 37,02"]
+6036 [ label = "ID: 6036\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 15,69\n slb: MAX_VAL\n shb: -1,00"]
+6360 [ label = "ID: 6360\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 31,50\n slb: MAX_VAL\n shb: -1,00"]
+6244 [ label = "ID: 6244\n sID: 6812\n obj: 2\n flb: 18,98\n fhb: 96,82\n slb: 8,57\n shb: 82,60"]
+6298 [ label = "ID: 6298\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 29,32\n slb: MAX_VAL\n shb: -1,00"]
+7054 [ label = "ID: 7054\n sID: 7057\n obj: 2\n flb: 10,86\n fhb: 78,19\n slb: 9,65\n shb: 54,36"]
+6312 [ label = "ID: 6312\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 26,01\n slb: MAX_VAL\n shb: -1,00"]
+6075 [ label = "ID: 6075\n sID: 6913\n obj: 2\n flb: 8,64\n fhb: 59,05\n slb: 15,50\n shb: 48,67"]
+6447 [ label = "ID: 6447\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 25,93\n slb: MAX_VAL\n shb: -1,00"]
+5995 [ label = "ID: 5995\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 33,97\n slb: MAX_VAL\n shb: -1,00"]
+6976 [ label = "ID: 6976\n sID: 6535\n obj: 2\n flb: 20,90\n fhb: 160,36\n slb: 5,72\n shb: 118,82"]
+5922 [ label = "ID: 5922\n sID: 6765\n obj: 2\n flb: 9,62\n fhb: 86,11\n slb: 16,74\n shb: 57,98"]
+6759 [ label = "ID: 6759\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 17,73\n slb: MAX_VAL\n shb: -1,00"]
+6514 [ label = "ID: 6514\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 48,85\n slb: MAX_VAL\n shb: -1,00"]
+5883 [ label = "ID: 5883\n sID: 6392\n obj: 2\n flb: 18,97\n fhb: 123,14\n slb: 7,47\n shb: 98,99"]
+5898 [ label = "ID: 5898\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 58,56\n slb: MAX_VAL\n shb: -1,00"]
+5934 [ label = "ID: 5934\n sID: 6351\n obj: 2\n flb: 25,21\n fhb: 108,62\n slb: 11,70\n shb: 71,93"]
+6908 [ label = "ID: 6908\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 19,13\n slb: MAX_VAL\n shb: -1,00"]
+6452 [ label = "ID: 6452\n sID: 6022\n obj: 2\n flb: 16,35\n fhb: 70,53\n slb: 17,24\n shb: 55,00"]
+7039 [ label = "ID: 7039\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+5994 [ label = "ID: 5994\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 40,67\n slb: MAX_VAL\n shb: -1,00"]
+6716 [ label = "ID: 6716\n sID: 6567\n obj: 2\n flb: 15,98\n fhb: 395,67\n slb: 14,40\n shb: 325,01"]
+7510 [ label = "ID: 7510\n sID: 6167\n obj: 2\n flb: 21,97\n fhb: 300,31\n slb: 14,03\n shb: 234,97"]
+6507 [ label = "ID: 6507\n sID: 6813\n obj: 2\n flb: 23,69\n fhb: 115,05\n slb: 21,02\n shb: 87,60"]
+6064 [ label = "ID: 6064\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 59,43\n slb: MAX_VAL\n shb: -1,00"]
+5901 [ label = "ID: 5901\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 62,75\n slb: MAX_VAL\n shb: -1,00"]
+6158 [ label = "ID: 6158\n sID: 6081\n obj: 2\n flb: 25,82\n fhb: 201,72\n slb: 15,51\n shb: 152,15"]
+7577 [ label = "ID: 7577\n sID: 6892\n obj: 2\n flb: 19,26\n fhb: 114,56\n slb: 13,30\n shb: 88,29"]
+6917 [ label = "ID: 6917\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 38,55\n slb: MAX_VAL\n shb: -1,00"]
+7628 [ label = "ID: 7628\n sID: 7229\n obj: 2\n flb: 21,23\n fhb: 80,00\n slb: 15,07\n shb: 66,30"]
+6668 [ label = "ID: 6668\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 47,05\n slb: MAX_VAL\n shb: -1,00"]
+6450 [ label = "ID: 6450\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 57,17\n slb: MAX_VAL\n shb: -1,00"]
+6133 [ label = "ID: 6133\n sID: 6391\n obj: 2\n flb: 31,36\n fhb: 165,46\n slb: 15,87\n shb: 128,33"]
+6093 [ label = "ID: 6093\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 46,52\n slb: MAX_VAL\n shb: -1,00"]
+6188 [ label = "ID: 6188\n sID: 6274\n obj: 2\n flb: 12,76\n fhb: 146,16\n slb: 10,39\n shb: 111,81"]
+6076 [ label = "ID: 6076\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 43,41\n slb: MAX_VAL\n shb: -1,00"]
+5909 [ label = "ID: 5909\n sID: 7007\n obj: 2\n flb: 12,03\n fhb: 96,47\n slb: 3,03\n shb: 87,67"]
+6087 [ label = "ID: 6087\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 47,63\n slb: MAX_VAL\n shb: -1,00"]
+6980 [ label = "ID: 6980\n sID: 6561\n obj: 2\n flb: 10,04\n fhb: 79,91\n slb: 12,20\n shb: 61,95"]
+5833 [ label = "ID: 5833\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 30,99\n slb: MAX_VAL\n shb: -1,00"]
+6090 [ label = "ID: 6090\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 74,69\n slb: MAX_VAL\n shb: -1,00"]
+6404 [ label = "ID: 6404\n sID: 6953\n obj: 2\n flb: 10,48\n fhb: 312,38\n slb: 19,83\n shb: 231,38"]
+6790 [ label = "ID: 6790\n sID: 6495\n obj: 2\n flb: 13,83\n fhb: 150,17\n slb: 29,57\n shb: 146,42"]
+6318 [ label = "ID: 6318\n sID: 6407\n obj: 2\n flb: 15,98\n fhb: 127,47\n slb: 21,96\n shb: 87,66"]
+6007 [ label = "ID: 6007\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 32,32\n slb: MAX_VAL\n shb: -1,00"]
+6896 [ label = "ID: 6896\n sID: 6085\n obj: 2\n flb: 14,04\n fhb: 85,45\n slb: 11,51\n shb: 63,18"]
+6902 [ label = "ID: 6902\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+6585 [ label = "ID: 6585\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 63,12\n slb: MAX_VAL\n shb: -1,00"]
+7652 [ label = "ID: 7652\n sID: 6437\n obj: 2\n flb: 20,86\n fhb: 103,83\n slb: 23,05\n shb: 64,43"]
+6731 [ label = "ID: 6731\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 42,12\n slb: MAX_VAL\n shb: -1,00"]
+5830 [ label = "ID: 5830\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 49,48\n slb: MAX_VAL\n shb: -1,00"]
+5938 [ label = "ID: 5938\n sID: 7118\n obj: 2\n flb: 17,02\n fhb: 204,89\n slb: 23,21\n shb: 168,15"]
+6205 [ label = "ID: 6205\n sID: 7457\n obj: 2\n flb: 21,82\n fhb: 146,69\n slb: 12,14\n shb: 90,06"]
+6002 [ label = "ID: 6002\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 17,89\n slb: MAX_VAL\n shb: -1,00"]
+6974 [ label = "ID: 6974\n sID: 6282\n obj: 2\n flb: 11,05\n fhb: 110,98\n slb: 14,26\n shb: 78,28"]
+6021 [ label = "ID: 6021\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 25,38\n slb: MAX_VAL\n shb: -1,00"]
+6734 [ label = "ID: 6734\n sID: 5880\n obj: 2\n flb: 27,86\n fhb: 76,53\n slb: 11,32\n shb: 58,39"]
+6396 [ label = "ID: 6396\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+5888 [ label = "ID: 5888\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 54,96\n slb: MAX_VAL\n shb: -1,00"]
+6714 [ label = "ID: 6714\n sID: 6943\n obj: 2\n flb: 29,34\n fhb: 205,04\n slb: 12,30\n shb: 139,07"]
+5813 [ label = "ID: 5813\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 58,39\n slb: MAX_VAL\n shb: -1,00"]
+6056 [ label = "ID: 6056\n sID: 6203\n obj: 2\n flb: 10,55\n fhb: 140,34\n slb: 23,39\n shb: 104,38"]
+6590 [ label = "ID: 6590\n sID: 7636\n obj: 2\n flb: 27,75\n fhb: 86,30\n slb: 21,13\n shb: 60,46"]
+6296 [ label = "ID: 6296\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 40,59\n slb: MAX_VAL\n shb: -1,00"]
+6719 [ label = "ID: 6719\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 44,45\n slb: MAX_VAL\n shb: -1,00"]
+5910 [ label = "ID: 5910\n sID: 7738\n obj: 2\n flb: 25,78\n fhb: 97,29\n slb: 7,67\n shb: 77,83"]
+6335 [ label = "ID: 6335\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 32,58\n slb: MAX_VAL\n shb: -1,00"]
+7371 [ label = "ID: 7371\n sID: 7448\n obj: 2\n flb: 19,30\n fhb: 82,87\n slb: 11,26\n shb: 55,34"]
+6930 [ label = "ID: 6930\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+6083 [ label = "ID: 6083\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 42,43\n slb: MAX_VAL\n shb: -1,00"]
+6492 [ label = "ID: 6492\n sID: 7162\n obj: 2\n flb: 17,14\n fhb: 850,13\n slb: 16,00\n shb: 713,97"]
+6639 [ label = "ID: 6639\n sID: 6527\n obj: 2\n flb: 16,41\n fhb: 686,38\n slb: 9,27\n shb: 500,21"]
+6547 [ label = "ID: 6547\n sID: 6409\n obj: 2\n flb: 28,49\n fhb: 379,38\n slb: 11,84\n shb: 264,22"]
+6791 [ label = "ID: 6791\n sID: 6891\n obj: 2\n flb: 24,33\n fhb: 124,93\n slb: 9,27\n shb: 92,22"]
+6598 [ label = "ID: 6598\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 29,24\n slb: MAX_VAL\n shb: -1,00"]
+7396 [ label = "ID: 7396\n sID: 6543\n obj: 2\n flb: 21,25\n fhb: 89,84\n slb: 19,32\n shb: 92,29"]
+6250 [ label = "ID: 6250\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 62,95\n slb: MAX_VAL\n shb: -1,00"]
+7345 [ label = "ID: 7345\n sID: 7563\n obj: 2\n flb: 31,58\n fhb: 66,29\n slb: 9,79\n shb: 53,87"]
+5957 [ label = "ID: 5957\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 41,23\n slb: MAX_VAL\n shb: -1,00"]
+5979 [ label = "ID: 5979\n sID: 6724\n obj: 2\n flb: 43,48\n fhb: 285,17\n slb: 18,86\n shb: 201,26"]
+7053 [ label = "ID: 7053\n sID: 6564\n obj: 2\n flb: 24,60\n fhb: 92,92\n slb: 20,47\n shb: 73,25"]
+5815 [ label = "ID: 5815\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 19,58\n slb: MAX_VAL\n shb: -1,00"]
+6180 [ label = "ID: 6180\n sID: 6207\n obj: 2\n flb: 14,01\n fhb: 85,91\n slb: 17,62\n shb: 64,01"]
+5836 [ label = "ID: 5836\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 50,67\n slb: MAX_VAL\n shb: -1,00"]
+6520 [ label = "ID: 6520\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 55,04\n slb: MAX_VAL\n shb: -1,00"]
+6338 [ label = "ID: 6338\n sID: 7365\n obj: 2\n flb: 15,67\n fhb: 190,29\n slb: 15,94\n shb: 186,72"]
+6934 [ label = "ID: 6934\n sID: 7316\n obj: 2\n flb: 6,55\n fhb: 176,42\n slb: 12,08\n shb: 141,84"]
+6061 [ label = "ID: 6061\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 41,30\n slb: MAX_VAL\n shb: -1,00"]
+6194 [ label = "ID: 6194\n sID: 5872\n obj: 2\n flb: 13,43\n fhb: 100,95\n slb: 5,72\n shb: 72,66"]
+7204 [ label = "ID: 7204\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+6157 [ label = "ID: 6157\n sID: 6301\n obj: 2\n flb: 16,94\n fhb: 86,07\n slb: 27,57\n shb: 73,24"]
+5817 [ label = "ID: 5817\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 61,73\n slb: MAX_VAL\n shb: -1,00"]
+6154 [ label = "ID: 6154\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 48,03\n slb: MAX_VAL\n shb: -1,00"]
+7286 [ label = "ID: 7286\n sID: 6960\n obj: 2\n flb: 25,30\n fhb: 173,98\n slb: 25,17\n shb: 138,09"]
+6040 [ label = "ID: 6040\n sID: 6558\n obj: 2\n flb: 26,97\n fhb: 82,25\n slb: 3,50\n shb: 54,08"]
+6354 [ label = "ID: 6354\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+6059 [ label = "ID: 6059\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 50,40\n slb: MAX_VAL\n shb: -1,00"]
+7425 [ label = "ID: 7425\n sID: 6245\n obj: 2\n flb: 15,53\n fhb: 113,11\n slb: 16,66\n shb: 93,06"]
+5886 [ label = "ID: 5886\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 92,38\n slb: MAX_VAL\n shb: -1,00"]
+7328 [ label = "ID: 7328\n sID: 5973\n obj: 2\n flb: 13,86\n fhb: 80,53\n slb: 17,71\n shb: 66,90"]
+5841 [ label = "ID: 5841\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 28,46\n slb: MAX_VAL\n shb: -1,00"]
+5825 [ label = "ID: 5825\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 52,69\n slb: MAX_VAL\n shb: -1,00"]
+6223 [ label = "ID: 6223\n sID: 5891\n obj: 2\n flb: 16,81\n fhb: 452,44\n slb: 7,87\n shb: 440,41"]
+7455 [ label = "ID: 7455\n sID: 7665\n obj: 2\n flb: 13,45\n fhb: 375,98\n slb: 18,87\n shb: 268,91"]
+7514 [ label = "ID: 7514\n sID: 7584\n obj: 2\n flb: 9,34\n fhb: 151,95\n slb: 18,38\n shb: 137,44"]
+7281 [ label = "ID: 7281\n sID: 7612\n obj: 2\n flb: 23,18\n fhb: 117,09\n slb: 12,64\n shb: 78,61"]
+6484 [ label = "ID: 6484\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 19,52\n slb: MAX_VAL\n shb: -1,00"]
+6072 [ label = "ID: 6072\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 56,82\n slb: MAX_VAL\n shb: -1,00"]
+6606 [ label = "ID: 6606\n sID: 5912\n obj: 2\n flb: 12,71\n fhb: 120,43\n slb: 15,31\n shb: 109,66"]
+6824 [ label = "ID: 6824\n sID: 6867\n obj: 2\n flb: 30,51\n fhb: 94,54\n slb: 15,81\n shb: 71,81"]
+6462 [ label = "ID: 6462\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 16,42\n slb: MAX_VAL\n shb: -1,00"]
+5824 [ label = "ID: 5824\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 47,80\n slb: MAX_VAL\n shb: -1,00"]
+6125 [ label = "ID: 6125\n sID: 6045\n obj: 2\n flb: 22,37\n fhb: 94,66\n slb: 8,70\n shb: 61,31"]
+6457 [ label = "ID: 6457\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 38,54\n slb: MAX_VAL\n shb: -1,00"]
+6389 [ label = "ID: 6389\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 36,58\n slb: MAX_VAL\n shb: -1,00"]
+6695 [ label = "ID: 6695\n sID: 6844\n obj: 2\n flb: 14,48\n fhb: 238,61\n slb: 14,71\n shb: 209,66"]
+7517 [ label = "ID: 7517\n sID: 6349\n obj: 2\n flb: 14,62\n fhb: 136,98\n slb: 22,08\n shb: 125,91"]
+6705 [ label = "ID: 6705\n sID: 7684\n obj: 2\n flb: 22,08\n fhb: 105,74\n slb: 9,56\n shb: 68,62"]
+5956 [ label = "ID: 5956\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 27,55\n slb: MAX_VAL\n shb: -1,00"]
+6009 [ label = "ID: 6009\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 65,75\n slb: MAX_VAL\n shb: -1,00"]
+7108 [ label = "ID: 7108\n sID: 5842\n obj: 2\n flb: 19,09\n fhb: 110,02\n slb: 16,70\n shb: 70,07"]
+7294 [ label = "ID: 7294\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 28,63\n slb: MAX_VAL\n shb: -1,00"]
+7279 [ label = "ID: 7279\n sID: 7099\n obj: 2\n flb: 18,50\n fhb: 88,19\n slb: 14,62\n shb: 62,39"]
+5975 [ label = "ID: 5975\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 21,76\n slb: MAX_VAL\n shb: -1,00"]
+5993 [ label = "ID: 5993\n sID: NaN\n obj: 9\n flb: 0,00\n fhb: ∞\n slb: MAX_VAL\n shb: -1,00"]
+7576 [ label = "ID: 7576\n sID: 6505\n obj: 2\n flb: 38,24\n fhb: 226,51\n slb: 7,57\n shb: 185,70"]
+5832 [ label = "ID: 5832\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 89,30\n slb: MAX_VAL\n shb: -1,00"]
+7398 [ label = "ID: 7398\n sID: 7180\n obj: 2\n flb: 8,14\n fhb: 153,81\n slb: 29,37\n shb: 141,91"]
+7378 [ label = "ID: 7378\n sID: 7009\n obj: 2\n flb: 20,60\n fhb: 123,48\n slb: 14,35\n shb: 83,33"]
+5904 [ label = "ID: 5904\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 46,54\n slb: MAX_VAL\n shb: -1,00"]
+5917 [ label = "ID: 5917\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 71,43\n slb: MAX_VAL\n shb: -1,00"]
+7304 [ label = "ID: 7304\n sID: 7542\n obj: 2\n flb: 37,02\n fhb: 127,80\n slb: 13,10\n shb: 101,95"]
+6251 [ label = "ID: 6251\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+6197 [ label = "ID: 6197\n sID: 6102\n obj: 2\n flb: 17,50\n fhb: 104,14\n slb: 18,20\n shb: 83,14"]
+6345 [ label = "ID: 6345\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 49,50\n slb: MAX_VAL\n shb: -1,00"]
+6390 [ label = "ID: 6390\n sID: 7598\n obj: 2\n flb: 15,69\n fhb: 81,39\n slb: 14,67\n shb: 70,15"]
+6626 [ label = "ID: 6626\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 37,39\n slb: MAX_VAL\n shb: -1,00"]
+6128 [ label = "ID: 6128\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 48,10\n slb: MAX_VAL\n shb: -1,00"]
+6761 [ label = "ID: 6761\n sID: 7593\n obj: 2\n flb: 20,20\n fhb: 386,76\n slb: 17,40\n shb: 321,45"]
+7073 [ label = "ID: 7073\n sID: 6678\n obj: 2\n flb: 14,51\n fhb: 196,23\n slb: 8,98\n shb: 152,32"]
+6963 [ label = "ID: 6963\n sID: 7089\n obj: 2\n flb: 42,47\n fhb: 95,00\n slb: 9,37\n shb: 72,51"]
+6630 [ label = "ID: 6630\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 2,40\n slb: MAX_VAL\n shb: -1,00"]
+6118 [ label = "ID: 6118\n sID: 6436\n obj: 2\n flb: 31,01\n fhb: 74,17\n slb: 10,25\n shb: 52,74"]
+5885 [ label = "ID: 5885\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 48,58\n slb: MAX_VAL\n shb: -1,00"]
+6310 [ label = "ID: 6310\n sID: 7740\n obj: 2\n flb: 23,85\n fhb: 143,31\n slb: 12,92\n shb: 117,92"]
+6017 [ label = "ID: 6017\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 36,68\n slb: MAX_VAL\n shb: -1,00"]
+6147 [ label = "ID: 6147\n sID: 6843\n obj: 2\n flb: 10,02\n fhb: 126,53\n slb: 14,26\n shb: 95,37"]
+6209 [ label = "ID: 6209\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 79,62\n slb: MAX_VAL\n shb: -1,00"]
+6729 [ label = "ID: 6729\n sID: 7495\n obj: 2\n flb: 15,62\n fhb: 97,90\n slb: 32,96\n shb: 84,36"]
+5846 [ label = "ID: 5846\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 47,80\n slb: MAX_VAL\n shb: -1,00"]
+6107 [ label = "ID: 6107\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 55,20\n slb: MAX_VAL\n shb: -1,00"]
+6343 [ label = "ID: 6343\n sID: 7352\n obj: 2\n flb: 16,25\n fhb: 392,44\n slb: 18,92\n shb: 298,70"]
+5837 [ label = "ID: 5837\n sID: 5831\n obj: 2\n flb: 25,81\n fhb: 191,08\n slb: 1,98\n shb: 143,47"]
+6123 [ label = "ID: 6123\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 30,20\n slb: MAX_VAL\n shb: -1,00"]
+7744 [ label = "ID: 7744\n sID: 7182\n obj: 2\n flb: 25,17\n fhb: 159,81\n slb: 5,39\n shb: 105,53"]
+5925 [ label = "ID: 5925\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 27,86\n slb: MAX_VAL\n shb: -1,00"]
+6935 [ label = "ID: 6935\n sID: 7245\n obj: 2\n flb: 16,02\n fhb: 108,09\n slb: 1,30\n shb: 89,17"]
+6807 [ label = "ID: 6807\n sID: 6062\n obj: 2\n flb: 13,98\n fhb: 67,03\n slb: 18,50\n shb: 54,58"]
+6421 [ label = "ID: 6421\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 21,22\n slb: MAX_VAL\n shb: -1,00"]
+6924 [ label = "ID: 6924\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 36,88\n slb: MAX_VAL\n shb: -1,00"]
+7275 [ label = "ID: 7275\n sID: 6011\n obj: 2\n flb: 10,90\n fhb: 91,21\n slb: 14,11\n shb: 63,02"]
+5865 [ label = "ID: 5865\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 34,96\n slb: MAX_VAL\n shb: -1,00"]
+7502 [ label = "ID: 7502\n sID: 6795\n obj: 2\n flb: 12,51\n fhb: 70,69\n slb: 19,84\n shb: 57,34"]
+6552 [ label = "ID: 6552\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 15,89\n slb: MAX_VAL\n shb: -1,00"]
+5965 [ label = "ID: 5965\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 46,53\n slb: MAX_VAL\n shb: -1,00"]
+6806 [ label = "ID: 6806\n sID: 7056\n obj: 2\n flb: 14,99\n fhb: 270,21\n slb: 5,57\n shb: 227,24"]
+6533 [ label = "ID: 6533\n sID: 7656\n obj: 2\n flb: 11,99\n fhb: 186,84\n slb: 12,83\n shb: 149,03"]
+6260 [ label = "ID: 6260\n sID: 6264\n obj: 2\n flb: 19,02\n fhb: 83,59\n slb: 12,53\n shb: 68,05"]
+6273 [ label = "ID: 6273\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 31,17\n slb: MAX_VAL\n shb: -1,00"]
+5969 [ label = "ID: 5969\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 57,43\n slb: MAX_VAL\n shb: -1,00"]
+7128 [ label = "ID: 7128\n sID: 6435\n obj: 2\n flb: 8,61\n fhb: 110,64\n slb: 15,72\n shb: 111,77"]
+6775 [ label = "ID: 6775\n sID: 6135\n obj: 2\n flb: 5,38\n fhb: 95,36\n slb: 15,18\n shb: 88,82"]
+6058 [ label = "ID: 6058\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 34,20\n slb: MAX_VAL\n shb: -1,00"]
+6821 [ label = "ID: 6821\n sID: 6432\n obj: 2\n flb: 16,42\n fhb: 80,09\n slb: 11,15\n shb: 53,66"]
+6114 [ label = "ID: 6114\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 27,50\n slb: MAX_VAL\n shb: -1,00"]
+5905 [ label = "ID: 5905\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 49,45\n slb: MAX_VAL\n shb: -1,00"]
+7138 [ label = "ID: 7138\n sID: 6482\n obj: 2\n flb: 10,12\n fhb: 92,03\n slb: 11,87\n shb: 68,84"]
+6471 [ label = "ID: 6471\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 25,62\n slb: MAX_VAL\n shb: -1,00"]
+6614 [ label = "ID: 6614\n sID: 6770\n obj: 2\n flb: 17,42\n fhb: 68,13\n slb: 12,62\n shb: 67,46"]
+6242 [ label = "ID: 6242\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 48,02\n slb: MAX_VAL\n shb: -1,00"]
+5889 [ label = "ID: 5889\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 30,29\n slb: MAX_VAL\n shb: -1,00"]
+7084 [ label = "ID: 7084\n sID: 7094\n obj: 2\n flb: 14,44\n fhb: 191,00\n slb: 12,31\n shb: 166,50"]
+7216 [ label = "ID: 7216\n sID: 7139\n obj: 2\n flb: 8,47\n fhb: 119,01\n slb: 17,07\n shb: 129,56"]
+6911 [ label = "ID: 6911\n sID: 7475\n obj: 2\n flb: 13,72\n fhb: 107,83\n slb: 14,10\n shb: 74,24"]
+5989 [ label = "ID: 5989\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 32,36\n slb: MAX_VAL\n shb: -1,00"]
+7121 [ label = "ID: 7121\n sID: 5950\n obj: 2\n flb: 4,04\n fhb: 72,30\n slb: 18,68\n shb: 56,26"]
+6226 [ label = "ID: 6226\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 22,41\n slb: MAX_VAL\n shb: -1,00"]
+6784 [ label = "ID: 6784\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 58,82\n slb: MAX_VAL\n shb: -1,00"]
+6224 [ label = "ID: 6224\n sID: 7329\n obj: 2\n flb: 13,93\n fhb: 100,29\n slb: 8,79\n shb: 64,53"]
+5852 [ label = "ID: 5852\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 9,01\n slb: MAX_VAL\n shb: -1,00"]
+6130 [ label = "ID: 6130\n sID: 7144\n obj: 2\n flb: 16,20\n fhb: 78,72\n slb: 11,69\n shb: 40,15"]
+6066 [ label = "ID: 6066\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+7225 [ label = "ID: 7225\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 55,58\n slb: MAX_VAL\n shb: -1,00"]
+7308 [ label = "ID: 7308\n sID: 7259\n obj: 2\n flb: 4,12\n fhb: 140,76\n slb: 9,79\n shb: 129,88"]
+7491 [ label = "ID: 7491\n sID: 7351\n obj: 2\n flb: 3,99\n fhb: 109,20\n slb: 1,87\n shb: 67,89"]
+6027 [ label = "ID: 6027\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 24,41\n slb: MAX_VAL\n shb: -1,00"]
+6575 [ label = "ID: 6575\n sID: 7116\n obj: 2\n flb: 19,10\n fhb: 61,40\n slb: 8,70\n shb: 52,85"]
+6481 [ label = "ID: 6481\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 8,12\n slb: MAX_VAL\n shb: -1,00"]
+6536 [ label = "ID: 6536\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 37,48\n slb: MAX_VAL\n shb: -1,00"]
+6218 [ label = "ID: 6218\n sID: 5941\n obj: 2\n flb: 10,65\n fhb: 124,00\n slb: 4,44\n shb: 87,30"]
+7335 [ label = "ID: 7335\n sID: 5826\n obj: 2\n flb: 12,79\n fhb: 47,39\n slb: 8,11\n shb: 37,12"]
+6903 [ label = "ID: 6903\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 29,16\n slb: MAX_VAL\n shb: -1,00"]
+5873 [ label = "ID: 5873\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 33,27\n slb: MAX_VAL\n shb: -1,00"]
+7356 [ label = "ID: 7356\n sID: 7429\n obj: 2\n flb: 16,47\n fhb: 81,84\n slb: 9,66\n shb: 58,69"]
+6361 [ label = "ID: 6361\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 16,68\n slb: MAX_VAL\n shb: -1,00"]
+6929 [ label = "ID: 6929\n sID: 5810\n obj: 2\n flb: 19,83\n fhb: 60,58\n slb: 28,89\n shb: 60,32"]
+5942 [ label = "ID: 5942\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 23,55\n slb: MAX_VAL\n shb: -1,00"]
+5907 [ label = "ID: 5907\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 24,31\n slb: MAX_VAL\n shb: -1,00"]
+6243 [ label = "ID: 6243\n sID: 7051\n obj: 2\n flb: 39,30\n fhb: 778,84\n slb: 4,92\n shb: 539,06"]
+7532 [ label = "ID: 7532\n sID: 5998\n obj: 2\n flb: 30,23\n fhb: 516,61\n slb: 16,76\n shb: 380,42"]
+6987 [ label = "ID: 6987\n sID: 6988\n obj: 2\n flb: 16,03\n fhb: 173,55\n slb: 14,92\n shb: 151,86"]
+7444 [ label = "ID: 7444\n sID: 6051\n obj: 2\n flb: 34,92\n fhb: 136,90\n slb: 11,26\n shb: 100,96"]
+7168 [ label = "ID: 7168\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 5,60\n slb: MAX_VAL\n shb: -1,00"]
+6295 [ label = "ID: 6295\n sID: 6758\n obj: 2\n flb: 18,71\n fhb: 87,89\n slb: 13,30\n shb: 66,28"]
+6100 [ label = "ID: 6100\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 19,48\n slb: MAX_VAL\n shb: -1,00"]
+5977 [ label = "ID: 5977\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 51,71\n slb: MAX_VAL\n shb: -1,00"]
+7399 [ label = "ID: 7399\n sID: 6070\n obj: 2\n flb: 10,01\n fhb: 156,38\n slb: 19,16\n shb: 135,91"]
+5920 [ label = "ID: 5920\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 45,08\n slb: MAX_VAL\n shb: -1,00"]
+6803 [ label = "ID: 6803\n sID: 7424\n obj: 2\n flb: 28,26\n fhb: 132,42\n slb: 13,02\n shb: 82,41"]
+6485 [ label = "ID: 6485\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+6055 [ label = "ID: 6055\n sID: 7072\n obj: 2\n flb: 20,40\n fhb: 103,76\n slb: 30,07\n shb: 94,50"]
+6032 [ label = "ID: 6032\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 52,48\n slb: MAX_VAL\n shb: -1,00"]
+5918 [ label = "ID: 5918\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 45,28\n slb: MAX_VAL\n shb: -1,00"]
+5857 [ label = "ID: 5857\n sID: 7727\n obj: 2\n flb: 12,71\n fhb: 327,42\n slb: 15,69\n shb: 292,94"]
+6767 [ label = "ID: 6767\n sID: 7004\n obj: 2\n flb: 18,03\n fhb: 269,98\n slb: 16,75\n shb: 170,29"]
+6095 [ label = "ID: 6095\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 35,23\n slb: MAX_VAL\n shb: -1,00"]
+6745 [ label = "ID: 6745\n sID: 7488\n obj: 2\n flb: 13,75\n fhb: 227,75\n slb: 17,86\n shb: 154,21"]
+7645 [ label = "ID: 7645\n sID: 6410\n obj: 2\n flb: 13,00\n fhb: 81,50\n slb: 17,30\n shb: 70,52"]
+5839 [ label = "ID: 5839\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 37,85\n slb: MAX_VAL\n shb: -1,00"]
+6696 [ label = "ID: 6696\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 71,47\n slb: MAX_VAL\n shb: -1,00"]
+7033 [ label = "ID: 7033\n sID: 6771\n obj: 2\n flb: 18,59\n fhb: 143,19\n slb: 8,90\n shb: 117,40"]
+6876 [ label = "ID: 6876\n sID: 6126\n obj: 2\n flb: 21,33\n fhb: 80,25\n slb: 24,55\n shb: 51,29"]
+6358 [ label = "ID: 6358\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+6386 [ label = "ID: 6386\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 51,14\n slb: MAX_VAL\n shb: -1,00"]
+6723 [ label = "ID: 6723\n sID: 6708\n obj: 2\n flb: 25,56\n fhb: 119,85\n slb: 20,84\n shb: 91,05"]
+6640 [ label = "ID: 6640\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 55,69\n slb: MAX_VAL\n shb: -1,00"]
+5985 [ label = "ID: 5985\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 75,65\n slb: MAX_VAL\n shb: -1,00"]
+6754 [ label = "ID: 6754\n sID: 6378\n obj: 2\n flb: 11,68\n fhb: 296,57\n slb: 13,61\n shb: 275,93"]
+6179 [ label = "ID: 6179\n sID: 6933\n obj: 2\n flb: 12,70\n fhb: 192,69\n slb: 13,80\n shb: 150,45"]
+5812 [ label = "ID: 5812\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 27,71\n slb: MAX_VAL\n shb: -1,00"]
+6161 [ label = "ID: 6161\n sID: 7146\n obj: 2\n flb: 16,62\n fhb: 118,54\n slb: 11,58\n shb: 98,49"]
+6199 [ label = "ID: 6199\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 64,96\n slb: MAX_VAL\n shb: -1,00"]
+7249 [ label = "ID: 7249\n sID: 6781\n obj: 2\n flb: 9,63\n fhb: 97,59\n slb: 16,58\n shb: 68,52"]
+5964 [ label = "ID: 5964\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 44,30\n slb: MAX_VAL\n shb: -1,00"]
+5829 [ label = "ID: 5829\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 57,65\n slb: MAX_VAL\n shb: -1,00"]
+6280 [ label = "ID: 6280\n sID: 7552\n obj: 2\n flb: 17,99\n fhb: 283,45\n slb: 15,04\n shb: 193,44"]
+6478 [ label = "ID: 6478\n sID: 6982\n obj: 2\n flb: 9,91\n fhb: 102,83\n slb: 16,30\n shb: 92,40"]
+6047 [ label = "ID: 6047\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 39,23\n slb: MAX_VAL\n shb: -1,00"]
+6326 [ label = "ID: 6326\n sID: 7327\n obj: 2\n flb: 33,73\n fhb: 92,18\n slb: 20,72\n shb: 65,32"]
+5953 [ label = "ID: 5953\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+6057 [ label = "ID: 6057\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 51,97\n slb: MAX_VAL\n shb: -1,00"]
+7095 [ label = "ID: 7095\n sID: 7570\n obj: 2\n flb: 14,01\n fhb: 187,10\n slb: 29,63\n shb: 145,52"]
+6005 [ label = "ID: 6005\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 122,81\n slb: MAX_VAL\n shb: -1,00"]
+7631 [ label = "ID: 7631\n sID: 6850\n obj: 2\n flb: 17,50\n fhb: 155,70\n slb: 22,38\n shb: 128,80"]
+7419 [ label = "ID: 7419\n sID: 5844\n obj: 2\n flb: 15,11\n fhb: 108,16\n slb: 16,18\n shb: 72,46"]
+6796 [ label = "ID: 6796\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 12,05\n slb: MAX_VAL\n shb: -1,00"]
+5814 [ label = "ID: 5814\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 58,85\n slb: MAX_VAL\n shb: -1,00"]
+7530 [ label = "ID: 7530\n sID: 7506\n obj: 2\n flb: 9,00\n fhb: 113,92\n slb: 10,06\n shb: 88,44"]
+6328 [ label = "ID: 6328\n sID: 7191\n obj: 2\n flb: 12,91\n fhb: 65,18\n slb: 13,47\n shb: 48,52"]
+6383 [ label = "ID: 6383\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 33,47\n slb: MAX_VAL\n shb: -1,00"]
+6422 [ label = "ID: 6422\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 33,64\n slb: MAX_VAL\n shb: -1,00"]
+7454 [ label = "ID: 7454\n sID: 7252\n obj: 2\n flb: 8,43\n fhb: 69,92\n slb: 17,47\n shb: 68,09"]
+6104 [ label = "ID: 6104\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 49,96\n slb: MAX_VAL\n shb: -1,00"]
+7266 [ label = "ID: 7266\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 45,59\n slb: MAX_VAL\n shb: -1,00"]
+7202 [ label = "ID: 7202\n sID: 5868\n obj: 2\n flb: 13,56\n fhb: 577,21\n slb: 21,84\n shb: 516,27"]
+6608 [ label = "ID: 6608\n sID: 7322\n obj: 2\n flb: 20,11\n fhb: 371,50\n slb: 22,46\n shb: 352,65"]
+7114 [ label = "ID: 7114\n sID: 6829\n obj: 2\n flb: 12,72\n fhb: 300,72\n slb: 13,16\n shb: 200,21"]
+5879 [ label = "ID: 5879\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 63,36\n slb: MAX_VAL\n shb: -1,00"]
+6710 [ label = "ID: 6710\n sID: 6172\n obj: 2\n flb: 9,46\n fhb: 195,97\n slb: 7,74\n shb: 150,55"]
+7059 [ label = "ID: 7059\n sID: 7235\n obj: 2\n flb: 26,35\n fhb: 96,80\n slb: 16,78\n shb: 74,94"]
+6402 [ label = "ID: 6402\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 38,84\n slb: MAX_VAL\n shb: -1,00"]
+7005 [ label = "ID: 7005\n sID: 6509\n obj: 2\n flb: 17,52\n fhb: 78,89\n slb: 18,11\n shb: 53,98"]
+6684 [ label = "ID: 6684\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 11,53\n slb: MAX_VAL\n shb: -1,00"]
+6364 [ label = "ID: 6364\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 33,42\n slb: MAX_VAL\n shb: -1,00"]
+6352 [ label = "ID: 6352\n sID: 6920\n obj: 2\n flb: 76,88\n fhb: 142,94\n slb: 12,23\n shb: 110,75"]
+5866 [ label = "ID: 5866\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+7282 [ label = "ID: 7282\n sID: 6001\n obj: 2\n flb: 23,85\n fhb: 85,25\n slb: 13,65\n shb: 68,46"]
+6246 [ label = "ID: 6246\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 39,35\n slb: MAX_VAL\n shb: -1,00"]
+7437 [ label = "ID: 7437\n sID: 6735\n obj: 2\n flb: 8,51\n fhb: 60,03\n slb: 12,47\n shb: 40,47"]
+6089 [ label = "ID: 6089\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 12,74\n slb: MAX_VAL\n shb: -1,00"]
+6400 [ label = "ID: 6400\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 34,01\n slb: MAX_VAL\n shb: -1,00"]
+7617 [ label = "ID: 7617\n sID: 6653\n obj: 2\n flb: 13,43\n fhb: 334,44\n slb: 13,64\n shb: 236,84"]
+7551 [ label = "ID: 7551\n sID: 6173\n obj: 2\n flb: 27,31\n fhb: 162,59\n slb: 13,30\n shb: 113,86"]
+5943 [ label = "ID: 5943\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 63,22\n slb: MAX_VAL\n shb: -1,00"]
+7200 [ label = "ID: 7200\n sID: 6230\n obj: 2\n flb: 6,73\n fhb: 115,75\n slb: 18,69\n shb: 90,71"]
+5970 [ label = "ID: 5970\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 77,10\n slb: MAX_VAL\n shb: -1,00"]
+6859 [ label = "ID: 6859\n sID: 7175\n obj: 2\n flb: 17,29\n fhb: 103,85\n slb: 24,92\n shb: 74,37"]
+6817 [ label = "ID: 6817\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 10,73\n slb: MAX_VAL\n shb: -1,00"]
+7714 [ label = "ID: 7714\n sID: 6541\n obj: 2\n flb: 13,92\n fhb: 63,01\n slb: 1,85\n shb: 55,01"]
+6955 [ label = "ID: 6955\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 47,93\n slb: MAX_VAL\n shb: -1,00"]
+6395 [ label = "ID: 6395\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 40,05\n slb: MAX_VAL\n shb: -1,00"]
+7136 [ label = "ID: 7136\n sID: 6664\n obj: 2\n flb: 15,27\n fhb: 255,24\n slb: 17,98\n shb: 194,85"]
+7265 [ label = "ID: 7265\n sID: 6819\n obj: 2\n flb: 27,58\n fhb: 134,42\n slb: 14,63\n shb: 103,45"]
+6221 [ label = "ID: 6221\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 40,99\n slb: MAX_VAL\n shb: -1,00"]
+7434 [ label = "ID: 7434\n sID: 6556\n obj: 2\n flb: 18,66\n fhb: 95,98\n slb: 14,77\n shb: 67,75"]
+6658 [ label = "ID: 6658\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 47,41\n slb: MAX_VAL\n shb: -1,00"]
+7407 [ label = "ID: 7407\n sID: 7247\n obj: 2\n flb: 7,56\n fhb: 72,24\n slb: 17,80\n shb: 54,48"]
+6574 [ label = "ID: 6574\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 37,84\n slb: MAX_VAL\n shb: -1,00"]
+5987 [ label = "ID: 5987\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 37,82\n slb: MAX_VAL\n shb: -1,00"]
+7509 [ label = "ID: 7509\n sID: 7599\n obj: 2\n flb: 31,98\n fhb: 247,77\n slb: 19,97\n shb: 161,72"]
+7338 [ label = "ID: 7338\n sID: 6234\n obj: 2\n flb: 17,38\n fhb: 104,96\n slb: 20,68\n shb: 71,12"]
+6048 [ label = "ID: 6048\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 32,66\n slb: MAX_VAL\n shb: -1,00"]
+5870 [ label = "ID: 5870\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 35,87\n slb: MAX_VAL\n shb: -1,00"]
+6557 [ label = "ID: 6557\n sID: 6672\n obj: 2\n flb: 16,44\n fhb: 168,01\n slb: 29,88\n shb: 156,24"]
+6880 [ label = "ID: 6880\n sID: 7347\n obj: 2\n flb: 10,73\n fhb: 137,55\n slb: 15,43\n shb: 102,29"]
+7135 [ label = "ID: 7135\n sID: 7169\n obj: 2\n flb: 14,69\n fhb: 73,77\n slb: 18,35\n shb: 60,25"]
+5990 [ label = "ID: 5990\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 23,87\n slb: MAX_VAL\n shb: -1,00"]
+6604 [ label = "ID: 6604\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 42,08\n slb: MAX_VAL\n shb: -1,00"]
+6149 [ label = "ID: 6149\n sID: 6788\n obj: 2\n flb: 17,50\n fhb: 92,56\n slb: 12,16\n shb: 65,78"]
+6236 [ label = "ID: 6236\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 52,66\n slb: MAX_VAL\n shb: -1,00"]
+5847 [ label = "ID: 5847\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 35,42\n slb: MAX_VAL\n shb: -1,00"]
+6633 [ label = "ID: 6633\n sID: 6136\n obj: 2\n flb: 5,07\n fhb: 142,98\n slb: 24,67\n shb: 83,20"]
+6937 [ label = "ID: 6937\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+6254 [ label = "ID: 6254\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 104,52\n slb: MAX_VAL\n shb: -1,00"]
+6597 [ label = "ID: 6597\n sID: 6240\n obj: 2\n flb: 8,01\n fhb: 499,33\n slb: 16,45\n shb: 358,49"]
+7423 [ label = "ID: 7423\n sID: 7651\n obj: 2\n flb: 19,99\n fhb: 321,17\n slb: 7,75\n shb: 241,28"]
+6828 [ label = "ID: 6828\n sID: 7691\n obj: 2\n flb: 9,90\n fhb: 179,65\n slb: 4,73\n shb: 124,23"]
+7524 [ label = "ID: 7524\n sID: 6521\n obj: 2\n flb: 7,92\n fhb: 69,60\n slb: 12,03\n shb: 46,77"]
+6146 [ label = "ID: 6146\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 13,73\n slb: MAX_VAL\n shb: -1,00"]
+5851 [ label = "ID: 5851\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 46,20\n slb: MAX_VAL\n shb: -1,00"]
+7055 [ label = "ID: 7055\n sID: 5864\n obj: 2\n flb: 11,25\n fhb: 123,55\n slb: 3,40\n shb: 95,58"]
+6068 [ label = "ID: 6068\n sID: 7173\n obj: 2\n flb: 14,40\n fhb: 70,83\n slb: 14,09\n shb: 43,24"]
+6308 [ label = "ID: 6308\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+5859 [ label = "ID: 5859\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 53,83\n slb: MAX_VAL\n shb: -1,00"]
+7615 [ label = "ID: 7615\n sID: 7269\n obj: 2\n flb: 7,16\n fhb: 87,60\n slb: 9,66\n shb: 77,23"]
+5848 [ label = "ID: 5848\n sID: 6299\n obj: 2\n flb: 3,55\n fhb: 50,02\n slb: 4,70\n shb: 36,18"]
+6112 [ label = "ID: 6112\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 18,09\n slb: MAX_VAL\n shb: -1,00"]
+6151 [ label = "ID: 6151\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 18,84\n slb: MAX_VAL\n shb: -1,00"]
+6293 [ label = "ID: 6293\n sID: 6222\n obj: 2\n flb: 4,99\n fhb: 69,63\n slb: 3,74\n shb: 55,07"]
+6748 [ label = "ID: 6748\n sID: 6836\n obj: 2\n flb: 7,19\n fhb: 55,04\n slb: 4,69\n shb: 41,03"]
+6863 [ label = "ID: 6863\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 23,31\n slb: MAX_VAL\n shb: -1,00"]
+7739 [ label = "ID: 7739\n sID: 7729\n obj: 2\n flb: 4,46\n fhb: 30,49\n slb: 6,78\n shb: 20,03"]
+7015 [ label = "ID: 7015\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+5890 [ label = "ID: 5890\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 14,32\n slb: MAX_VAL\n shb: -1,00"]
+5849 [ label = "ID: 5849\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 39,03\n slb: MAX_VAL\n shb: -1,00"]
+7040 [ label = "ID: 7040\n sID: 7597\n obj: 2\n flb: 9,96\n fhb: 240,84\n slb: 5,75\n shb: 205,28"]
+6618 [ label = "ID: 6618\n sID: 7283\n obj: 2\n flb: 10,65\n fhb: 147,52\n slb: 12,25\n shb: 105,32"]
+7525 [ label = "ID: 7525\n sID: 7306\n obj: 2\n flb: 13,19\n fhb: 65,39\n slb: 8,04\n shb: 46,01"]
+6092 [ label = "ID: 6092\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 16,34\n slb: MAX_VAL\n shb: -1,00"]
+7091 [ label = "ID: 7091\n sID: 6131\n obj: 2\n flb: 15,71\n fhb: 41,70\n slb: 10,06\n shb: 32,16"]
+7082 [ label = "ID: 7082\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+5881 [ label = "ID: 5881\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 20,41\n slb: MAX_VAL\n shb: -1,00"]
+7205 [ label = "ID: 7205\n sID: 6979\n obj: 2\n flb: 11,32\n fhb: 95,87\n slb: 12,97\n shb: 86,19"]
+7375 [ label = "ID: 7375\n sID: 5858\n obj: 2\n flb: 6,34\n fhb: 76,68\n slb: 5,32\n shb: 52,60"]
+5821 [ label = "ID: 5821\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 18,42\n slb: MAX_VAL\n shb: -1,00"]
+6289 [ label = "ID: 6289\n sID: 6525\n obj: 2\n flb: 14,48\n fhb: 53,86\n slb: 6,27\n shb: 44,93"]
+5860 [ label = "ID: 5860\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 26,40\n slb: MAX_VAL\n shb: -1,00"]
+6037 [ label = "ID: 6037\n sID: 6686\n obj: 2\n flb: 10,72\n fhb: 42,13\n slb: 12,26\n shb: 33,13"]
+5923 [ label = "ID: 5923\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 15,15\n slb: MAX_VAL\n shb: -1,00"]
+6451 [ label = "ID: 6451\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 18,26\n slb: MAX_VAL\n shb: -1,00"]
+7226 [ label = "ID: 7226\n sID: 6549\n obj: 2\n flb: 10,23\n fhb: 79,50\n slb: 7,46\n shb: 59,99"]
+6375 [ label = "ID: 6375\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 27,87\n slb: MAX_VAL\n shb: -1,00"]
+7565 [ label = "ID: 7565\n sID: 5999\n obj: 2\n flb: 8,66\n fhb: 60,90\n slb: 8,63\n shb: 39,36"]
+5828 [ label = "ID: 5828\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 13,66\n slb: MAX_VAL\n shb: -1,00"]
+6292 [ label = "ID: 6292\n sID: 7713\n obj: 2\n flb: 10,29\n fhb: 48,56\n slb: 10,93\n shb: 38,92"]
+6545 [ label = "ID: 6545\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 27,94\n slb: MAX_VAL\n shb: -1,00"]
+5823 [ label = "ID: 5823\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 27,66\n slb: MAX_VAL\n shb: -1,00"]
+5955 [ label = "ID: 5955\n sID: 6895\n obj: 2\n flb: 6,44\n fhb: 199,00\n slb: 10,83\n shb: 145,59"]
+7300 [ label = "ID: 7300\n sID: 7519\n obj: 2\n flb: 19,81\n fhb: 78,15\n slb: 6,45\n shb: 59,58"]
+5940 [ label = "ID: 5940\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 37,23\n slb: MAX_VAL\n shb: -1,00"]
+6256 [ label = "ID: 6256\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 61,44\n slb: MAX_VAL\n shb: -1,00"]
+5913 [ label = "ID: 5913\n sID: 6524\n obj: 2\n flb: 8,97\n fhb: 145,54\n slb: 8,25\n shb: 123,74"]
+6516 [ label = "ID: 6516\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 38,02\n slb: MAX_VAL\n shb: -1,00"]
+5845 [ label = "ID: 5845\n sID: 5843\n obj: 2\n flb: 7,34\n fhb: 83,81\n slb: 12,94\n shb: 72,52"]
+5945 [ label = "ID: 5945\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 50,07\n slb: MAX_VAL\n shb: -1,00"]
+7711 [ label = "ID: 7711\n sID: 6440\n obj: 2\n flb: 15,27\n fhb: 65,67\n slb: 11,11\n shb: 45,55"]
+5900 [ label = "ID: 5900\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 7,64\n slb: MAX_VAL\n shb: -1,00"]
+6253 [ label = "ID: 6253\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 31,99\n slb: MAX_VAL\n shb: -1,00"]
+7236 [ label = "ID: 7236\n sID: 6030\n obj: 2\n flb: 11,48\n fhb: 360,76\n slb: 6,27\n shb: 318,03"]
+7389 [ label = "ID: 7389\n sID: 7716\n obj: 2\n flb: 31,77\n fhb: 290,30\n slb: 9,21\n shb: 198,11"]
+6321 [ label = "ID: 6321\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 44,76\n slb: MAX_VAL\n shb: -1,00"]
+6757 [ label = "ID: 6757\n sID: 6315\n obj: 2\n flb: 14,61\n fhb: 230,36\n slb: 13,43\n shb: 183,78"]
+6405 [ label = "ID: 6405\n sID: 6337\n obj: 2\n flb: 15,75\n fhb: 145,73\n slb: 6,52\n shb: 110,68"]
+5863 [ label = "ID: 5863\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 40,97\n slb: MAX_VAL\n shb: -1,00"]
+7412 [ label = "ID: 7412\n sID: 6008\n obj: 2\n flb: 16,47\n fhb: 103,58\n slb: 11,16\n shb: 78,35"]
+5876 [ label = "ID: 5876\n sID: 7731\n obj: 2\n flb: 15,07\n fhb: 77,35\n slb: 6,68\n shb: 56,01"]
+6785 [ label = "ID: 6785\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+6159 [ label = "ID: 6159\n sID: 7353\n obj: 2\n flb: 10,71\n fhb: 53,19\n slb: 14,12\n shb: 36,79"]
+6470 [ label = "ID: 6470\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+5874 [ label = "ID: 5874\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 33,83\n slb: MAX_VAL\n shb: -1,00"]
+6755 [ label = "ID: 6755\n sID: 7732\n obj: 2\n flb: 7,98\n fhb: 74,22\n slb: 17,10\n shb: 52,68"]
+6229 [ label = "ID: 6229\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 29,86\n slb: MAX_VAL\n shb: -1,00"]
+6810 [ label = "ID: 6810\n sID: 6737\n obj: 2\n flb: 13,04\n fhb: 54,93\n slb: 16,60\n shb: 47,45"]
+6643 [ label = "ID: 6643\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 47,57\n slb: MAX_VAL\n shb: -1,00"]
+5854 [ label = "ID: 5854\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 40,00\n slb: MAX_VAL\n shb: -1,00"]
+6751 [ label = "ID: 6751\n sID: 7331\n obj: 2\n flb: 11,45\n fhb: 167,76\n slb: 6,51\n shb: 138,15"]
+6523 [ label = "ID: 6523\n sID: 7539\n obj: 2\n flb: 12,29\n fhb: 96,91\n slb: 28,02\n shb: 85,78"]
+6239 [ label = "ID: 6239\n sID: 6113\n obj: 2\n flb: 18,52\n fhb: 63,80\n slb: 13,53\n shb: 45,48"]
+6563 [ label = "ID: 6563\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 21,80\n slb: MAX_VAL\n shb: -1,00"]
+5963 [ label = "ID: 5963\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 37,04\n slb: MAX_VAL\n shb: -1,00"]
+6119 [ label = "ID: 6119\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 38,01\n slb: MAX_VAL\n shb: -1,00"]
+7743 [ label = "ID: 7743\n sID: 6445\n obj: 2\n flb: 20,70\n fhb: 113,07\n slb: 25,24\n shb: 85,42"]
+6572 [ label = "ID: 6572\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 29,46\n slb: MAX_VAL\n shb: -1,00"]
+5929 [ label = "ID: 5929\n sID: 7568\n obj: 2\n flb: 21,20\n fhb: 61,56\n slb: 7,58\n shb: 59,10"]
+5932 [ label = "ID: 5932\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 21,04\n slb: MAX_VAL\n shb: -1,00"]
+6049 [ label = "ID: 6049\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 37,95\n slb: MAX_VAL\n shb: -1,00"]
+7589 [ label = "ID: 7589\n sID: 5924\n obj: 2\n flb: 15,89\n fhb: 339,45\n slb: 20,54\n shb: 325,00"]
+5933 [ label = "ID: 5933\n sID: 7364\n obj: 2\n flb: 12,87\n fhb: 242,33\n slb: 9,82\n shb: 167,21"]
+6268 [ label = "ID: 6268\n sID: 6768\n obj: 2\n flb: 10,93\n fhb: 63,70\n slb: 8,53\n shb: 45,12"]
+7110 [ label = "ID: 7110\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+6936 [ label = "ID: 6936\n sID: 7362\n obj: 2\n flb: 9,74\n fhb: 51,41\n slb: 8,32\n shb: 31,39"]
+6726 [ label = "ID: 6726\n sID: NaN\n obj: 1\n flb: ∞\n fhb: -1,00\n slb: MAX_VAL\n shb: -1,00"]
+6341 [ label = "ID: 6341\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 25,19\n slb: MAX_VAL\n shb: -1,00"]
+7332 [ label = "ID: 7332\n sID: 6997\n obj: 2\n flb: 17,41\n fhb: 148,44\n slb: 16,95\n shb: 101,99"]
+6448 [ label = "ID: 6448\n sID: 6548\n obj: 2\n flb: 9,17\n fhb: 49,96\n slb: 13,84\n shb: 33,14"]
+6517 [ label = "ID: 6517\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 9,92\n slb: MAX_VAL\n shb: -1,00"]
+6605 [ label = "ID: 6605\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 23,47\n slb: MAX_VAL\n shb: -1,00"]
+7465 [ label = "ID: 7465\n sID: 7476\n obj: 2\n flb: 8,10\n fhb: 124,99\n slb: 7,87\n shb: 95,92"]
+6042 [ label = "ID: 6042\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 26,59\n slb: MAX_VAL\n shb: -1,00"]
+6809 [ label = "ID: 6809\n sID: 7463\n obj: 2\n flb: 19,99\n fhb: 82,64\n slb: 12,01\n shb: 70,18"]
+6286 [ label = "ID: 6286\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 23,81\n slb: MAX_VAL\n shb: -1,00"]
+7354 [ label = "ID: 7354\n sID: 5919\n obj: 2\n flb: 14,19\n fhb: 77,64\n slb: 7,83\n shb: 65,45"]
+6212 [ label = "ID: 6212\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 64,84\n slb: MAX_VAL\n shb: -1,00"]
+5915 [ label = "ID: 5915\n sID: NaN\n obj: 7\n flb: ∞\n fhb: 51,50\n slb: MAX_VAL\n shb: -1,00"]
+7298 [ label = "ID: 7298\n sID: 5871\n obj: 2\n flb: 15,05\n fhb: 319,09\n slb: 11,72\n shb: 223,05"]
+5984 [ label = "ID: 5984\n sID: 6677\n obj: 2\n flb: 12,44\n fhb: 70,02\n slb: 19,18\n shb: 46,70"]
+7133 [ label = "ID: 7133\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 17,96\n slb: MAX_VAL\n shb: -1,00"]
+5838 [ label = "ID: 5838\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 56,08\n slb: MAX_VAL\n shb: -1,00"]
+5856 [ label = "ID: 5856\n sID: 7101\n obj: 2\n flb: 21,51\n fhb: 282,70\n slb: 6,60\n shb: 209,48"]
+7172 [ label = "ID: 7172\n sID: 7583\n obj: 2\n flb: 14,34\n fhb: 86,40\n slb: 19,74\n shb: 44,17"]
+6155 [ label = "ID: 6155\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 15,35\n slb: MAX_VAL\n shb: -1,00"]
+5882 [ label = "ID: 5882\n sID: NaN\n obj: 6\n flb: ∞\n fhb: 38,96\n slb: MAX_VAL\n shb: -1,00"]
+7466 [ label = "ID: 7466\n sID: 6488\n obj: 2\n flb: 17,23\n fhb: 216,08\n slb: 16,03\n shb: 162,68"]
+5962 [ label = "ID: 5962\n sID: 7585\n obj: 2\n flb: 7,19\n fhb: 110,10\n slb: 11,43\n shb: 81,95"]
+6096 [ label = "ID: 6096\n sID: 7127\n obj: 2\n flb: 15,35\n fhb: 61,63\n slb: 9,40\n shb: 46,03"]
+5958 [ label = "ID: 5958\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 13,87\n slb: MAX_VAL\n shb: -1,00"]
+5822 [ label = "ID: 5822\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 37,69\n slb: MAX_VAL\n shb: -1,00"]
+6142 [ label = "ID: 6142\n sID: 6931\n obj: 2\n flb: 5,38\n fhb: 84,77\n slb: 10,43\n shb: 79,01"]
+6166 [ label = "ID: 6166\n sID: 5884\n obj: 2\n flb: 12,13\n fhb: 67,63\n slb: 14,14\n shb: 37,56"]
+7023 [ label = "ID: 7023\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 5,37\n slb: MAX_VAL\n shb: -1,00"]
+6309 [ label = "ID: 6309\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 35,50\n slb: MAX_VAL\n shb: -1,00"]
+5840 [ label = "ID: 5840\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 59,52\n slb: MAX_VAL\n shb: -1,00"]
+7003 [ label = "ID: 7003\n sID: 7174\n obj: 2\n flb: 20,79\n fhb: 153,41\n slb: 26,22\n shb: 128,73"]
+7224 [ label = "ID: 7224\n sID: 6052\n obj: 2\n flb: 18,41\n fhb: 111,48\n slb: 7,61\n shb: 79,07"]
+6786 [ label = "ID: 6786\n sID: NaN\n obj: 2\n flb: ∞\n fhb: 12,52\n slb: MAX_VAL\n shb: -1,00"]
+6023 [ label = "ID: 6023\n sID: 7145\n obj: 2\n flb: 17,36\n fhb: 67,33\n slb: 12,02\n shb: 59,26"]
+5809 [ label = "ID: 5809\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 34,30\n slb: MAX_VAL\n shb: -1,00"]
+5986 [ label = "ID: 5986\n sID: NaN\n obj: 4\n flb: ∞\n fhb: 57,53\n slb: MAX_VAL\n shb: -1,00"]
+6645 [ label = "ID: 6645\n sID: 5921\n obj: 2\n flb: 11,14\n fhb: 127,95\n slb: 18,92\n shb: 113,87"]
+6069 [ label = "ID: 6069\n sID: NaN\n obj: 5\n flb: ∞\n fhb: 47,76\n slb: MAX_VAL\n shb: -1,00"]
+6526 [ label = "ID: 6526\n sID: 6854\n obj: 2\n flb: 20,62\n fhb: 117,48\n slb: 13,80\n shb: 80,33"]
+6249 [ label = "ID: 6249\n sID: NaN\n obj: 3\n flb: ∞\n fhb: 38,31\n slb: MAX_VAL\n shb: -1,00"]
+5926 [ label = "ID: 5926\n sID: NaN\n obj: 8\n flb: ∞\n fhb: 44,48\n slb: MAX_VAL\n shb: -1,00"]
+7518 -> 6153
+6153 -> 6247
+6247 -> 6500
+6500 -> 6998
+6998 -> 7081
+7081 -> 6667
+7081 -> 5835
+6998 -> 5937
+6500 -> 7432
+7432 -> 6449
+6449 -> 6015
+6449 -> 6546
+6546 -> 5878
+6546 -> 6673
+6673 -> 6624
+6673 -> 6214
+7432 -> 5939
+5939 -> 5899
+5939 -> 6909
+6909 -> 6044
+6909 -> 6091
+6247 -> 6178
+6178 -> 7262
+7262 -> 7062
+7062 -> 5902
+7062 -> 7339
+7339 -> 5996
+7339 -> 6323
+6323 -> 6019
+6323 -> 7701
+7701 -> 6491
+7701 -> 6276
+7262 -> 6578
+6578 -> 7390
+7390 -> 6014
+6014 -> 6878
+6014 -> 7433
+7433 -> 6742
+7433 -> 6459
+7390 -> 7527
+7527 -> 5894
+7527 -> 6619
+6619 -> 7603
+6619 -> 6139
+6578 -> 6078
+6078 -> 7242
+7242 -> 6134
+7242 -> 7126
+7126 -> 6446
+7126 -> 5850
+6078 -> 6915
+6915 -> 7418
+7418 -> 6949
+6949 -> 6550
+6949 -> 5820
+6915 -> 6359
+6359 -> 5895
+6359 -> 7515
+7515 -> 6397
+7515 -> 6419
+6178 -> 7660
+7660 -> 6412
+6412 -> 6086
+6412 -> 6662
+6662 -> 6426
+6662 -> 6228
+6228 -> 7017
+6228 -> 6340
+7660 -> 6140
+6140 -> 7046
+7046 -> 6568
+7046 -> 7117
+7117 -> 6248
+7117 -> 6832
+6832 -> 6281
+6832 -> 5947
+6140 -> 6235
+6235 -> 7290
+7290 -> 5952
+7290 -> 6013
+6013 -> 6225
+6013 -> 5968
+6235 -> 6003
+6003 -> 6996
+6003 -> 6694
+6694 -> 6747
+6694 -> 6138
+6153 -> 6168
+6168 -> 6967
+6967 -> 7077
+7077 -> 6712
+7077 -> 6287
+6287 -> 6004
+6287 -> 5875
+6967 -> 6494
+6494 -> 6334
+6334 -> 6176
+6334 -> 7097
+7097 -> 7079
+7079 -> 7222
+7079 -> 5827
+7097 -> 6336
+6494 -> 6797
+6797 -> 6612
+6612 -> 5834
+6612 -> 7698
+7698 -> 6171
+7698 -> 6183
+6183 -> 6764
+6183 -> 7013
+7013 -> 5811
+7013 -> 6184
+6797 -> 6702
+6702 -> 5981
+6702 -> 7313
+7313 -> 6232
+7313 -> 7478
+7478 -> 6442
+7478 -> 6283
+6168 -> 6576
+6576 -> 6408
+6408 -> 7288
+7288 -> 7553
+7553 -> 7470
+7553 -> 6206
+7288 -> 7071
+7071 -> 6060
+6060 -> 6384
+6060 -> 7240
+7240 -> 6288
+7240 -> 6020
+7071 -> 5916
+5916 -> 6441
+5916 -> 6174
+6174 -> 6428
+6174 -> 5930
+5930 -> 6631
+5930 -> 5960
+6408 -> 6837
+6837 -> 7303
+7303 -> 6202
+7303 -> 6346
+6346 -> 6388
+6388 -> 7120
+6388 -> 5966
+6346 -> 7320
+7320 -> 5997
+7320 -> 7284
+7284 -> 6006
+7284 -> 6053
+6837 -> 6275
+6275 -> 7333
+7333 -> 7312
+7312 -> 6036
+7312 -> 6360
+7333 -> 6244
+6244 -> 6298
+6244 -> 7054
+7054 -> 6312
+7054 -> 6075
+6075 -> 6447
+6075 -> 5995
+6275 -> 6976
+6976 -> 5922
+5922 -> 6759
+5922 -> 6514
+6976 -> 5883
+5883 -> 5898
+5883 -> 5934
+5934 -> 6908
+5934 -> 6452
+6452 -> 7039
+6452 -> 5994
+6576 -> 6716
+6716 -> 7510
+7510 -> 6507
+6507 -> 6064
+6507 -> 5901
+7510 -> 6158
+6158 -> 7577
+7577 -> 6917
+7577 -> 7628
+7628 -> 6668
+7628 -> 6450
+6158 -> 6133
+6133 -> 6093
+6133 -> 6188
+6188 -> 6076
+6188 -> 5909
+5909 -> 6087
+5909 -> 6980
+6980 -> 5833
+6980 -> 6090
+6716 -> 6404
+6404 -> 6790
+6790 -> 6318
+6318 -> 6007
+6318 -> 6896
+6896 -> 6902
+6896 -> 6585
+6790 -> 7652
+7652 -> 6731
+7652 -> 5830
+6404 -> 5938
+5938 -> 6205
+6205 -> 6002
+6205 -> 6974
+6974 -> 6021
+6974 -> 6734
+6734 -> 6396
+6734 -> 5888
+5938 -> 6714
+6714 -> 5813
+6714 -> 6056
+6056 -> 6590
+6590 -> 6296
+6590 -> 6719
+6056 -> 5910
+5910 -> 6335
+5910 -> 7371
+7371 -> 6930
+7371 -> 6083
+7518 -> 6492
+6492 -> 6639
+6639 -> 6547
+6547 -> 6791
+6791 -> 6598
+6791 -> 7396
+7396 -> 6250
+7396 -> 7345
+7345 -> 5957
+6547 -> 5979
+5979 -> 7053
+7053 -> 5815
+7053 -> 6180
+6180 -> 5836
+6180 -> 6520
+5979 -> 6338
+6338 -> 6934
+6934 -> 6061
+6934 -> 6194
+6194 -> 7204
+6194 -> 6157
+6157 -> 5817
+6157 -> 6154
+6338 -> 7286
+7286 -> 6040
+6040 -> 6354
+6040 -> 6059
+7286 -> 7425
+7425 -> 5886
+7425 -> 7328
+7328 -> 5841
+7328 -> 5825
+6639 -> 6223
+6223 -> 7455
+7455 -> 7514
+7514 -> 7281
+7281 -> 6484
+7281 -> 6072
+7514 -> 6606
+6606 -> 6824
+6824 -> 6462
+6824 -> 5824
+6606 -> 6125
+6125 -> 6457
+6125 -> 6389
+7455 -> 6695
+6695 -> 7517
+7517 -> 6705
+6705 -> 5956
+6705 -> 6009
+7517 -> 7108
+7108 -> 7294
+7108 -> 7279
+7279 -> 5975
+7279 -> 5993
+6695 -> 7576
+7576 -> 5832
+7576 -> 7398
+7398 -> 7378
+7378 -> 5904
+7378 -> 5917
+7398 -> 7304
+7304 -> 6251
+7304 -> 6197
+6197 -> 6345
+6197 -> 6390
+6390 -> 6626
+6390 -> 6128
+6223 -> 6761
+6761 -> 7073
+7073 -> 6963
+6963 -> 6630
+6963 -> 6118
+6118 -> 5885
+7073 -> 6310
+6310 -> 6017
+6310 -> 6147
+6147 -> 6209
+6147 -> 6729
+6729 -> 5846
+6729 -> 6107
+6761 -> 6343
+6343 -> 5837
+5837 -> 6123
+5837 -> 7744
+7744 -> 5925
+7744 -> 6935
+6935 -> 6807
+6807 -> 6421
+6807 -> 6924
+6935 -> 7275
+7275 -> 5865
+7275 -> 7502
+7502 -> 6552
+7502 -> 5965
+6343 -> 6806
+6806 -> 6533
+6533 -> 6260
+6260 -> 6273
+6260 -> 5969
+6533 -> 7128
+7128 -> 6775
+6775 -> 6058
+6775 -> 6821
+6821 -> 6114
+6821 -> 5905
+7128 -> 7138
+7138 -> 6471
+7138 -> 6614
+6614 -> 6242
+6614 -> 5889
+6806 -> 7084
+7084 -> 7216
+7216 -> 6911
+6911 -> 5989
+6911 -> 7121
+7121 -> 6226
+7121 -> 6784
+7216 -> 6224
+6224 -> 5852
+6224 -> 6130
+6130 -> 6066
+6130 -> 7225
+7084 -> 7308
+7308 -> 7491
+7491 -> 6027
+7491 -> 6575
+6575 -> 6481
+6575 -> 6536
+7308 -> 6218
+6218 -> 7335
+7335 -> 6903
+7335 -> 5873
+6218 -> 7356
+7356 -> 6361
+7356 -> 6929
+6929 -> 5942
+6929 -> 5907
+6492 -> 6243
+6243 -> 7532
+7532 -> 6987
+6987 -> 7444
+7444 -> 7168
+7444 -> 6295
+6295 -> 6100
+6295 -> 5977
+6987 -> 7399
+7399 -> 5920
+7399 -> 6803
+6803 -> 6485
+6803 -> 6055
+6055 -> 6032
+6055 -> 5918
+7532 -> 5857
+5857 -> 6767
+6767 -> 6095
+6767 -> 6745
+6745 -> 7645
+7645 -> 5839
+7645 -> 6696
+6745 -> 7033
+7033 -> 6876
+6876 -> 6358
+6876 -> 6386
+7033 -> 6723
+6723 -> 6640
+6723 -> 5985
+5857 -> 6754
+6754 -> 6179
+6179 -> 5812
+6179 -> 6161
+6161 -> 6199
+6161 -> 7249
+7249 -> 5964
+7249 -> 5829
+6754 -> 6280
+6280 -> 6478
+6478 -> 6047
+6478 -> 6326
+6326 -> 5953
+6326 -> 6057
+6280 -> 7095
+7095 -> 6005
+7095 -> 7631
+7631 -> 7419
+7419 -> 6796
+7419 -> 5814
+7631 -> 7530
+7530 -> 6328
+6328 -> 6383
+6328 -> 6422
+7530 -> 7454
+7454 -> 6104
+7454 -> 7266
+6243 -> 7202
+7202 -> 6608
+6608 -> 7114
+7114 -> 5879
+7114 -> 6710
+6710 -> 7059
+7059 -> 6402
+7059 -> 7005
+7005 -> 6684
+7005 -> 6364
+6710 -> 6352
+6352 -> 5866
+6352 -> 7282
+7282 -> 6246
+7282 -> 7437
+7437 -> 6089
+7437 -> 6400
+6608 -> 7617
+7617 -> 7551
+7551 -> 5943
+7551 -> 7200
+7200 -> 5970
+7200 -> 6859
+6859 -> 6817
+6859 -> 7714
+7714 -> 6955
+7714 -> 6395
+7617 -> 7136
+7136 -> 7265
+7265 -> 6221
+7265 -> 7434
+7434 -> 6658
+7434 -> 7407
+7407 -> 6574
+7407 -> 5987
+7136 -> 7509
+7509 -> 7338
+7338 -> 6048
+7338 -> 5870
+7509 -> 6557
+6557 -> 6880
+6880 -> 7135
+7135 -> 5990
+7135 -> 6604
+6880 -> 6149
+6149 -> 6236
+6149 -> 5847
+6557 -> 6633
+6633 -> 6937
+6633 -> 6254
+7202 -> 6597
+6597 -> 7423
+7423 -> 6828
+6828 -> 7524
+7524 -> 6146
+7524 -> 5851
+6828 -> 7055
+7055 -> 6068
+6068 -> 6308
+6068 -> 5859
+7055 -> 7615
+7615 -> 5848
+5848 -> 6112
+5848 -> 6151
+7615 -> 6293
+6293 -> 6748
+6748 -> 6863
+6748 -> 7739
+7739 -> 7015
+7739 -> 5890
+6293 -> 5849
+7423 -> 7040
+7040 -> 6618
+6618 -> 7525
+7525 -> 6092
+7525 -> 7091
+7091 -> 7082
+7091 -> 5881
+6618 -> 7205
+7205 -> 7375
+7375 -> 5821
+7375 -> 6289
+6289 -> 5860
+6289 -> 6037
+6037 -> 5923
+6037 -> 6451
+7205 -> 7226
+7226 -> 6375
+7226 -> 7565
+7565 -> 5828
+7565 -> 6292
+6292 -> 6545
+6292 -> 5823
+7040 -> 5955
+5955 -> 7300
+7300 -> 5940
+7300 -> 6256
+5955 -> 5913
+5913 -> 6516
+5913 -> 5845
+5845 -> 5945
+5845 -> 7711
+7711 -> 5900
+7711 -> 6253
+6597 -> 7236
+7236 -> 7389
+7389 -> 6321
+7389 -> 6757
+6757 -> 6405
+6405 -> 5863
+6405 -> 7412
+7412 -> 5876
+5876 -> 6785
+5876 -> 6159
+6159 -> 6470
+6159 -> 5874
+7412 -> 6755
+6755 -> 6229
+6755 -> 6810
+6810 -> 6643
+6810 -> 5854
+6757 -> 6751
+6751 -> 6523
+6523 -> 6239
+6239 -> 6563
+6239 -> 5963
+6523 -> 6119
+6751 -> 7743
+7743 -> 6572
+7743 -> 5929
+5929 -> 5932
+5929 -> 6049
+7236 -> 7589
+7589 -> 5933
+5933 -> 6268
+6268 -> 7110
+6268 -> 6936
+6936 -> 6726
+6936 -> 6341
+5933 -> 7332
+7332 -> 6448
+6448 -> 6517
+6448 -> 6605
+7332 -> 7465
+7465 -> 6042
+7465 -> 6809
+6809 -> 6286
+6809 -> 7354
+7354 -> 6212
+7354 -> 5915
+7589 -> 7298
+7298 -> 5984
+5984 -> 7133
+5984 -> 5838
+7298 -> 5856
+5856 -> 7172
+7172 -> 6155
+7172 -> 5882
+5856 -> 7466
+7466 -> 5962
+5962 -> 6096
+6096 -> 5958
+6096 -> 5822
+5962 -> 6142
+6142 -> 6166
+6166 -> 7023
+6166 -> 6309
+6142 -> 5840
+7466 -> 7003
+7003 -> 7224
+7224 -> 6786
+7224 -> 6023
+6023 -> 5809
+6023 -> 5986
+7003 -> 6645
+6645 -> 6069
+6645 -> 6526
+6526 -> 6249
+6526 -> 5926
+}
