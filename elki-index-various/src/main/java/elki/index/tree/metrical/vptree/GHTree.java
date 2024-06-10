@@ -845,20 +845,20 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                 final double secondDistanceDiff = (secondDistance - firstDistance) / 2;
 
                 // TODO: Better Priortization?
-                if(firstDistanceDiff < 0) {
-                    if(lc != null && firstDistanceDiff < tau && node.firstLowBound <= firstDistance + tau && firstDistance - tau <= node.firstHighBound) {
+                if(firstDistanceDiff <= 0) {
+                    if(lc != null && firstDistanceDiff <= tau && node.firstLowBound <= firstDistance + tau && firstDistance - tau <= node.firstHighBound) {
                         tau = ghKNNSearch(knns, lc);
                     }
 
-                    if(rc != null && secondDistanceDiff < tau && node.secondLowBound <= secondDistance + tau && secondDistance - tau <= node.secondHighBound) {
+                    if(rc != null && secondDistanceDiff <= tau && node.secondLowBound <= secondDistance + tau && secondDistance - tau <= node.secondHighBound) {
                         tau = ghKNNSearch(knns, rc);
                     }
                 } else {
-                    if(rc != null && secondDistanceDiff < tau && node.secondLowBound <= secondDistance + tau && secondDistance - tau  <= node.secondHighBound) {
+                    if(rc != null && secondDistanceDiff <= tau && node.secondLowBound <= secondDistance + tau && secondDistance - tau  <= node.secondHighBound) {
                         tau = ghKNNSearch(knns, rc);
                     }
 
-                    if(lc != null && firstDistanceDiff < tau && node.firstLowBound <= firstDistance + tau  && firstDistance - tau <= node.firstHighBound) {
+                    if(lc != null && firstDistanceDiff <= tau && node.firstLowBound <= firstDistance + tau  && firstDistance - tau <= node.firstHighBound) {
                         tau = ghKNNSearch(knns, lc);
                     }
                 }

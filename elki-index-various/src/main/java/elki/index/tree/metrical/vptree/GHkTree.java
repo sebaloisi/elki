@@ -387,17 +387,17 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
                 if(vpOffset == -1) {
                     for(int i = 0; i < breakPoints; i++) {
                         int scaleFirstDistance = i + 1;
-                        int scaleSecondDistance = this.kFold - i;
+                        int scaleSecondDistance = this.kFold - scaleFirstDistance;
 
                         double distanceDiff;
 
                         // First check for Elements left of Middle
                         // Then switch VP distances to check for right of middle
                         if(scaleFirstDistance <= scaleSecondDistance) {
-                            distanceDiff = (scaleSecondDistance * secondDistance) - (scaleFirstDistance * firstDistance);
+                            distanceDiff = (scaleFirstDistance * firstDistance) - (scaleSecondDistance * secondDistance);
                         }
                         else {
-                            distanceDiff = (scaleFirstDistance * firstDistance) - (scaleSecondDistance * secondDistance);
+                            distanceDiff = (scaleSecondDistance * secondDistance) - (scaleFirstDistance * firstDistance);
                         }
 
                         if(distanceDiff <= 0) {
@@ -897,12 +897,34 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
 
                 if(node.childNodes != null) {
                     Node[] children = node.childNodes;
+                    
+                    int breakPoints = node.kFold - 1;
+                    
+
+                    for(int i = 0; i < node.kFold ; i ++ ){
+                        int firstFactor = i +1;
+                        int secondFactor = node.kFold - firstFactor;
+
+                        if (firstFactor == 1 && firstVPDistance <= (secondVPDistance / secondFactor)){
+                            if (node.firstLowBound <= firstVPDistance + tau && firstVPDistance -tau <= node.firstHighBound){
+                                tau = ghKNNSearch(knns, children[i]);
+                            }
+                        }
+
+                        if(firstFactor == node.kFold && (firstVPDistance/firstFactor) > secondVPDistance){
+                            if(node.secondLowBound <= secondVPDistance + tau && secondVPDistance - tau <= node.secondHighBound) {
+                                tau = ghKNNSearch(knns, children[i]);
+                            }
+                        }
+
+
+                    }
 
                     // TODO: Priortization
-                    for(int i = 0; i < node.kFold; i++) {
+                    for(int i = 0; i < breakPoints; i++) {
                         if(children[i] != null) {
                             int scaleFirstDistance = i + 1;
-                            int scaleSecondDistance = node.kFold - i;
+                            int scaleSecondDistance = node.kFold - scaleFirstDistance;
 
                             double distanceDiff, upperBound, lowerBound, smallerDistance;
 
@@ -912,22 +934,29 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
                             // TODO: kann eigentlich gelöscht weren, etnscheidend ist nur ob linke oder rechte seite
                             // rest kann anhand hb,lb entscheiden werden.
                             if(scaleFirstDistance <= scaleSecondDistance) {
-                                distanceDiff = ((scaleSecondDistance * secondVPDistance) - (scaleFirstDistance * firstVPDistance)) / 2;
+                                distanceDiff = ((scaleFirstDistance * firstVPDistance) - (scaleSecondDistance * secondVPDistance)) / 2;
                                 lowerBound = node.firstLowBound;
                                 upperBound = node.firstHighBound;
                                 smallerDistance = firstVPDistance;
                             }
                             else {
-                                distanceDiff = ((scaleFirstDistance * firstVPDistance) - (scaleSecondDistance * secondVPDistance)) / 2;
+                                distanceDiff = ((scaleSecondDistance * secondVPDistance) - (scaleFirstDistance * firstVPDistance)) / 2;
                                 lowerBound = node.secondLowBound;
                                 upperBound = node.secondHighBound;
                                 smallerDistance = secondVPDistance;
                             }
 
-                            // TODO: Bounds correct? range?
-                            if(distanceDiff < tau && lowerBound <= smallerDistance + tau && smallerDistance - tau <= upperBound) {
+                            // TODO: Bounds correct? range?distanceDiff <= tau
+                            // &&
+                            if(distanceDiff <= tau && lowerBound <= smallerDistance + tau && smallerDistance - tau <= upperBound) {
                                 tau = ghKNNSearch(knns, children[i]);
                             }
+                        }
+
+                        double lastDiff = (secondVPDistance - (node.kFold * firstVPDistance))/ 2;
+
+                        if (node.childNodes[node.kFold-1] != null && lastDiff <= tau && node.secondLowBound <= secondVPDistance + tau && secondVPDistance - tau <= node.secondHighBound){
+                            tau = ghKNNSearch(knns, node.childNodes[node.kFold-1]);
                         }
                     }
                 }
@@ -1030,13 +1059,13 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
                             // Then switch VP distances to check for right of
                             // middle
                             if(scaleFirstDistance <= scaleSecondDistance) {
-                                distanceDiff = ((scaleSecondDistance * secondVPDistance) - (scaleFirstDistance * firstVPDistance)) / 2;
+                                distanceDiff = ((scaleFirstDistance * firstVPDistance) - (scaleSecondDistance * secondVPDistance)) / 2;
                                 lowerBound = node.firstLowBound;
                                 upperBound = node.firstHighBound;
                                 smallerDistance = firstVPDistance;
                             }
                             else {
-                                distanceDiff = ((scaleFirstDistance * firstVPDistance) - (scaleSecondDistance * secondVPDistance)) / 2;
+                                distanceDiff = ((scaleSecondDistance * secondVPDistance) - (scaleFirstDistance * firstVPDistance)) / 2;
                                 lowerBound = node.secondLowBound;
                                 upperBound = node.secondHighBound;
                                 smallerDistance = secondVPDistance;

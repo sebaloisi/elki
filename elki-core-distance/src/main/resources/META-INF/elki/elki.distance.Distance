@@ -8,6 +8,7 @@ elki.distance.ArcCosineDistance arccos
 elki.distance.ArcCosineUnitlengthDistance
 elki.distance.CosineDistance cosine
 elki.distance.CosineUnitlengthDistance
+elki.distance.GreatCircleDistance gcd
 elki.distance.SqrtCosineDistance
 elki.distance.SqrtCosineUnitlengthDistance
 elki.distance.minkowski.SquaredEuclideanDistance squaredeuclidean
@@ -55,6 +56,7 @@ elki.distance.set.HammingDistance
 elki.distance.set.JaccardSimilarityDistance
 elki.distance.strings.LevenshteinDistance
 elki.distance.strings.NormalizedLevenshteinDistance
+elki.distance.strings.NormalizedLongestCommonSubsequence NLCS
 elki.distance.subspace.SubspaceEuclideanDistance
 elki.distance.subspace.SubspaceLPNormDistance
 elki.distance.subspace.SubspaceManhattanDistance
