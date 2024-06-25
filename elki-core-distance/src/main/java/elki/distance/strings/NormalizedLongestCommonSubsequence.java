@@ -35,7 +35,7 @@ public class NormalizedLongestCommonSubsequence implements PrimitiveDistance<Str
         int secondLength = o2.length();
 
         if (firstLength == 0 || secondLength == 0){
-            return 0;
+            return 1;
         }
 
         double maxLength = Math.max(firstLength, secondLength);
@@ -53,7 +53,7 @@ public class NormalizedLongestCommonSubsequence implements PrimitiveDistance<Str
         }
 
         double lcs = steps[firstLength-1][secondLength-1];
-        double normlcs = 1 -( lcs / maxLength);
+        double normlcs = 1 -(lcs / maxLength);
 
         return normlcs;
     }

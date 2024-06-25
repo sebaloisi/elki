@@ -197,8 +197,8 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
     @Override
     public void initialize() {
         root = new Builder().buildTree(0, relation.size());
-        //TreeParser parser = new TreeParser();
-        //parser.parseTree();
+/*         TreeParser parser = new TreeParser();
+        parser.parseTree(); */
         System.gc();
         try {
             TimeUnit.SECONDS.sleep(2);
@@ -706,7 +706,7 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
 
             DoubleObjectMinHeap<Node> nodePrioHeap = new DoubleObjectMinHeap<>();
 
-            for(int i = 0; i < childNodes.length-1 ; i++){
+            for(int i = 0; i < childNodes.length ; i++){
                 if (childNodes[i] != null){
                     Node currentNode = childNodes[i];
                     double prio = (currentNode.highBound -(vpDist + tau)) + (vpDist - tau  - currentNode.lowBound);

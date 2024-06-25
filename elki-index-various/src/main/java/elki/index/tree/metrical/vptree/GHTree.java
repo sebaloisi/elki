@@ -10,9 +10,6 @@ import java.util.concurrent.TimeUnit;
 
 import elki.data.NumberVector;
 import elki.data.type.TypeInformation;
-import elki.database.datastore.DataStoreFactory;
-import elki.database.datastore.DataStoreUtil;
-import elki.database.datastore.memory.MapIntegerDBIDDoubleStore;
 import elki.database.ids.ArrayModifiableDBIDs;
 import elki.database.ids.DBID;
 import elki.database.ids.DBIDArrayIter;
@@ -23,7 +20,6 @@ import elki.database.ids.DBIDUtil;
 import elki.database.ids.DBIDVar;
 import elki.database.ids.DBIDs;
 import elki.database.ids.DoubleDBIDHeap;
-import elki.database.ids.DoubleDBIDList;
 import elki.database.ids.KNNHeap;
 import elki.database.ids.KNNList;
 import elki.database.ids.ModifiableDBIDs;
@@ -180,8 +176,8 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
     public void initialize() {
         root = new Node();
         buildTree(root, relation.getDBIDs());
-        TreeParser parser = new TreeParser();
-        parser.parseTree();
+/*         TreeParser parser = new TreeParser();
+        parser.parseTree(); */
         System.gc();
         try {
             TimeUnit.SECONDS.sleep(2);
@@ -238,22 +234,11 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
 
             vps.add(0, firstVantagePoint);
 
-            double lowBound = Double.POSITIVE_INFINITY;
-            double highBound = -1;
-
             for(contentIter.advance(); contentIter.valid(); contentIter.advance()) {
-                double vpDist = distance(firstVantagePoint, contentIter);
                 vps.add(distance(contentIter, firstVantagePoint), contentIter);
-
-                if(vpDist != 0){
-                    lowBound = lowBound < vpDist ? vpDist : lowBound;
-                }
-                highBound = highBound < vpDist ? vpDist : highBound;
             }
 
             current.firstVP = vps;
-            current.firstLowBound = lowBound;
-            current.firstHighBound = highBound;
 
             return;
         }
@@ -304,22 +289,12 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         // many duplicates of first Vantage Point
         if(tiedFirst + truncate > content.size()) {
             ModifiableDoubleDBIDList vps = DBIDUtil.newDistanceDBIDList(content.size());
-            double lowBound = Double.POSITIVE_INFINITY;
-            double highBound = -1;
 
             for(DBIDIter contentIter = content.iter(); contentIter.valid(); contentIter.advance()) {
-                double vpDist = distance(firstVP, contentIter);
                 vps.add(distance(contentIter, firstVP), contentIter);
-
-                if(vpDist != 0){
-                    lowBound = lowBound < vpDist ? vpDist : lowBound;
-                }
-                highBound = highBound < vpDist ? vpDist : highBound;
             }
 
             current.firstVP = vps;
-            current.firstLowBound = lowBound;
-            current.firstHighBound = highBound;
             return;
         }
 
@@ -333,8 +308,6 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             for(DBIDIter contentIter = content.iter(); contentIter.valid(); contentIter.advance()) {
                 current.firstVP.add(0, contentIter);
             }
-            current.firstLowBound = 0;
-            current.firstHighBound = Double.POSITIVE_INFINITY;
         } else {
 
             // count tied to second vp
@@ -347,11 +320,13 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
 
             ModifiableDoubleDBIDList secondVps = DBIDUtil.newDistanceDBIDList(tiedSecond);
 
-
             current.secondVP = secondVps;
 
-            double firstDistance;
-            double secondDistance;
+            double firstDistance,secondDistance;
+            double firstLowBound = Double.POSITIVE_INFINITY;
+            double firstHighBound = -1;
+            double secondLowBound = Double.POSITIVE_INFINITY;
+            double secondHighBound = -1;
 
             ModifiableDBIDs[] children = new ModifiableDBIDs[2];
 
@@ -367,7 +342,7 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                     vpOffset = 0;
                     firstVPs.add(firstDistance,iter);
                 }
-
+                
                 if(DBIDUtil.equal(secondVP, iter) || secondDistance == 0) {
                     vpOffset = 1;
                     secondVps.add(secondDistance,iter);
@@ -380,24 +355,31 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                         children[childOffset] = DBIDUtil.newArray();
                     }
                     children[childOffset].add(iter);
+
+                    if(childOffset == 0) {
+                        firstLowBound = firstLowBound > firstDistance ? firstDistance : firstLowBound;
+                        firstHighBound = firstHighBound < firstDistance ? firstDistance : firstHighBound;
+                    }
+
+                    if(childOffset == 1) {
+                        secondLowBound = secondLowBound > secondDistance ? secondDistance : secondLowBound;
+                        secondHighBound = secondHighBound < secondDistance ? secondDistance : secondHighBound;
+                    }
                 }
-                if(vpOffset != 0){
-                    current.firstLowBound = current.firstLowBound > firstDistance ? firstDistance : current.firstLowBound;
-                }
-                current.firstHighBound = current.firstHighBound < firstDistance ? firstDistance : current.firstHighBound;
-                
-                if(vpOffset != 1){
-                    current.secondLowBound = current.secondLowBound > secondDistance ? secondDistance : current.secondLowBound;
-                }
-                current.secondHighBound = current.secondHighBound < secondDistance ? secondDistance : current.secondHighBound;
             }
 
             if(children[0] != null) {
-                buildTree(current.firstChild = new Node(), children[0]);
+                current.firstChild = new Node();
+                current.firstChild.lowBound = firstLowBound;
+                current.firstChild.highBound = firstHighBound;
+                buildTree(current.firstChild, children[0]);
             }
 
             if(children[1] != null) {
-                buildTree(current.secondChild = new Node(), children[1]);
+                current.secondChild = new Node();
+                current.secondChild.lowBound = secondLowBound;
+                current.secondChild.highBound = secondHighBound;
+                buildTree(current.secondChild, children[1]);
             }
         }
     }
@@ -721,17 +703,15 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         /**
          * upper and lower distance bounds
          */
-        double firstLowBound, firstHighBound, secondLowBound, secondHighBound;
+        double lowBound, highBound;
 
         /**
          * Constructor.
          * 
          */
         public Node() {
-            this.firstLowBound = Double.MAX_VALUE;
-            this.firstHighBound = -1;
-            this.secondLowBound = Double.MAX_VALUE;
-            this.secondHighBound = -1;
+            this.lowBound = Double.POSITIVE_INFINITY;
+            this.highBound = -1;
         }
     }
 
@@ -841,24 +821,24 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
 
                 tau = knns.getKNNDistance();
 
-                final double firstDistanceDiff = (firstDistance - secondDistance) / 2;
-                final double secondDistanceDiff = (secondDistance - firstDistance) / 2;
+                final double firstDistanceDiff = (firstDistance - secondDistance) / 2.0;
+                final double secondDistanceDiff = (secondDistance - firstDistance) / 2.0;
 
                 // TODO: Better Priortization?
                 if(firstDistanceDiff <= 0) {
-                    if(lc != null && firstDistanceDiff <= tau && node.firstLowBound <= firstDistance + tau && firstDistance - tau <= node.firstHighBound) {
+                    if(lc != null && firstDistanceDiff <= tau && lc.lowBound <= firstDistance + tau && firstDistance - tau <= lc.highBound) {
                         tau = ghKNNSearch(knns, lc);
                     }
 
-                    if(rc != null && secondDistanceDiff <= tau && node.secondLowBound <= secondDistance + tau && secondDistance - tau <= node.secondHighBound) {
+                    if(rc != null && secondDistanceDiff <= tau && rc.lowBound <= secondDistance + tau && secondDistance - tau <= rc.highBound) {
                         tau = ghKNNSearch(knns, rc);
                     }
                 } else {
-                    if(rc != null && secondDistanceDiff <= tau && node.secondLowBound <= secondDistance + tau && secondDistance - tau  <= node.secondHighBound) {
+                    if(rc != null && secondDistanceDiff <= tau && rc.lowBound <= secondDistance + tau && secondDistance - tau  <= rc.highBound) {
                         tau = ghKNNSearch(knns, rc);
                     }
 
-                    if(lc != null && firstDistanceDiff <= tau && node.firstLowBound <= firstDistance + tau  && firstDistance - tau <= node.firstHighBound) {
+                    if(lc != null && firstDistanceDiff <= tau && lc.lowBound <= firstDistance + tau  && firstDistance - tau <= lc.highBound) {
                         tau = ghKNNSearch(knns, lc);
                     }
                 }
@@ -954,11 +934,11 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                 final double secondDistanceDiff = (secondVPDistance - firstVPDistance) / 2;
 
                 // TODO: Bounds?
-                if(lc != null && firstDistanceDiff < range && node.firstLowBound <= firstVPDistance + range && firstVPDistance - range <= node.firstHighBound) {
+                if(lc != null && firstDistanceDiff <= range && lc.lowBound <= firstVPDistance + range && firstVPDistance - range <= lc.highBound) {
                     ghRangeSearch(result, lc, range);
                 }
 
-                if(rc != null && secondDistanceDiff < range && node.secondLowBound <= secondVPDistance + range && secondVPDistance - range <= node.secondHighBound) {
+                if(rc != null && secondDistanceDiff <= range && rc.lowBound <= secondVPDistance + range && secondVPDistance - range <= rc.highBound) {
                     ghRangeSearch(result, rc, range);
                 }
             }
@@ -1066,8 +1046,8 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                 // TODO: loop necessary?
                 for(DBIDIter firstVPIter = firstVP.iter(); firstVPIter.valid(); firstVPIter.advance()){
                     double firstVPDist = queryDistance(firstVPIter);
-                    if(lc != null && intersect(firstVPDist - threshold, firstVPDist + threshold, cur.node.firstLowBound, cur.node.firstHighBound)) {
-                        final double mindist = Math.max(firstVPDist - cur.node.firstHighBound, cur.mindist);
+                    if(lc != null && intersect(firstVPDist - threshold, firstVPDist + threshold, cur.node.lowBound, cur.node.highBound)) {
+                        final double mindist = Math.max(firstVPDist - cur.node.highBound, cur.mindist);
                         heap.add(new PrioritySearchBranch(mindist, lc, DBIDUtil.deref(firstVPIter)));
                     }
                 }
@@ -1078,8 +1058,8 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                     double secondVPDist = queryDistance(secondVPIter);
                     Node rc = cur.node.secondChild;
 
-                    if(rc != null && intersect(secondVPDist - threshold, secondVPDist + threshold, cur.node.secondLowBound, cur.node.secondHighBound)) {
-                        final double mindist = Math.max(secondVPDist - cur.node.secondHighBound, cur.mindist);
+                    if(rc != null && intersect(secondVPDist - threshold, secondVPDist + threshold, cur.node.lowBound, cur.node.highBound)) {
+                        final double mindist = Math.max(secondVPDist - cur.node.lowBound, cur.mindist);
                         heap.add(new PrioritySearchBranch(mindist, rc, DBIDUtil.deref(secondVPIter)));
                     }
                 }
@@ -1433,8 +1413,8 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
 
 
             String nodeID = String.valueOf(firstVPIter.internalGetIndex());
-            String firstLowBound = String.valueOf(this.decimalFormat.format(node.firstLowBound));
-            String firstHighBound = String.valueOf(this.decimalFormat.format(node.firstHighBound));
+            String lowBound = String.valueOf(this.decimalFormat.format(node.lowBound));
+            String highBound = String.valueOf(this.decimalFormat.format(node.highBound));
             
             String seconVPID = "NaN";
             if(secondVP != null) {
@@ -1442,17 +1422,12 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                 seconVPID = String.valueOf(secondVPIter.internalGetIndex());
                 objectsInNode += secondVP.size();
             }
- 
-            String secondLowBound = node.secondLowBound == Double.MAX_VALUE ? "MAX_VAL" : String.valueOf(this.decimalFormat.format(node.secondLowBound));
-            String secondHighBound = String.valueOf(this.decimalFormat.format(node.secondHighBound));
 
             String nodeString = nodeID + " [ label = \"ID: " + nodeID 
                                        + "\\n sID: " + seconVPID
                                        + "\\n obj: " + String.valueOf(objectsInNode)
-                                       + "\\n flb: " + firstLowBound
-                                       + "\\n fhb: " + firstHighBound 
-                                       + "\\n slb: " + secondLowBound
-                                       + "\\n shb: " + secondHighBound
+                                       + "\\n lb: " + lowBound
+                                       + "\\n hb: " + highBound 
                                        + "\"]\n";
             this.nodes.add(nodeString);
             this.objectCounter += objectsInNode;

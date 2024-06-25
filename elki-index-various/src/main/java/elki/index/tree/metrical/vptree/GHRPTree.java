@@ -155,8 +155,8 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
     public void initialize() {
         root = new Node(ReuseVPIndicator.ROOT);
         buildTree(root, relation.getDBIDs(), DBIDUtil.newVar(), DBIDUtil.newDistanceDBIDList());
-        TreeParser parser = new TreeParser();
-        parser.parseTree();
+/*         TreeParser parser = new TreeParser();
+        parser.parseTree(); */
         System.gc();
         try {
             TimeUnit.SECONDS.sleep(2);
@@ -207,7 +207,7 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
         /**
          * upper and lower distance bounds
          */
-        double firstLowBound, firstHighBound, secondLowBound, secondHighBound;
+        double lowBound, highBound;
 
         /**
          * Constructor.
@@ -215,10 +215,8 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
          */
         public Node(ReuseVPIndicator vpIndicator) {
             this.vpIndicator = vpIndicator;
-            this.firstLowBound = Double.MAX_VALUE;
-            this.firstHighBound = -1;
-            this.secondLowBound = Double.MAX_VALUE;
-            this.secondHighBound = -1;
+            this.lowBound = Double.POSITIVE_INFINITY;
+            this.highBound = -1;
         }
     }
 
@@ -265,26 +263,15 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
 
             vps.add(0, firstVantagePoint);
 
-            double lowBound = Double.POSITIVE_INFINITY;
-            double highBound = -1;
-
             for(contentIter.advance(); contentIter.valid(); contentIter.advance()) {
-                double vpDist = distance(firstVantagePoint, contentIter);
                 vps.add(distance(contentIter, firstVantagePoint), contentIter);
-
-                if(vpDist != 0) {
-                    lowBound = vpDist < lowBound ? vpDist : lowBound;
-                }
-                highBound = highBound < vpDist ? vpDist : highBound;
             }
 
             current.vpIndicator = ReuseVPIndicator.ROOT;
             current.firstVP = vps;
-            current.firstLowBound = lowBound;
-            current.firstHighBound = highBound;
-
             return;
         }
+
         DBIDVar firstVP = DBIDUtil.newVar();
         DBIDVar secondVP = DBIDUtil.newVar();
         ReuseVPIndicator vpIndicator = current.vpIndicator;
@@ -324,23 +311,13 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
         // many duplicates of first Vantage Point
         if(tiedFirst + truncate > content.size()) {
             ModifiableDoubleDBIDList vps = DBIDUtil.newDistanceDBIDList(content.size());
-            double lowBound = Double.POSITIVE_INFINITY;
-            double highBound = -1;
 
             for(DBIDIter contentIter = content.iter(); contentIter.valid(); contentIter.advance()) {
-                double vpDist = distance(firstVP, contentIter);
                 vps.add(distance(contentIter, firstVP), contentIter);
-
-                if(vpDist != 0) {
-                    lowBound = vpDist < lowBound ? vpDist : lowBound;
-                }
-                highBound = highBound < vpDist ? vpDist : highBound;
             }
 
             current.vpIndicator = ReuseVPIndicator.ROOT;
             current.firstVP = vps;
-            current.firstLowBound = lowBound;
-            current.firstHighBound = highBound;
             return;
         }
         
@@ -351,8 +328,6 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
             for(DBIDIter contentIter = content.iter(); contentIter.valid(); contentIter.advance()) {
                 current.firstVP.add(0, contentIter);
             }
-            current.firstLowBound = 0;
-            current.firstHighBound = Double.POSITIVE_INFINITY;
         }
         else {
             // TODO: Wat?
@@ -382,6 +357,10 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
 
             ModifiableDBIDs firstChildren = null;
             ModifiableDBIDs secondChildren = null;
+            double firstLowBound = Double.POSITIVE_INFINITY;
+            double firstHighBound = -1;
+            double secondLowBound = Double.POSITIVE_INFINITY;
+            double secondHighBound = -1;
 
             for(DBIDArrayMIter iter = contentArray.iter(); iter.valid(); iter.advance()) {
                 // If the current position is a VP, this will be set to current
@@ -421,6 +400,8 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
                             firstChildren = DBIDUtil.newArray();
                         }
                         firstChildren.add(iter);
+                        firstLowBound = firstLowBound > firstDistance ? firstDistance : firstLowBound;
+                        firstHighBound = firstHighBound < firstDistance ? firstDistance : firstHighBound;
                     }
                     else {
                         secondDistances.add(secondDistance, iter);
@@ -428,32 +409,30 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
                             secondChildren = DBIDUtil.newArray();
                         }
                         secondChildren.add(iter);
+                        secondLowBound = secondLowBound > secondDistance ? secondDistance : secondLowBound;
+                        secondHighBound = secondHighBound < secondDistance ? secondDistance : secondHighBound;
                     }
                 }
 
-                if(vpOffset != 0){
-                    current.firstLowBound = current.firstLowBound > firstDistance ? firstDistance : current.firstLowBound;
-                }
-                current.firstHighBound = current.firstHighBound < firstDistance ? firstDistance : current.firstHighBound;
-                
-                if(vpOffset != 1){
-                    current.secondLowBound = current.secondLowBound > secondDistance ? secondDistance : current.secondLowBound;
-                }
-                current.secondHighBound = current.secondHighBound < secondDistance ? secondDistance : current.secondHighBound;
             }
 
 
             if(firstChildren != null) {
                 // Only pass closest VP
                 ReuseVPIndicator childIndicator = current.vpIndicator != ReuseVPIndicator.ROOT ? ReuseVPIndicator.ROOT : ReuseVPIndicator.FIRST_VP;
-
-                buildTree(current.firstChild = new Node(childIndicator), firstChildren, firstVP, firstDistances);
+                current.firstChild = new Node(childIndicator);
+                current.firstChild.lowBound = firstLowBound;
+                current.firstChild.highBound = firstHighBound;
+                buildTree(current.firstChild, firstChildren, firstVP, firstDistances);
             }
 
             if(secondChildren != null) {
                 // Only pass closest VP
                 ReuseVPIndicator childIndicator = current.vpIndicator != ReuseVPIndicator.ROOT ? ReuseVPIndicator.ROOT : ReuseVPIndicator.SECOND_VP;
-                buildTree(current.secondChild = new Node(childIndicator), secondChildren, secondVP, secondDistances);
+                current.secondChild = new Node(childIndicator);
+                current.secondChild.lowBound = secondLowBound;
+                current.secondChild.highBound = secondHighBound;
+                buildTree(current.secondChild, secondChildren, secondVP, secondDistances);
             }
         }
     }
@@ -952,20 +931,20 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
                 final double secondDistanceDiff = (secondDistance - firstDistance) / 2;
 
                 // TODO: less or equal less?
-                if(firstDistanceDiff < 0) {
-                    if(lc != null && firstDistanceDiff < tau && node.firstLowBound <= firstDistance + tau && firstDistance - tau <= node.firstHighBound) {
+                if(firstDistanceDiff <= 0) {
+                    if(lc != null && firstDistanceDiff <= tau && lc.lowBound <= firstDistance + tau && firstDistance - tau <= lc.highBound) {
                         tau = ghrpKNNSearch(knns, lc, firstDistance);
                     }
 
-                    if(rc != null && secondDistanceDiff < tau && node.secondLowBound <= secondDistance + tau && secondDistance - tau <= node.secondHighBound) {
+                    if(rc != null && secondDistanceDiff <= tau && rc.lowBound <= secondDistance + tau && secondDistance - tau <= rc.highBound) {
                         tau = ghrpKNNSearch(knns, rc, secondDistance);
                     }
                 }
                 else {
-                    if(rc != null && secondDistanceDiff < tau && node.secondLowBound <= secondDistance + tau && secondDistance - tau <= node.secondHighBound) {
+                    if(rc != null && secondDistanceDiff <= tau && rc.lowBound <= secondDistance + tau && secondDistance - tau <= rc.highBound) {
                         tau = ghrpKNNSearch(knns, rc, secondDistance);
                     }
-                    if(lc != null && firstDistanceDiff < tau && node.firstLowBound <= firstDistance + tau && firstDistance - tau <= node.firstHighBound) {
+                    if(lc != null && firstDistanceDiff <= tau && lc.lowBound <= firstDistance + tau && firstDistance - tau <= lc.highBound) {
                         tau = ghrpKNNSearch(knns, lc, firstDistance);
                     }
 
@@ -1042,6 +1021,9 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
                 firstVPDistance = reusedDistance;
             }
             else {
+                // TODO: query only once? leaf if both child null and
+                // vpindicator = ROOT (then second vp is also null). Only
+                // relevant if Dataset contains large amount of Duplicates
                 for(DBIDIter firstVPIter = firstVP.iter(); firstVPIter.valid(); firstVPIter.advance()) {
                     firstVPDistance = queryDistance(firstVPIter);
 
@@ -1059,6 +1041,7 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
                 }
                 else {
                     for(DBIDIter secondVPIter = secondVP.iter(); secondVPIter.valid(); secondVPIter.advance()) {
+                        // TODO: Query only once?
                         secondVPDistance = queryDistance(secondVPIter);
                         
                         if(secondVPDistance <= range) {
@@ -1072,11 +1055,11 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
                 final double firstDistanceDiff = (firstVPDistance - secondVPDistance) / 2;
                 final double secondDistanceDiff = (secondVPDistance - firstVPDistance) / 2;
 
-                if(lc != null && firstDistanceDiff < range && node.firstLowBound <= firstVPDistance + range && firstVPDistance - range <= node.firstHighBound) {
+                if(lc != null && firstDistanceDiff <= range && lc.lowBound <= firstVPDistance + range && firstVPDistance - range <= lc.highBound) {
                     ghrpRangeSearch(result, lc, range, firstVPDistance);
                 }
 
-                if(rc != null && secondDistanceDiff < range && node.secondLowBound <= secondVPDistance + range && secondVPDistance - range <= node.secondHighBound) {
+                if(rc != null && secondDistanceDiff <= range && rc.lowBound <= secondVPDistance + range && secondVPDistance - range <= rc.highBound) {
                     ghrpRangeSearch(result, rc, range, secondVPDistance);
                 }
             }
@@ -1185,8 +1168,8 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
                 // TODO: loop necessary?
                 for(DBIDIter firstVPIter = firstVP.iter(); firstVPIter.valid(); firstVPIter.advance()) {
                     double firstVPDist = queryDistance(firstVPIter);
-                    if(lc != null && intersect(firstVPDist - threshold, firstVPDist + threshold, cur.node.firstLowBound, cur.node.firstHighBound)) {
-                        final double mindist = Math.max(firstVPDist - cur.node.firstHighBound, cur.mindist);
+                    if(lc != null && intersect(firstVPDist - threshold, firstVPDist + threshold, cur.node.lowBound, cur.node.highBound)) {
+                        final double mindist = Math.max(firstVPDist - cur.node.highBound, cur.mindist);
                         heap.add(new PrioritySearchBranch(mindist, lc, DBIDUtil.deref(firstVPIter)));
                     }
                 }
@@ -1197,8 +1180,8 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
                     double secondVPDist = queryDistance(secondVPIter);
                     Node rc = cur.node.secondChild;
 
-                    if(rc != null && intersect(secondVPDist - threshold, secondVPDist + threshold, cur.node.secondLowBound, cur.node.secondHighBound)) {
-                        final double mindist = Math.max(secondVPDist - cur.node.secondHighBound, cur.mindist);
+                    if(rc != null && intersect(secondVPDist - threshold, secondVPDist + threshold, cur.node.lowBound, cur.node.highBound)) {
+                        final double mindist = Math.max(secondVPDist - cur.node.highBound, cur.mindist);
                         heap.add(new PrioritySearchBranch(mindist, rc, DBIDUtil.deref(secondVPIter)));
                     }
 
@@ -1554,16 +1537,13 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
                 }
             }
 
-            String firstLowBound = String.valueOf(this.decimalFormat.format(node.firstLowBound));
-            String firstHighBound = String.valueOf(this.decimalFormat.format(node.firstHighBound));
+            String firstLowBound = String.valueOf(this.decimalFormat.format(node.lowBound));
+            String firstHighBound = String.valueOf(this.decimalFormat.format(node.highBound));
 
 
             String nodeID = getNodeID(node);
 
-            String secondLowBound = node.secondLowBound == Double.MAX_VALUE ? "MAX_VAL" : String.valueOf(this.decimalFormat.format(node.secondLowBound));
-            String secondHighBound = String.valueOf(this.decimalFormat.format(node.secondHighBound));
-
-            String nodeString = "\"" +nodeID + "\" [ label = \"ID: " + nodeID + "\\n sID: \\n obj: " + String.valueOf(objectsInNode) + "\\n flb: " + firstLowBound + "\\n fhb: " + firstHighBound + "\\n slb: " + secondLowBound + "\\n shb: " + secondHighBound + "\"]\n";
+            String nodeString = "\"" +nodeID + "\" [ label = \"ID: " + nodeID + "\\n sID: \\n obj: " + String.valueOf(objectsInNode) + "\\n lb: " + firstLowBound + "\\n hb: " + firstHighBound + "\"]\n";
             this.nodes.add(nodeString);
             this.objectCounter += objectsInNode;
 
