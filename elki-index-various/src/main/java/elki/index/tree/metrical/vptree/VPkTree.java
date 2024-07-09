@@ -60,7 +60,6 @@ import elki.logging.statistics.LongStatistic;
 import elki.math.MeanVariance;
 import elki.utilities.Alias;
 import elki.utilities.datastructures.QuickSelect;
-import elki.utilities.datastructures.heap.DoubleObjectHeap;
 import elki.utilities.datastructures.heap.DoubleObjectMinHeap;
 import elki.utilities.documentation.Reference;
 import elki.utilities.optionhandling.OptionID;
@@ -197,8 +196,8 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
     @Override
     public void initialize() {
         root = new Builder().buildTree(0, relation.size());
-/*         TreeParser parser = new TreeParser();
-        parser.parseTree(); */
+        //TreeParser parser = new TreeParser();
+        //parser.parseTree(); 
         System.gc();
         try {
             TimeUnit.SECONDS.sleep(2);
@@ -272,7 +271,6 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
             
             DBIDVar vantagePoint;
 
-            // TODO: Interfae switch in Constructor?
             switch (vpSelector){
                 case MAXIMUM_VARIANCE: 
                     vantagePoint = selectMaximumVarianceVantagePoint(left, right);
@@ -336,7 +334,7 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
                 
             }
 
-            int leftQuant = left;
+            int leftQuant = left+tied;
             for(int i = 0; i < quantilesAmount; i++) {
 
                 final double quantileDistVal = scratch.doubleValue(quantiles[i]);
@@ -345,7 +343,7 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
                 // sorting is given
                 // TODO: loop in quantile?
                 // TODO: + quantiles correct?
-                for(scratchit.seek(leftQuant + tied); scratchit.getOffset() < quantiles[i]; scratchit.advance()) {
+                for(scratchit.seek(leftQuant); scratchit.getOffset() < quantiles[i]; scratchit.advance()) {
                     final double d = scratchit.doubleValue();
                     // Move all tied with the quantile to the next partition
                     if(d == quantileDistVal) {
@@ -377,9 +375,7 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
             
             int leftBound = left + tied;
             // Recursive build the first kVal-1 child Partititions
-            // TODO: Grosser quatsch, iterator muss weiter nach rechts um größe der Partition bewegt werden
             for(int i = 0; i < kVal -1; i++) {
-                    // TODO: Check if part is empty?
                     current.children[i] = buildTree(leftBound, quantiles[i]);
                     current.children[i].lowBound = lowBounds[i];
                     current.children[i].highBound = highBounds[i];

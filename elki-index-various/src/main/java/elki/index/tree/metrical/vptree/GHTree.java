@@ -176,8 +176,8 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
     public void initialize() {
         root = new Node();
         buildTree(root, relation.getDBIDs());
-/*         TreeParser parser = new TreeParser();
-        parser.parseTree(); */
+     //  TreeParser parser = new TreeParser();
+      //  parser.parseTree();
         System.gc();
         try {
             TimeUnit.SECONDS.sleep(2);

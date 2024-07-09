@@ -155,8 +155,8 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
     public void initialize() {
         root = new Node(ReuseVPIndicator.ROOT);
         buildTree(root, relation.getDBIDs(), DBIDUtil.newVar(), DBIDUtil.newDistanceDBIDList());
-/*         TreeParser parser = new TreeParser();
-        parser.parseTree(); */
+      //  TreeParser parser = new TreeParser();
+       // parser.parseTree(); 
         System.gc();
         try {
             TimeUnit.SECONDS.sleep(2);
