@@ -156,15 +156,6 @@ public class VPTree<O> implements DistancePriorityIndex<O> {
   @Override
   public void initialize() {
     root = new Builder().buildTree(0, relation.size());
-            System.gc();
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        }
-        catch(InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        System.gc();
   }
 
   /**

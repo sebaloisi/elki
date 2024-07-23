@@ -21,13 +21,7 @@
 
 package elki.index.tree.metrical.vptree;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import elki.data.NumberVector;
 import elki.data.type.TypeInformation;
@@ -196,17 +190,6 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
     @Override
     public void initialize() {
         root = new Builder().buildTree(0, relation.size());
-        //TreeParser parser = new TreeParser();
-        //parser.parseTree(); 
-        System.gc();
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        }
-        catch(InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        System.gc();
     }
 
     private enum VPSelectionAlgorithm {
@@ -341,8 +324,6 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
 
                 // offset for values == quantileDistVal, such that correct
                 // sorting is given
-                // TODO: loop in quantile?
-                // TODO: + quantiles correct?
                 for(scratchit.seek(leftQuant); scratchit.getOffset() < quantiles[i]; scratchit.advance()) {
                     final double d = scratchit.doubleValue();
                     // Move all tied with the quantile to the next partition
@@ -390,9 +371,6 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
         }
 
         
-
-        // TODO: interface for VP Selection alternatives
-        // TODO: Standart algorithmus liefert random VP für samplesize = 1
         /**
          * Find a vantage points in the DBIDs between left and right
          * 
@@ -415,10 +393,6 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
             return result;
         }
 
-        // TODO: mindestens 2 datenpunkte wegen Varianz?
-        // TODO: Referenz zur Methode einfügen
-        // TODO: Standart VP-Tree Variante für Benchmarking berücksichtigen
-        // HINWEIS: für GH Tree Variante auch mean berechnen!
         
         /**
          * Finds the Vantage Point with Maximum Variance to all other Data
@@ -680,7 +654,6 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
      */
 
     public static abstract class VPkTreeKNNSearcher {
-        // TODO: Branch Prio? sort by pairwise
         /**
          * Recursive search function
          * 
@@ -891,10 +864,9 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
         }
     }
 
-    // TODO: Link referenced classes
     /**
      * Priority search for the VPk-Tree.
-     * 
+     *  TODO: This method is not Tested nor debugged
      * @author Sebastian Aloisi
      *         Based on VPTreePrioritySearcher written by Robert Gehde and Erich
      *         Schubert
@@ -983,7 +955,6 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
 
             // Add Child Nodes to the Heap
 
-            // TODO: prio
             for(int i = 0; i < childNodes.length; i++) {
                 Node currentChild = childNodes[i];
 
@@ -1117,7 +1088,6 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
         LOG.statistics(new LongStatistic(this.getClass().getName() + ".distance-computations", distComputations));
     }
 
-    // TODO: Parameters for algorithm selection
     /**
      * Index factory for the VPk-Tree
      *
@@ -1285,84 +1255,6 @@ public class VPkTree<O> implements DistancePriorityIndex<O> {
             public Factory<O> make() {
                 return new Factory<>(distance, random, sampleSize, truncate, kFold, vpSelector);
             }
-        }
-    }
-
-    private class TreeParser {
-        private LinkedList<String> nodes;
-        private LinkedList<String> edges;
-        private int objectCounter;
-        private DecimalFormat decimalFormat;
-
-        public TreeParser(){
-            this.nodes = new LinkedList<String>();
-            this.edges = new LinkedList<String>();
-            this.objectCounter = 0;
-            this.decimalFormat = new DecimalFormat("0.00");
-        }
-
-        public void parseTree(){
-            parseNode(root);
-            String treeString = treeToString();
-            try {
-                FileWriter fileWriter = new FileWriter("vpk_"+ VPkTree.this.kVal + ".dot");
-                fileWriter.write(treeString);
-                fileWriter.close();
-            } catch(IOException e){
-
-            }
-        }
-
-        private void parseNode(Node node){
-            DBIDRef vp = node.vp.iter();
-            int objectsInNode = node.vp.size();
-            this.objectCounter += objectsInNode;
-
-            String nodeID = String.valueOf(vp.internalGetIndex());
-            String lowBound = String.valueOf(this.decimalFormat.format(node.lowBound));
-            String highBound = String.valueOf(this.decimalFormat.format(node.highBound));
-
-            String nodeString = nodeID + " [ label = \"ID: " + nodeID +" \\n obj: " + String.valueOf(objectsInNode) + "\\n lb:" + lowBound + "\\n hb: " + highBound + "\"]\n";
-            this.nodes.add(nodeString);
-
-
-            Node[] children = node.children;
-            
-            for(int i = 0; i < children.length; i++){
-                if (children[i] != null){
-                    Node currentChild = node.children[i];
-                    DBIDRef currentChildVP = currentChild.vp.iter();
-                    String currentChildID = String.valueOf(currentChildVP.internalGetIndex());
-                    this.edges.add(nodeID + " -> " + currentChildID + "\n");
-                    parseNode(currentChild);
-                }
-            }
-        }
-
-        private String treeToString(){
-            String header = "digraph {\nrankdir=\"TB\"\nnode [shape=box]\n";
-            String stats = "stats [label=\"Objects found: " + this.objectCounter + "\"]\n";
-            String tail = "}";
-            StringBuilder bodyStringBuilder = new StringBuilder();
-            String body, result;
-
-            Iterator nodeIter = this.nodes.iterator();
-
-            while (nodeIter.hasNext()){
-                bodyStringBuilder.append(nodeIter.next());
-            }
-
-            Iterator edgesIterator = this.edges.iterator();
-
-            while (edgesIterator.hasNext()){
-                bodyStringBuilder.append(edgesIterator.next());
-            }
-
-            body = bodyStringBuilder.toString();
-
-            result = header + stats + body + tail;
-
-            return result;
         }
     }
 }

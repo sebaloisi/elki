@@ -10,7 +10,6 @@ import java.util.concurrent.TimeUnit;
 
 import elki.data.NumberVector;
 import elki.data.type.TypeInformation;
-import elki.database.datastore.memory.MapIntegerDBIDDoubleStore;
 import elki.database.ids.ArrayModifiableDBIDs;
 import elki.database.ids.DBID;
 import elki.database.ids.DBIDArrayIter;
@@ -156,7 +155,6 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
 
     /**
      * Constructor.
-     * TODO: delete truncate
      * 
      * @param relation data for tree construction
      * @param distance distance function for tree construction
@@ -184,17 +182,6 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
     public void initialize() {
         root = new Node(this.kFold);
         buildTree(root, relation.getDBIDs());
-        //TreeParser parser = new TreeParser();
-       // parser.parseTree(); 
-        System.gc();
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        }
-        catch(InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        System.gc();
     }
 
     private enum VPSelectionAlgorithm {
@@ -312,7 +299,6 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
         // If second VP is empty, Leaf is reached, just set low/highbound
         // if content still has objects it means there are duplicates, add them to vps
         // Else build childnodes
-        // TODO: looks wrong
         if(secondVP.isEmpty()) {
             for (DBIDIter contentIter = content.iter(); contentIter.valid(); contentIter.advance()){
                     current.firstVP.add(0,contentIter);
@@ -1067,7 +1053,7 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
 
     /**
      * Priority search for the GH-Tree
-     * 
+     *  TODO: This Method is not tested nor debugged!
      * @author Sebastian Aloisi
      * 
      * @param <Q> query type
@@ -1107,26 +1093,35 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
 
             cur = heap.poll();
 
-            /*             if(cur.node != null) {
-                double firstVPDist = queryDistance(cur.node.firstVP);
-                Node lc = cur.node.firstChild;
-            
-                if(lc != null && intersect(firstVPDist - threshold, firstVPDist + threshold, cur.node.firstLowBound, cur.node.firstHighBound)) {
-                    final double mindist = Math.max(firstVPDist - cur.node.firstHighBound, cur.mindist);
-                    heap.add(new PrioritySearchBranch(mindist, lc, DBIDUtil.deref(cur.node.firstVP)));
-                }
-            
-                if(cur.node.secondVP != null) {
-                    double secondVPDist = queryDistance(cur.node.secondVP);
-                    Node rc = cur.node.secondChild;
-            
-                    if(rc != null && intersect(secondVPDist - threshold, secondVPDist + threshold, cur.node.secondLowBound, cur.node.secondHighBound)) {
-                        final double mindist = Math.max(secondVPDist - cur.node.secondHighBound, cur.mindist);
-                        heap.add(new PrioritySearchBranch(mindist, rc, DBIDUtil.deref(cur.node.secondVP)));
+                if(cur.node != null) {
+                Node[] childNodes = cur.node.childNodes;
+                
+                for(int i = 0; i < childNodes.length; i++){
+                    Node currentChild = childNodes[i];
+                    double firstVPDist = queryDistance(cur.node.firstVP.iter());
+                    double secondVPDist = queryDistance(cur.node.secondVP.iter());
+                    double lowBound,highBound,vpDist;
+                    DBIDIter vp;
+                    
+                    if (firstVPDist < secondVPDist){
+                        vpDist = firstVPDist;
+                        lowBound = cur.node.firstLowBound;
+                        highBound = cur.node.firstHighBound;
+                        vp = cur.node.firstVP.iter();
+                    } else {
+                        vpDist = secondVPDist;
+                        lowBound = cur.node.secondLowBound;
+                        highBound = cur.node.secondHighBound;
+                        vp = cur.node.secondVP.iter();
                     }
+
+                    if(currentChild != null && intersect(vpDist - threshold, vpDist + threshold, lowBound, highBound)) {
+                        final double mindist = Math.max(firstVPDist - cur.node.firstHighBound, cur.mindist);
+                        heap.add(new PrioritySearchBranch(mindist, currentChild, DBIDUtil.deref(vp)));
+                    }
+
                 }
-            
-            } */
+            }
 
             return this;
         }
@@ -1453,109 +1448,6 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
             public Object make() {
                 return new Factory<>(distance, random, sampleSize, truncate, kFold, mvAlpha, vpSelector);
             }
-        }
-    }
-
-    private class TreeParser {
-        private LinkedList<String> nodes;
-
-        private LinkedList<String> edges;
-
-        private int objectCounter;
-
-        private DecimalFormat decimalFormat;
-
-        public TreeParser() {
-            this.nodes = new LinkedList<String>();
-            this.edges = new LinkedList<String>();
-            this.objectCounter = 0;
-            this.decimalFormat = new DecimalFormat("0.00");
-        }
-
-        public void parseTree() {
-            parseNode(root);
-            String treeString = treeToString();
-            try {
-                FileWriter fileWriter = new FileWriter("ghk.dot");
-                fileWriter.write(treeString);
-                fileWriter.close();
-            }
-            catch(IOException e) {
-
-            }
-        }
-
-        private void parseNode(Node node) {
-            final DBIDs firstVP = node.firstVP;
-            final DBIDs secondVP = node.secondVP;
-            DBIDIter firstVPIter = firstVP.iter();
-            DBIDIter secondVPIter;
-            int objectsInNode = firstVP.size();
-
-            String nodeID = String.valueOf(firstVPIter.internalGetIndex());
-            String seconVPID = "NaN";
-            if(secondVP != null) {
-                secondVPIter = secondVP.iter();
-                seconVPID = String.valueOf(secondVPIter.internalGetIndex());
-                objectsInNode += secondVP.size();
-            }
-            String firstLowBound = String.valueOf(this.decimalFormat.format(node.firstLowBound));
-            String firstHighBound =
-            String.valueOf(this.decimalFormat.format(node.firstHighBound));
-            String secondLowBound = node.secondLowBound == Double.MAX_VALUE ?
-            "MAX_VAL" :
-            String.valueOf(this.decimalFormat.format(node.secondLowBound));
-            String secondHighBound =
-            String.valueOf(this.decimalFormat.format(node.secondHighBound));
-
-            String nodeString = nodeID + " [ label = \"ID: " + nodeID + "\\n sID: " + seconVPID + "\\n obj: " + String.valueOf(objectsInNode)
-            + "\\n flb: " + firstLowBound
-            + "\\n fhb: " + firstHighBound
-            + "\\n slb: " + secondLowBound
-            + "\\n shb: " + secondHighBound
-                    + "\"]\n";
-            this.nodes.add(nodeString);
-            
-            this.objectCounter += objectsInNode;
-
-            Node[] childNodes = node.childNodes;
-
-            if(childNodes != null) {
-                for(int i = 0; i < node.kFold; i++) {
-                    if(childNodes[i] != null) {
-                        DBIDRef firstChildVP = childNodes[i].firstVP.iter();
-                        String firstChildID = String.valueOf(firstChildVP.internalGetIndex());
-                        this.edges.add(nodeID + " -> " + firstChildID + "\n");
-                        parseNode(childNodes[i]);
-                    }
-                }
-            }
-        }
-
-        private String treeToString() {
-            String header = "digraph {\nrankdir=\"TB\"\nnode [shape=box]\n";
-            String stats = "stats [label=\"Objects found: " + this.objectCounter + "\"]\n";
-            String tail = "}";
-            StringBuilder bodyStringBuilder = new StringBuilder();
-            String body, result;
-
-            Iterator nodeIter = this.nodes.iterator();
-
-            while(nodeIter.hasNext()) {
-                bodyStringBuilder.append(nodeIter.next());
-            }
-
-            Iterator edgesIterator = this.edges.iterator();
-
-            while(edgesIterator.hasNext()) {
-                bodyStringBuilder.append(edgesIterator.next());
-            }
-
-            body = bodyStringBuilder.toString();
-
-            result = header + stats + body + tail;
-
-            return result;
         }
     }
 }

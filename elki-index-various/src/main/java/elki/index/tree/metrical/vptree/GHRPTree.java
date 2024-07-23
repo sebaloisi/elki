@@ -155,17 +155,6 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
     public void initialize() {
         root = new Node(ReuseVPIndicator.ROOT);
         buildTree(root, relation.getDBIDs(), DBIDUtil.newVar(), DBIDUtil.newDistanceDBIDList());
-      //  TreeParser parser = new TreeParser();
-       // parser.parseTree(); 
-        System.gc();
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        }
-        catch(InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        System.gc();
     }
 
     private enum VPSelectionAlgorithm {
@@ -330,12 +319,9 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
             }
         }
         else {
-            // TODO: Wat?
             if(current.firstVP == null){
                 current.firstVP = DBIDUtil.newDistanceDBIDList(tiedFirst);
             }
-
-            // TODO: Wat?
             if (current.secondVP == null || current.secondVP.isEmpty()){
                 // count tied to second vp
                 int tiedSecond = 0;
@@ -367,7 +353,6 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
                 // offset
                 int vpOffset = -1;
 
-                // TODO: add binary Decision to GH
                 switch(vpIndicator){
                 case FIRST_VP:
                     firstDistance = reuseDistances.doubleValue(iter.getOffset());
@@ -665,7 +650,6 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
         DBIDVar firstVP = DBIDUtil.newVar();
         DBIDVar currentDbid = DBIDUtil.newVar();
 
-        // TODO: Truncate!
         if(content.size() == 1) {
             DBIDIter it = content.iter();
             firstVP.set(it);
@@ -919,7 +903,6 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
                 }
                 else {
                     for(DBIDIter secondVPIter = secondVP.iter(); secondVPIter.valid(); secondVPIter.advance()) {
-                        // TODO: only query once?
                         secondDistance = queryDistance(secondVPIter);
                         knns.insert(secondDistance, secondVPIter);
                     }
@@ -930,7 +913,6 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
                 final double firstDistanceDiff = (firstDistance - secondDistance) / 2;
                 final double secondDistanceDiff = (secondDistance - firstDistance) / 2;
 
-                // TODO: less or equal less?
                 if(firstDistanceDiff <= 0) {
                     if(lc != null && firstDistanceDiff <= tau && lc.lowBound <= firstDistance + tau && firstDistance - tau <= lc.highBound) {
                         tau = ghrpKNNSearch(knns, lc, firstDistance);
@@ -1021,9 +1003,6 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
                 firstVPDistance = reusedDistance;
             }
             else {
-                // TODO: query only once? leaf if both child null and
-                // vpindicator = ROOT (then second vp is also null). Only
-                // relevant if Dataset contains large amount of Duplicates
                 for(DBIDIter firstVPIter = firstVP.iter(); firstVPIter.valid(); firstVPIter.advance()) {
                     firstVPDistance = queryDistance(firstVPIter);
 
@@ -1041,7 +1020,6 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
                 }
                 else {
                     for(DBIDIter secondVPIter = secondVP.iter(); secondVPIter.valid(); secondVPIter.advance()) {
-                        // TODO: Query only once?
                         secondVPDistance = queryDistance(secondVPIter);
                         
                         if(secondVPDistance <= range) {
@@ -1120,6 +1098,8 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
 
     /**
      * Priority search for the GH-Tree
+     * TODO: This Method is not debugged nor tested! Also the reusage of pivots
+     * is not applied!
      * 
      * @author Sebastian Aloisi
      * 
@@ -1150,8 +1130,6 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
             this.heap.add(new PrioritySearchBranch(0, root, null));
             advance();
         }
-
-        // TODO: adjust to reusement of VP?
         @Override
         public PrioritySearcher<Q> advance() {
             if(heap.isEmpty()) {
@@ -1487,118 +1465,6 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
             public Object make() {
                 return new Factory<>(distance, random, sampleSize, truncate, mvAlpha, vpSelector);
             }
-        }
-    }
-
-    private class TreeParser {
-        private LinkedList<String> nodes;
-
-        private LinkedList<String> edges;
-
-        private int objectCounter;
-
-        private DecimalFormat decimalFormat;
-
-        public TreeParser() {
-            this.nodes = new LinkedList<String>();
-            this.edges = new LinkedList<String>();
-            this.objectCounter = 0;
-            this.decimalFormat = new DecimalFormat("0.00");
-        }
-
-        public void parseTree() {
-            parseNode(root);
-            String treeString = treeToString();
-            try {
-                FileWriter fileWriter = new FileWriter("ghrp.dot");
-                fileWriter.write(treeString);
-                fileWriter.close();
-            }
-            catch(IOException e) {
-
-            }
-        }
-
-        private void parseNode(Node node) {
-            DBIDs firstVP = node.firstVP;
-            DBIDs secondVP = node.secondVP;
-            ReuseVPIndicator vpIndicator = node.vpIndicator;
-
-            int objectsInNode = 0;
-
-            if (vpIndicator == ReuseVPIndicator.ROOT || vpIndicator != ReuseVPIndicator.FIRST_VP){
-                objectsInNode += firstVP.size();
-            }
-
-
-            if (node.secondVP != null){
-                if(vpIndicator == ReuseVPIndicator.ROOT || vpIndicator != ReuseVPIndicator.SECOND_VP) {
-                    objectsInNode += secondVP.size();
-                }
-            }
-
-            String firstLowBound = String.valueOf(this.decimalFormat.format(node.lowBound));
-            String firstHighBound = String.valueOf(this.decimalFormat.format(node.highBound));
-
-
-            String nodeID = getNodeID(node);
-
-            String nodeString = "\"" +nodeID + "\" [ label = \"ID: " + nodeID + "\\n sID: \\n obj: " + String.valueOf(objectsInNode) + "\\n lb: " + firstLowBound + "\\n hb: " + firstHighBound + "\"]\n";
-            this.nodes.add(nodeString);
-            this.objectCounter += objectsInNode;
-
-            Node firstChild = node.firstChild;
-            Node secondChild = node.secondChild;
-
-            if(firstChild != null) {
-                String firstChildID = getNodeID(firstChild);
-                this.edges.add("\"" + nodeID + "\" -> \"" + firstChildID + "\"\n");
-                parseNode(firstChild);
-            }
-
-            if(secondChild != null) {
-                String secondChildID = getNodeID(secondChild);
-                this.edges.add("\"" + nodeID + "\" -> \"" + secondChildID + "\"\n");
-                parseNode(secondChild);
-            }
-        }
-
-        private String getNodeID (Node node){
-            DBIDIter firstVPIter = node.firstVP.iter();
-            DBIDIter secondVPIter;
-            String firstVPID = String.valueOf(firstVPIter.internalGetIndex());
-            String secondVPID = "NaN";
-            if(node.secondVP != null) {
-                secondVPIter = node.secondVP.iter();
-                secondVPID = node.secondVP.isEmpty() ? "NAN" : String.valueOf(secondVPIter.internalGetIndex());
-            }
-            return firstVPID + "<>" + secondVPID;
-        }
-
-        private String treeToString() {
-            String header = "digraph {\nrankdir=\"TB\"\nnode [shape=box]\n";
-            String stats = "stats [label=\"Objects found: " + this.objectCounter + "\"]\n";
-            String tail = "}";
-            StringBuilder bodyStringBuilder = new StringBuilder();
-            String body, result;
-
-            Iterator nodeIter = this.nodes.iterator();
-
-            while(nodeIter.hasNext()) {
-                bodyStringBuilder.append(nodeIter.next());
-            }
-
-            Iterator edgesIterator = this.edges.iterator();
-
-            while(edgesIterator.hasNext()) {
-                bodyStringBuilder.append(edgesIterator.next());
-            }
-
-            body = bodyStringBuilder.toString();
-
-            result = header + stats + body + tail;
-
-            return result;
         }
     }
 }

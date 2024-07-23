@@ -1,12 +1,5 @@
 package elki.index.tree.metrical.vptree;
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import elki.data.NumberVector;
 import elki.data.type.TypeInformation;
@@ -176,17 +169,6 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
     public void initialize() {
         root = new Node();
         buildTree(root, relation.getDBIDs());
-     //  TreeParser parser = new TreeParser();
-      //  parser.parseTree();
-        System.gc();
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        }
-        catch(InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        System.gc();
     }
 
     private enum VPSelectionAlgorithm {
@@ -622,7 +604,6 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
         DBIDVar secondVP = DBIDUtil.newVar();
         DBIDVar currentDbid = DBIDUtil.newVar();
 
-        // TODO: Truncate!
         if(content.size() == 1) {
             DBIDIter it = content.iter();
             firstVP.set(it);
@@ -814,7 +795,6 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                 double secondDistance = 0;
 
                 for(DBIDIter secondVPIter = secondVP.iter(); secondVPIter.valid(); secondVPIter.advance()){
-                    // TODO: only query once?
                     secondDistance = queryDistance(secondVPIter);
                     knns.insert(secondDistance, secondVPIter);
                 }
@@ -920,7 +900,6 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
 
                 double secondVPDistance = 0;
                 for(DBIDIter secondVPIter = secondVP.iter(); secondVPIter.valid(); secondVPIter.advance()){
-                    // TODO: query once?
                     secondVPDistance = queryDistance(secondVPIter);
 
                     if(secondVPDistance <= range) {
@@ -933,7 +912,6 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                 final double firstDistanceDiff = (firstVPDistance - secondVPDistance) / 2;
                 final double secondDistanceDiff = (secondVPDistance - firstVPDistance) / 2;
 
-                // TODO: Bounds?
                 if(lc != null && firstDistanceDiff <= range && lc.lowBound <= firstVPDistance + range && firstVPDistance - range <= lc.highBound) {
                     ghRangeSearch(result, lc, range);
                 }
@@ -1043,7 +1021,6 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
                 DBIDs firstVP = cur.node.firstVP;
                 Node lc = cur.node.firstChild;
 
-                // TODO: loop necessary?
                 for(DBIDIter firstVPIter = firstVP.iter(); firstVPIter.valid(); firstVPIter.advance()){
                     double firstVPDist = queryDistance(firstVPIter);
                     if(lc != null && intersect(firstVPDist - threshold, firstVPDist + threshold, cur.node.lowBound, cur.node.highBound)) {
@@ -1370,112 +1347,6 @@ public class GHTree<O> implements DistancePriorityIndex<O> {
             public Object make() {
                 return new Factory<>(distance, random, sampleSize, truncate, mvAlpha, vpSelector);
             }
-        }
-    }
-
-    private class TreeParser {
-        private LinkedList<String> nodes;
-
-        private LinkedList<String> edges;
-
-        private int objectCounter;
-
-        private DecimalFormat decimalFormat;
-
-        public TreeParser() {
-            this.nodes = new LinkedList<String>();
-            this.edges = new LinkedList<String>();
-            this.objectCounter = 0;
-            this.decimalFormat = new DecimalFormat("0.00");
-        }
-
-        public void parseTree() {
-            parseNode(root);
-            String treeString = treeToString();
-            try {
-                FileWriter fileWriter = new FileWriter("gh.dot");
-                fileWriter.write(treeString);
-                fileWriter.close();
-            }
-            catch(IOException e) {
-
-            }
-        }
-
-        private void parseNode(Node node) {
-            DBIDs firstVP = node.firstVP;
-            DBIDs secondVP = node.secondVP;
-            DBIDIter firstVPIter = firstVP.iter();
-            DBIDIter secondVPIter;
-            
-
-            int objectsInNode = firstVP.size();
-
-
-            String nodeID = String.valueOf(firstVPIter.internalGetIndex());
-            String lowBound = String.valueOf(this.decimalFormat.format(node.lowBound));
-            String highBound = String.valueOf(this.decimalFormat.format(node.highBound));
-            
-            String seconVPID = "NaN";
-            if(secondVP != null) {
-                secondVPIter = secondVP.iter();
-                seconVPID = String.valueOf(secondVPIter.internalGetIndex());
-                objectsInNode += secondVP.size();
-            }
-
-            String nodeString = nodeID + " [ label = \"ID: " + nodeID 
-                                       + "\\n sID: " + seconVPID
-                                       + "\\n obj: " + String.valueOf(objectsInNode)
-                                       + "\\n lb: " + lowBound
-                                       + "\\n hb: " + highBound 
-                                       + "\"]\n";
-            this.nodes.add(nodeString);
-            this.objectCounter += objectsInNode;
-
-            Node firstChild = node.firstChild;
-            Node secondChild = node.secondChild;
-
-            if (firstChild != null){
-                DBIDs firstChildVP = firstChild.firstVP;
-                DBIDIter fcVPIter = firstChildVP.iter();
-                String firstChildID = String.valueOf(fcVPIter.internalGetIndex());
-                this.edges.add(nodeID + " -> " + firstChildID +"\n");
-                parseNode(firstChild);
-            }
-
-            if (secondChild != null){
-                DBIDs secondChildVP = secondChild.firstVP;
-                DBIDIter scVPIter = secondChildVP.iter();
-                String secondChildID = String.valueOf(scVPIter.internalGetIndex());
-                this.edges.add(nodeID + " -> " + secondChildID + "\n");
-                parseNode(secondChild);
-            }
-        }
-
-        private String treeToString() {
-            String header = "digraph {\nrankdir=\"TB\"\nnode [shape=box]\n";
-            String stats = "stats [label=\"Objects found: " + this.objectCounter + "\"]\n";
-            String tail = "}";
-            StringBuilder bodyStringBuilder = new StringBuilder();
-            String body, result;
-
-            Iterator nodeIter = this.nodes.iterator();
-
-            while(nodeIter.hasNext()) {
-                bodyStringBuilder.append(nodeIter.next());
-            }
-
-            Iterator edgesIterator = this.edges.iterator();
-
-            while(edgesIterator.hasNext()) {
-                bodyStringBuilder.append(edgesIterator.next());
-            }
-
-            body = bodyStringBuilder.toString();
-
-            result = header + stats + body + tail;
-
-            return result;
         }
     }
 }

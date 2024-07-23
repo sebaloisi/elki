@@ -1,10 +1,5 @@
 package elki.index.tree.metrical.vptree;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -182,17 +177,6 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
     public void initialize() {
         root = new Node(this.kFold, ReuseVPIndicator.ROOT);
         buildTree(root, DBIDUtil.newArray(relation.getDBIDs()), DBIDUtil.newVar(), DBIDUtil.newDistanceDBIDList());
-/*         TreeParser parser = new TreeParser();
-        parser.parseTree(); */
-        System.gc();
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        }
-        catch(InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        System.gc();
     }
 
     private enum VPSelectionAlgorithm {
@@ -313,12 +297,10 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
             }
         }
         else {
-            // TODO: Wat?
             if(current.firstVP == null) {
                 current.firstVP = DBIDUtil.newDistanceDBIDList(tiedFirst);
             }
 
-            // TODO: Wat?
             if(current.secondVP == null) {
                 // count tied to second vp
                 int tiedSecond = 0;
@@ -829,7 +811,6 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
         DBIDVar firstVP = DBIDUtil.newVar();
         DBIDVar secondVP = DBIDUtil.newVar();
 
-        // TODO: Truncate!
         if(content.size() == 1) {
             DBIDIter it = content.iter();
             firstVP.set(it);
@@ -1018,7 +999,6 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
                 }
                 else {
                     for(DBIDIter secondVPIter = secondVP.iter(); secondVPIter.valid(); secondVPIter.advance()) {
-                        // TODO: only query once?
                         secondVPDistance = queryDistance(secondVPIter);
                         knns.insert(secondVPDistance, secondVPIter);
                     }
@@ -1029,19 +1009,15 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
                 if(node.childNodes != null) {
                     Node[] children = node.childNodes;
 
-                    // TODO: Priortization
-
                     for(int i = 0; i < node.kFold; i++) {
                         Node currentChildNode = children[i];
                         if(currentChildNode != null) {
                             if(firstVPDistance < secondVPDistance) {
-                                // TODO: Better Prio?
                                 if(currentChildNode.firstLowBound <= firstVPDistance + tau && firstVPDistance - tau <= currentChildNode.firstHighBound) {
                                     tau = ghkrpKNNSearch(knns, currentChildNode, firstVPDistance);
                                 }
                             }
                             else {
-                                // TODO: Better Prio?
                                 if(currentChildNode.secondLowBound <= secondVPDistance + tau && secondVPDistance - tau <= currentChildNode.secondHighBound) {
                                     tau = ghkrpKNNSearch(knns, currentChildNode,secondVPDistance);
                                 }
@@ -1136,7 +1112,6 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
                 }
                 else {
                     for(DBIDIter secondVPIter = secondVP.iter(); secondVPIter.valid(); secondVPIter.advance()) {
-                        // TODO: query once?
                         secondVPDistance = queryDistance(secondVPIter);
 
                         if(secondVPDistance <= range) {
@@ -1221,9 +1196,9 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
 
     /**
      * Priority search for the GH-Tree
-     * 
+     * TODO: This Method is not debugged nor tested! Also the reusage of pivots is not applied!
      * @author Sebastian Aloisi
-     * 
+     *  
      * @param <Q> query type
      */
     public abstract class GHkTreePrioritySearcher<Q> implements PrioritySearcher<Q> {
@@ -1261,26 +1236,36 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
 
             cur = heap.poll();
 
-            /*             if(cur.node != null) {
-                double firstVPDist = queryDistance(cur.node.firstVP);
-                Node lc = cur.node.firstChild;
-            
-                if(lc != null && intersect(firstVPDist - threshold, firstVPDist + threshold, cur.node.firstLowBound, cur.node.firstHighBound)) {
-                    final double mindist = Math.max(firstVPDist - cur.node.firstHighBound, cur.mindist);
-                    heap.add(new PrioritySearchBranch(mindist, lc, DBIDUtil.deref(cur.node.firstVP)));
-                }
-            
-                if(cur.node.secondVP != null) {
-                    double secondVPDist = queryDistance(cur.node.secondVP);
-                    Node rc = cur.node.secondChild;
-            
-                    if(rc != null && intersect(secondVPDist - threshold, secondVPDist + threshold, cur.node.secondLowBound, cur.node.secondHighBound)) {
-                        final double mindist = Math.max(secondVPDist - cur.node.secondHighBound, cur.mindist);
-                        heap.add(new PrioritySearchBranch(mindist, rc, DBIDUtil.deref(cur.node.secondVP)));
+            if(cur.node != null) {
+                Node[] childNodes = cur.node.childNodes;
+
+                for(int i = 0; i < childNodes.length; i++) {
+                    Node currentChild = childNodes[i];
+                    double firstVPDist = queryDistance(cur.node.firstVP.iter());
+                    double secondVPDist = queryDistance(cur.node.secondVP.iter());
+                    double lowBound, highBound, vpDist;
+                    DBIDIter vp;
+
+                    if(firstVPDist < secondVPDist) {
+                        vpDist = firstVPDist;
+                        lowBound = cur.node.firstLowBound;
+                        highBound = cur.node.firstHighBound;
+                        vp = cur.node.firstVP.iter();
                     }
+                    else {
+                        vpDist = secondVPDist;
+                        lowBound = cur.node.secondLowBound;
+                        highBound = cur.node.secondHighBound;
+                        vp = cur.node.secondVP.iter();
+                    }
+
+                    if(currentChild != null && intersect(vpDist - threshold, vpDist + threshold, lowBound, highBound)) {
+                        final double mindist = Math.max(firstVPDist - cur.node.firstHighBound, cur.mindist);
+                        heap.add(new PrioritySearchBranch(mindist, currentChild, DBIDUtil.deref(vp)));
+                    }
+
                 }
-            
-            } */
+            }
 
             return this;
         }
@@ -1607,109 +1592,6 @@ public class GHkRPTree<O> implements DistancePriorityIndex<O> {
             public Object make() {
                 return new Factory<>(distance, random, sampleSize, truncate, kFold, mvAlpha, vpSelector);
             }
-        }
-    }
-
-    private class TreeParser {
-        private LinkedList<String> nodes;
-
-        private LinkedList<String> edges;
-
-        private int objectCounter;
-
-        private DecimalFormat decimalFormat;
-
-        public TreeParser() {
-            this.nodes = new LinkedList<String>();
-            this.edges = new LinkedList<String>();
-            this.objectCounter = 0;
-            this.decimalFormat = new DecimalFormat("0.00");
-        }
-
-        public void parseTree() {
-            parseNode(root);
-            String treeString = treeToString();
-            try {
-                FileWriter fileWriter = new FileWriter("ghkrp.dot");
-                fileWriter.write(treeString);
-                fileWriter.close();
-            }
-            catch(IOException e) {
-
-            }
-        }
-
-        private void parseNode(Node node) {
-            DBIDs firstVP = node.firstVP;
-            DBIDs secondVP = node.secondVP;
-            ReuseVPIndicator vpIndicator = node.vpIndicator;
-
-            int objectsInNode = 0;
-
-            if(vpIndicator == ReuseVPIndicator.ROOT || vpIndicator == ReuseVPIndicator.SECOND_VP) {
-                objectsInNode += firstVP.size();
-            }
-
-            if(node.secondVP != null) {
-                if(vpIndicator == ReuseVPIndicator.ROOT || vpIndicator == ReuseVPIndicator.FIRST_VP) {
-                    objectsInNode += secondVP.size();
-                }
-            }
-
-            String nodeID = getNodeID(node);
-
-            // TODO: print bounds
-            String nodeString = "\"" + nodeID + "\" [ label = \"ID: " + nodeID + "\\n sID: \\n obj: " + String.valueOf(objectsInNode) + "\"]\n";
-            this.nodes.add(nodeString);
-            this.objectCounter += objectsInNode;
-
-            if(node.childNodes != null) {
-                for(int i = 0; i < node.kFold; i++) {
-                    if(node.childNodes[i] != null) {
-                        String childID = getNodeID(node.childNodes[i]);
-                        this.edges.add("\"" + nodeID + "\" -> \"" + childID + "\"\n");
-                        parseNode(node.childNodes[i]);
-                    }
-                }
-            }
-        }
-
-        private String getNodeID(Node node) {
-            DBIDIter firstVPIter = node.firstVP.iter();
-            DBIDIter secondVPIter;
-            String firstVPID = String.valueOf(firstVPIter.internalGetIndex());
-            String secondVPID = "NaN";
-            if(node.secondVP != null) {
-                secondVPIter = node.secondVP.iter();
-                secondVPID = node.secondVP.isEmpty() ? "NAN" : String.valueOf(secondVPIter.internalGetIndex());
-            }
-            return firstVPID + "<>" + secondVPID;
-        }
-
-        private String treeToString() {
-            String header = "digraph {\nrankdir=\"TB\"\nnode [shape=box]\n";
-            String stats = "stats [label=\"Objects found: " + this.objectCounter + "\"]\n";
-            String tail = "}";
-            StringBuilder bodyStringBuilder = new StringBuilder();
-            String body, result;
-
-            Iterator nodeIter = this.nodes.iterator();
-
-            while(nodeIter.hasNext()) {
-                bodyStringBuilder.append(nodeIter.next());
-            }
-
-            Iterator edgesIterator = this.edges.iterator();
-
-            while(edgesIterator.hasNext()) {
-                bodyStringBuilder.append(edgesIterator.next());
-            }
-
-            body = bodyStringBuilder.toString();
-
-            result = header + stats + body + tail;
-
-            return result;
         }
     }
 }
