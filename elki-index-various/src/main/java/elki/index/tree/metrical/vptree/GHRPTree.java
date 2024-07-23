@@ -1,16 +1,9 @@
 package elki.index.tree.metrical.vptree;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import elki.data.NumberVector;
 import elki.data.type.TypeInformation;
-import elki.database.datastore.memory.MapIntegerDBIDDoubleStore;
 import elki.database.ids.ArrayModifiableDBIDs;
 import elki.database.ids.DBID;
 import elki.database.ids.DBIDArrayIter;
@@ -158,7 +151,7 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
     }
 
     private enum VPSelectionAlgorithm {
-        RANDOM, FFT, MAXIMUM_VARIANCE, MAXIMUM_VARIANCE_SAMPLING, MAXIMUM_VARIANCE_FFT, MAXIMUM_VARIANCE_FFT_SAMPLING, REF_CHOOSE_VP
+        RANDOM, FFT, MAXIMUM_VARIANCE, MAXIMUM_VARIANCE_SAMPLING, MAXIMUM_VARIANCE_FFT, MAXIMUM_VARIANCE_FFT_SAMPLING
     }
 
     private enum ReuseVPIndicator {
@@ -1143,7 +1136,6 @@ public class GHRPTree<O> implements DistancePriorityIndex<O> {
                 DBIDs firstVP = cur.node.firstVP;
                 Node lc = cur.node.firstChild;
 
-                // TODO: loop necessary?
                 for(DBIDIter firstVPIter = firstVP.iter(); firstVPIter.valid(); firstVPIter.advance()) {
                     double firstVPDist = queryDistance(firstVPIter);
                     if(lc != null && intersect(firstVPDist - threshold, firstVPDist + threshold, cur.node.lowBound, cur.node.highBound)) {

@@ -185,7 +185,7 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
     }
 
     private enum VPSelectionAlgorithm {
-        RANDOM, FFT, MAXIMUM_VARIANCE, MAXIMUM_VARIANCE_SAMPLING, MAXIMUM_VARIANCE_FFT, MAXIMUM_VARIANCE_FFT_SAMPLING, REF_CHOOSE_VP
+        RANDOM, FFT, MAXIMUM_VARIANCE, MAXIMUM_VARIANCE_SAMPLING, MAXIMUM_VARIANCE_FFT, MAXIMUM_VARIANCE_FFT_SAMPLING
     }
 
     private class DBIDVarTuple {
@@ -657,7 +657,6 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
         DBIDVar firstVP = DBIDUtil.newVar();
         DBIDVar secondVP = DBIDUtil.newVar();
         
-        // TODO: Truncate!
         if(content.size() == 1) {
             DBIDIter it = content.iter();
             firstVP.set(it);
@@ -864,7 +863,6 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
                 double secondVPDistance = 0;
 
                 for(DBIDIter secondVPIter = secondVP.iter(); secondVPIter.valid(); secondVPIter.advance()) {
-                    // TODO: only query once?
                     secondVPDistance = queryDistance(secondVPIter);
                     knns.insert(secondVPDistance, secondVPIter);
                 }
@@ -878,12 +876,10 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
                         Node currentChildNode = children[i];
                         if(currentChildNode != null) {
                             if (firstVPDistance < secondVPDistance){
-                                // TODO: Better Prio?
                                 if( currentChildNode.firstLowBound <= firstVPDistance + tau && firstVPDistance - tau <= currentChildNode.firstHighBound) {
                                     tau = ghKNNSearch(knns, currentChildNode);
                                 }
                             } else {
-                                // TODO: Better Prio?
                                 if(  currentChildNode.secondLowBound <= secondVPDistance + tau && secondVPDistance - tau  <= currentChildNode.secondHighBound) {
                                     tau = ghKNNSearch(knns, currentChildNode);
                                 }
@@ -968,7 +964,6 @@ public class GHkTree<O> implements DistancePriorityIndex<O> {
 
                 double secondVPDistance = 0;
                 for(DBIDIter secondVPIter = secondVP.iter(); secondVPIter.valid(); secondVPIter.advance()) {
-                    // TODO: query once?
                     secondVPDistance = queryDistance(secondVPIter);
 
                     if(secondVPDistance <= range) {
